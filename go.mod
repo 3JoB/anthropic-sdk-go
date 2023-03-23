@@ -5,13 +5,13 @@ go 1.20
 require (
 	github.com/3JoB/fasthttp-client v0.2.0
 	github.com/3JoB/ulib v1.20.0
+	github.com/goccy/go-json v0.10.2
 )
 
 require (
 	github.com/3JoB/unsafeConvert v1.3.0 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/klauspost/compress v1.16.3 // indirect
 	github.com/lufia/plan9stats v0.0.0-20230110061619-bbe2e5e100de // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect

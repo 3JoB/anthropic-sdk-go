@@ -11,19 +11,29 @@ func New(conf *Anthropic) *Anthropic {
 		panic(ErrConfigEmpty)
 	}
 	setHeaders(conf.Key)
+	SetPool()
 	if conf.DefaultModel == "" {
 		conf.DefaultModel = ModelClaudeInstantDefault
 	}
 	return conf
 }
 
-func (ah *Anthropic) Send(sender Sender) (data *Response, err error) {
+func (ah *Anthropic) Send(sender *Sender) (data *Response, err error) {
+	if sender == nil {
+		return nil, ErrSenderNil
+	}
 	if sender.Prompt == "" {
 		return nil, ErrPromptEmpty
 	}
 	sender.Prompt, err = setPrompt(sender.Prompt)
 	if err != nil {
 		return nil, err
+	}
+	if sender.Model == "" {
+		sender.Model = ah.DefaultModel
+	}
+	if sender.MaxToken < 1 {
+		sender.MaxToken = 200
 	}
 	return nil, nil
 }

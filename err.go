@@ -13,7 +13,7 @@ type Err struct {
 }
 
 func (e *Err) Error() string {
-	e.e = errors.New(e.Err)
+	e.e = fmt.Errorf(e.Err)
 	return fmt.Sprintf("%v: %v", e.Op, e.e.Error())
 }
 
@@ -30,3 +30,11 @@ func Exit(e error, code ...int) {
 		os.Exit(-99)
 	}
 }
+
+var (
+	ErrApiKeyEmpty error = &Err{Op: "config", Err: "APIKey cannot be empty!"}
+	ErrConfigEmpty error = &Err{Op: "config", Err: "Configuration cannot be empty!"}
+	ErrSenderNil   error = &Err{Op: "sender", Err: "Sender cannot be nil!"}
+	ErrHumanEmpty  error = &Err{Op: "prompt", Err: "The value of human cannot be empty!"}
+	ErrPromptEmpty error = &Err{Op: "send", Err: "The value of prompt cannot be empty!"}
+)
