@@ -4,6 +4,7 @@
         "reasonstop",
         "seenstop",
         "sequencesmax",
-        "sequencestop"
+        "sequencestop",
+        "tokensmax"
     ]
 }
