@@ -3,19 +3,29 @@ package anthropic
 import (
 	"fmt"
 
-	"github.com/3JoB/ulib/maps"
 	"github.com/3JoB/ulib/net/ua"
 )
 
 func New(conf *Anthropic) *Anthropic {
 	if conf == nil {
-        panic(ErrConfigEmpty)
+		panic(ErrConfigEmpty)
 	}
 	setHeaders(conf.Key)
 	if conf.DefaultModel == "" {
-
+		conf.DefaultModel = ModelClaudeInstantDefault
 	}
 	return conf
+}
+
+func (ah *Anthropic) Send(sender Sender) (data *Response, err error) {
+	if sender.Prompt == "" {
+		return nil, ErrPromptEmpty
+	}
+	sender.Prompt, err = setPrompt(sender.Prompt)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
 }
 
 func setPrompt(human string) (string, error) {
@@ -27,9 +37,8 @@ func setPrompt(human string) (string, error) {
 
 func setHeaders(api string) {
 	if api == "" {
-		panic(ErrApiKeyEmpty)
+		Exit(ErrApiKeyEmpty)
 	}
-	Headers = maps.New(Headers)
 	Headers = map[string]string{
 		"Accept":        "application/json",
 		"Client":        fmt.Sprintf("anthropic-sdk-go/%v", SDKVersion),

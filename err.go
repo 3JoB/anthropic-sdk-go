@@ -3,12 +3,13 @@ package anthropic
 import (
 	"errors"
 	"fmt"
+	"os"
 )
 
 type Err struct {
 	Op  string
 	Err string
-	e error
+	e   error
 }
 
 func (e *Err) Error() string {
@@ -18,5 +19,14 @@ func (e *Err) Error() string {
 
 func (e *Err) Unwrap() error {
 	e.e = errors.New(e.Err)
-    return e.e
+	return e.e
+}
+
+func Exit(e error, code ...int) {
+	fmt.Println(e.Error())
+	if len(code) != 0 {
+		os.Exit(code[0])
+	} else {
+		os.Exit(-99)
+	}
 }
