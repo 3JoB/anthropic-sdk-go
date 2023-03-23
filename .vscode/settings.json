@@ -5,6 +5,7 @@
         "seenstop",
         "sequencesmax",
         "sequencestop",
-        "tokensmax"
+        "tokensmax",
+        "ULIB"
     ]
 }
