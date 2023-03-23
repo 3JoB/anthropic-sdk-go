@@ -6,16 +6,18 @@ import (
 	"github.com/3JoB/ulib/net/ua"
 )
 
-func New(conf *Anthropic) *Anthropic {
+func New(conf *Anthropic) (*Anthropic, error) {
 	if conf == nil {
-		panic(ErrConfigEmpty)
+		return nil, ErrConfigEmpty
 	}
-	setHeaders(conf.Key)
+	if err := setHeaders(conf.Key); err != nil {
+		return nil, err
+	}
 	SetPool()
 	if conf.DefaultModel == "" {
 		conf.DefaultModel = ModelClaudeInstantDefault
 	}
-	return conf
+	return conf, nil
 }
 
 func (ah *Anthropic) Send(sender *Sender) (data *Response, err error) {
@@ -45,9 +47,9 @@ func setPrompt(human string) (string, error) {
 	return fmt.Sprintf(`\n\nHuman: %v\n\nAssistant:`, human), nil
 }
 
-func setHeaders(api string) {
+func setHeaders(api string) error {
 	if api == "" {
-		Exit(ErrApiKeyEmpty)
+		return ErrApiKeyEmpty
 	}
 	Headers = map[string]string{
 		"Accept":        "application/json",
@@ -57,4 +59,5 @@ func setHeaders(api string) {
 		"X-API-Key":     api,
 		"User-Agent":    ua.ULIBDefault,
 	}
+	return nil
 }

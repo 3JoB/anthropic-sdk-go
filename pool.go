@@ -7,9 +7,7 @@ import (
 	"github.com/goccy/go-json"
 )
 
-var (
-	Pool sync.Pool = fast.NewClientPool()
-)
+var Pool sync.Pool = fast.NewClientPool()
 
 func GetPool() *fast.Client {
 	return Pool.Get().(*fast.Client)
