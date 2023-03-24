@@ -19,18 +19,13 @@ func NewClient(conf *AnthropicClient) (*AnthropicClient, error) {
 	return conf, nil
 }
 
-func (ah *AnthropicClient) Send(sender *Sender) (data *Response, err error) {
+func (ah *AnthropicClient) c(sender *Sender) (err error) {
 	if sender == nil {
-		return nil, ErrSenderNil
+		return ErrSenderNil
 	}
 	if sender.Prompt == "" {
-		return nil, ErrPromptEmpty
+		return ErrPromptEmpty
 	}
-	sender.Prompt, err = setPrompt(sender.Prompt, "")
-	if err != nil {
-		return nil, err
-	}
-	sender.Stream = false
 	if sender.Model == "" {
 		sender.Model = ah.DefaultModel
 	}
@@ -40,8 +35,32 @@ func (ah *AnthropicClient) Send(sender *Sender) (data *Response, err error) {
 	if sender.MaxToken < 1 {
 		sender.MaxToken = 400
 	}
-	sender.Complete()
-	return nil, nil
+	return nil
+}
+
+func (ah *AnthropicClient) Send(sender *Sender) (ctx *Context, err error) {
+	if err := ah.c(sender); err != nil {
+		return nil, err
+	}
+	sender.Prompt, err = setPrompt(sender.Prompt, "")
+	if err != nil {
+		return nil, err
+	}
+	return sender.Complete()
+}
+
+// context if from *Context.CtxData.
+//
+// It's already preprocessed, no need to reprocess it!
+func (ah *AnthropicClient) SendWithContext(sender *Sender, context string) (ctx *Context, err error) {
+	if err := ah.c(sender); err != nil {
+		return nil, err
+	}
+	sender.Prompt, err = addPrompt(context, sender.Prompt)
+	if err != nil {
+		return nil, err
+	}
+	return sender.Complete()
 }
 
 func setPrompt(human, assistant string) (string, error) {

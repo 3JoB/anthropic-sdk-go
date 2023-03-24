@@ -14,13 +14,107 @@
     </p>
 <p align="center">Golang implementation of AnthRopic AI sdk</p>
 
+<br>
+
+## Features
+- Prompt automatically handles
+- Concise and easy-to-use API
+- Support context memory (automatically handle context)
+
 <br><br>
 
-**The sdk is still under development and cannot be used temporarily.**
+## Start
+Usage:
+```sh
+$ go get github.com/3JoB/anthropic-sdk-go@v1.0.0
+```
 
-<br><br>
+<br>
+Example usage:
 
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/3JoB/anthropic-sdk-go"
+)
+
+func main() {
+	c, err := anthropic.NewClient(&anthropic.AnthropicClient{
+		Key: "your keys",
+	})
+	if err != nil {
+		panic(err)
+	}
+	d, err := c.Send(&anthropic.Sender{
+		Prompt: "Do you know Golang, please answer me in the shortest possible way.",
+		MaxToken: 1200,
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(d.Response.String())
+}
+```
+
+Return:
+```json
+{"detail":null,"completion":"Hello world! \nfmt.Println(\"Hello world!\")\n\nDone.","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1","truncated":false}
+```
+
+<br>
+
+Context Example:
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/3JoB/anthropic-sdk-go"
+)
+
+func main() {
+	c, err := anthropic.NewClient(&anthropic.AnthropicClient{
+		Key: "your keys",
+	})
+	if err != nil {
+		panic(err)
+	}
+	d, err := c.Send(&anthropic.Sender{
+		Prompt: "Do you know Golang, please answer me in the shortest possible way.",
+		MaxToken: 1200,
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(d.Response.String())
+
+	ds, err := c.SendWithContext(&anthropic.Sender{
+		Prompt: "What is its current version number?",
+        MaxToken: 1200,
+	}, d.CtxData)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(ds.Response.String())
+}
+```
+
+Return:
+```json
+{"detail":null,"completion":"Hello world! \nfmt.Println(\"Hello world!\")\n\nDone.","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1","truncated":false}
+{"detail":null,"completion":"1.14.4 ","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1","truncated":false}
+```
+
+<br>
+
+# Other
 This project only guarantees basic usability, if you need new features or improvements, please create a `Pull Requests`
+
+<br>
 
 # License
 This software is distributed under MIT license.

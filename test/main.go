@@ -8,16 +8,26 @@ import (
 
 func main() {
 	c, err := anthropic.NewClient(&anthropic.AnthropicClient{
-		Key: "",
+		Key: "your keys",
 	})
 	if err != nil {
 		panic(err)
 	}
 	d, err := c.Send(&anthropic.Sender{
-		Prompt: "what's your name?",
+		Prompt: "Do you know Golang, please answer me in the shortest possible way.",
+		MaxToken: 1200,
 	})
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(d)
+	fmt.Println(d.Response.String())
+
+	ds, err := c.SendWithContext(&anthropic.Sender{
+		Prompt: "What is its current version number?",
+        MaxToken: 1200,
+	}, d.CtxData)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(ds.Response.String())
 }

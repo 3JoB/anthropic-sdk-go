@@ -3,6 +3,8 @@
         "fasthttp",
         "goccy",
         "ldflags",
+        "nfmt",
+        "Println",
         "ptemperaturetop",
         "reasonstop",
         "resty",
