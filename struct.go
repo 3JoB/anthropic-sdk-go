@@ -21,12 +21,6 @@ type Sender struct {
 	TopP          int      `json:"top_p,omitempty"`          // (optional) Does nucleus sampling, in which we compute the cumulative distribution over all the options for each subsequent token in decreasing probability order and cut it off once it reaches a particular probability specified by . Defaults to -1, which disables it. Note that you should either alter or , but not both.`top_ptemperaturetop_p``
 }
 
-type Context struct {
-	CtxData  string // This is automatically processed context data, do not modify
-	RawData  string // Unprocessed raw json data returned by the API endpoint
-	Response *Response
-}
-
 type Response struct {
 	Detail     any    `json:"detail"`      // detail
 	Completion string `json:"completion"`  // The resulting completion up to and excluding the stop sequences.
