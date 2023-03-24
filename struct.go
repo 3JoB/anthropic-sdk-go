@@ -1,10 +1,14 @@
 package anthropic
 
-import "github.com/3JoB/ulib/json"
+import (
+	"github.com/3JoB/ulib/json"
+	"github.com/go-resty/resty/v2"
+)
 
 type AnthropicClient struct {
 	Key          string // API Keys
-	DefaultModel string
+	DefaultModel string // Choose the default AI model
+	client *resty.Client // http client
 }
 
 type Sender struct {
@@ -18,20 +22,20 @@ type Sender struct {
 }
 
 type Context struct {
-	CtxData string
-	RawData string
+	CtxData  string // This is automatically processed context data, do not modify
+	RawData  string // Unprocessed raw json data returned by the API endpoint
 	Response *Response
 }
 
 type Response struct {
-	Detail     any    `json:"detail"`    // detail
-	Completion string `json:"completion"`          // The resulting completion up to and excluding the stop sequences.
-	StopReason string `json:"stop_reason"`         // The reason we stopped sampling, either if we reached one of your provided , or if we exceeded `.stop_sequencestop_sequencesmax_tokensmax_tokens_to_sample`
-	Stop       string `json:"stop"`                // If the is , this contains the actual stop sequence (of the list passed-in) that was `seenstop_reasonstop_sequencestop_sequences`
-	LogID      string `json:"log_id"`              // The ID of the log that generated the response
-	Exception  string `json:"exception"` // exception
-	Model      string `json:"model"`               // Model
-	Truncated  bool   `json:"truncated"` // truncated
+	Detail     any    `json:"detail"`      // detail
+	Completion string `json:"completion"`  // The resulting completion up to and excluding the stop sequences.
+	StopReason string `json:"stop_reason"` // The reason we stopped sampling, either if we reached one of your provided , or if we exceeded `.stop_sequencestop_sequencesmax_tokensmax_tokens_to_sample`
+	Stop       string `json:"stop"`        // If the is , this contains the actual stop sequence (of the list passed-in) that was `seenstop_reasonstop_sequencestop_sequences`
+	LogID      string `json:"log_id"`      // The ID of the log that generated the response
+	Exception  string `json:"exception"`   // exception
+	Model      string `json:"model"`       // Model
+	Truncated  bool   `json:"truncated"`   // truncated
 }
 
 func (res *Response) String() string {

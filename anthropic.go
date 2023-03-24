@@ -4,8 +4,10 @@ import (
 	"fmt"
 
 	"github.com/3JoB/ulib/net/ua"
+	"github.com/go-resty/resty/v2"
 )
 
+// Create a new Client object.
 func NewClient(conf *AnthropicClient) (*AnthropicClient, error) {
 	if conf == nil {
 		return nil, ErrConfigEmpty
@@ -13,6 +15,7 @@ func NewClient(conf *AnthropicClient) (*AnthropicClient, error) {
 	if err := setHeaders(conf.Key); err != nil {
 		return nil, err
 	}
+	conf.client = resty.New().SetBaseURL(API).SetHeaders(Headers)
 	if conf.DefaultModel == "" {
 		conf.DefaultModel = ModelClaudeInstantV1
 	}
@@ -38,6 +41,7 @@ func (ah *AnthropicClient) c(sender *Sender) (err error) {
 	return nil
 }
 
+// Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 func (ah *AnthropicClient) Send(sender *Sender) (ctx *Context, err error) {
 	if err := ah.c(sender); err != nil {
 		return nil, err
@@ -46,12 +50,14 @@ func (ah *AnthropicClient) Send(sender *Sender) (ctx *Context, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return sender.Complete()
+	return sender.Complete(ah.client)
 }
 
-// context if from *Context.CtxData.
+// Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 //
-// It's already preprocessed, no need to reprocess it!
+// This method will be used to handle context requests.
+//
+// The context parameter comes from *Context.CtxData, please do not modify or process it by yourself, the context will be automatically processed when the previous request is executed.
 func (ah *AnthropicClient) SendWithContext(sender *Sender, context string) (ctx *Context, err error) {
 	if err := ah.c(sender); err != nil {
 		return nil, err
@@ -60,7 +66,7 @@ func (ah *AnthropicClient) SendWithContext(sender *Sender, context string) (ctx 
 	if err != nil {
 		return nil, err
 	}
-	return sender.Complete()
+	return sender.Complete(ah.client)
 }
 
 func setPrompt(human, assistant string) (string, error) {

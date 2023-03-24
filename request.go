@@ -7,11 +7,13 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-func (req *Sender) Complete() (*Context, error) {
-	r, errs := resty.New().R().SetHeaders(Headers).SetBody(json.Marshal(req).Bytes()).Post(APIComplete)
+// Make a processed request to an API endpoint.
+func (req *Sender) Complete(client *resty.Client) (*Context, error) {
+	r, errs := client.R().SetBody(json.Marshal(req).Bytes()).Post(APIComplete)
 	if errs != nil {
 		return nil, &err.Err{Op: "request_Complete", Err: errs.Error()}
 	}
+	defer r.RawBody().Close()
 	ctx := &Context{
 		Response: &Response{},
 	}
