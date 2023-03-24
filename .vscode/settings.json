@@ -1,9 +1,11 @@
 {
     "cSpell.words": [
+        "CPTA",
         "fasthttp",
         "goccy",
         "ldflags",
         "nfmt",
+        "pipebomb",
         "Println",
         "ptemperaturetop",
         "reasonstop",
@@ -13,6 +15,7 @@
         "sequencestop",
         "tokensmax",
         "ULIB",
+        "undercompensating",
         "zerolog"
     ]
 }
