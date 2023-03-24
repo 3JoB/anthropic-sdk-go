@@ -1,12 +1,16 @@
 {
     "cSpell.words": [
         "fasthttp",
+        "goccy",
+        "ldflags",
         "ptemperaturetop",
         "reasonstop",
+        "resty",
         "seenstop",
         "sequencesmax",
         "sequencestop",
         "tokensmax",
-        "ULIB"
+        "ULIB",
+        "zerolog"
     ]
 }

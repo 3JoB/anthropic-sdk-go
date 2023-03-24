@@ -3,7 +3,7 @@ package anthropic
 const (
 	API         string = "https://api.anthropic.com"
 	APIComplete string = "https://api.anthropic.com/v1/complete"
-	SDKVersion  string = "v1.0.0"
+	SDKVersion  string = "1.0.0"
 
 	ModelClaudeV1             string = "claude-v1"
 	ModelClaudeDefault        string = "claude-v1.0"
@@ -13,5 +13,8 @@ const (
 )
 
 var (
-	Headers map[string]string
+	Headers       map[string]string
+	StopSequences []string = []string{
+		"\n\nHuman:",
+	}
 )
