@@ -12,7 +12,7 @@
         <a href="#"><img src="https://img.shields.io/github/repo-size/3JoB/anthropic-sdk-go?style=flat-square" alt="GitHub repo size"></a>
         <a href="#"><img src="https://img.shields.io/github/commit-activity/m/3JoB/anthropic-sdk-go?style=flat-square" alt="GitHub commit activity"></a>
     </p>
-<p align="center">Golang implementation of AnthRopic AI sdk</p>
+<p align="center">Golang SDK for AnthRopic Claude AI</p>
 
 <br>
 
