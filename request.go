@@ -8,7 +8,7 @@ import (
 )
 
 // Make a processed request to an API endpoint.
-func (req *Sender) Complete(client *resty.Client) (*Context, error) {
+func (req *Opts) Complete(client *resty.Client) (*Context, error) {
 	r, errs := client.R().SetBody(json.Marshal(req).Bytes()).Post(APIComplete)
 	if errs != nil {
 		return nil, &err.Err{Op: "request_Complete", Err: errs.Error()}
@@ -17,6 +17,7 @@ func (req *Sender) Complete(client *resty.Client) (*Context, error) {
 	ctx := &Context{
 		Response: &Response{},
 	}
+	ctx.ID = req.ContextID
 	if errs := json.Unmarshal(r.Body(), ctx.Response); errs != nil {
 		return nil, &err.Err{Op: "request_Complete", Err: errs.Error()}
 	}
@@ -24,6 +25,6 @@ func (req *Sender) Complete(client *resty.Client) (*Context, error) {
 		return nil, &err.Err{Op: "request_Complete", Err: ctx.Response.Detail.(string)}
 	}
 	ctx.RawData = unsafeConvert.StringReflect(r.Body())
-	ctx.CtxData, _ = setPrompt(req.Prompt, ctx.Response.Completion)
+	ctx.Add()
 	return ctx, nil
 }

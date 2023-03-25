@@ -5,6 +5,7 @@ import (
 
 	"github.com/3JoB/ulib/net/ua"
 	"github.com/go-resty/resty/v2"
+	"github.com/google/uuid"
 )
 
 // Create a new Client object.
@@ -42,15 +43,28 @@ func (ah *AnthropicClient) c(sender *Sender) (err error) {
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
-func (ah *AnthropicClient) Send(sender *Sender) (ctx *Context, err error) {
-	if err := ah.c(sender); err != nil {
+func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
+	if err := ah.c(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
-	sender.Prompt, err = setPrompt(sender.Prompt, "")
+	num := len(senderOpts.Context)
+	if num == 0 {
+		return nil, ErrContextNil
+	}
+	ms := senderOpts.Context[num - 1]
+	if senderOpts.ContextID == "" {
+		senderOpts.ContextID = uuid.New().String()
+	}
+	AddContextMaps(senderOpts.ContextID, ms)
+	if num == 1 {
+		senderOpts.Sender.Prompt, err = setPrompt(ms.Human, ms.Assistant)
+	} else {
+		senderOpts.Sender.Prompt, err = buildPrompts(senderOpts.Context)
+	}
 	if err != nil {
 		return nil, err
 	}
-	return sender.Complete(ah.client)
+	return senderOpts.Complete(ah.client)
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
@@ -58,7 +72,7 @@ func (ah *AnthropicClient) Send(sender *Sender) (ctx *Context, err error) {
 // This method will be used to handle context requests.
 //
 // The context parameter comes from *Context.CtxData, please do not modify or process it by yourself, the context will be automatically processed when the previous request is executed.
-func (ah *AnthropicClient) SendWithContext(sender *Sender, context string) (ctx *Context, err error) {
+/*func (ah *AnthropicClient) SendWithContext(sender *Sender, context string) (ctx *Context, err error) {
 	if err := ah.c(sender); err != nil {
 		return nil, err
 	}
@@ -67,7 +81,7 @@ func (ah *AnthropicClient) SendWithContext(sender *Sender, context string) (ctx 
 		return nil, err
 	}
 	return sender.Complete(ah.client)
-}
+}*/
 
 func setPrompt(human, assistant string) (string, error) {
 	if human == "" {
@@ -77,6 +91,26 @@ func setPrompt(human, assistant string) (string, error) {
 		return fmt.Sprintf("\n\nHuman: %v\n\nAssistant:", human), nil
 	}
 	return fmt.Sprintf("%v%v", human, assistant), nil
+}
+
+func buildPrompts(data []MessageModule) (string, error) {
+	if len(data) == 0 {
+        return "", nil
+    }
+	prompts, _ := setPrompt(data[0].Human, data[0].Assistant)
+	if len(data) < 2 {
+		return prompts, nil
+	}
+    for _, d := range data[1:] {
+		if d.Human == "" {
+			return "", ErrPromptHumanEmpty
+		}
+		if d.Assistant == "" {
+			return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", prompts, d.Human), nil
+		}
+        prompts = fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:%v", prompts, d.Human, d.Assistant)
+    }
+	return prompts, nil
 }
 
 func addPrompt(context, human string) (string, error) {

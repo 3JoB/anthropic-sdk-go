@@ -6,6 +6,7 @@ require (
 	github.com/3JoB/ulib v1.21.0
 	github.com/3JoB/unsafeConvert v1.3.0
 	github.com/go-resty/resty/v2 v2.7.0
+	github.com/google/uuid v1.3.0
 )
 
 require (

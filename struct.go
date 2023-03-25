@@ -6,9 +6,9 @@ import (
 )
 
 type AnthropicClient struct {
-	Key          string // API Keys
-	DefaultModel string // Choose the default AI model
-	client *resty.Client // http client
+	Key          string        // API Keys
+	DefaultModel string        // Choose the default AI model
+	client       *resty.Client // http client
 }
 
 type Sender struct {
