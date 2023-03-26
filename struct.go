@@ -2,14 +2,7 @@ package anthropic
 
 import (
 	"github.com/3JoB/ulib/json"
-	"github.com/go-resty/resty/v2"
 )
-
-type AnthropicClient struct {
-	Key          string        // API Keys
-	DefaultModel string        // Choose the default AI model
-	client       *resty.Client // http client
-}
 
 type Sender struct {
 	Prompt        string   `json:"prompt"`                   // (required) The prompt you want Claude to complete. For proper response generation you will most likely want to format your prompt as follows:See [our comments on prompts](https://console.anthropic.com/docs/prompt-design#what-is-a-prompt) for more context.

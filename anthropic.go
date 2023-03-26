@@ -8,11 +8,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type AnthropicClient struct {
+	Key          string        // API Keys
+	DefaultModel string        // Choose the default AI model
+	client       *resty.Client // http client
+}
+
 // Create a new Client object.
-func NewClient(conf *AnthropicClient) (*AnthropicClient, error) {
-	if conf == nil {
-		return nil, ErrConfigEmpty
-	}
+func New(conf *AnthropicClient) (*AnthropicClient, error) {
 	if err := setHeaders(conf.Key); err != nil {
 		return nil, err
 	}
@@ -24,9 +27,6 @@ func NewClient(conf *AnthropicClient) (*AnthropicClient, error) {
 }
 
 func (ah *AnthropicClient) c(sender *Sender) (err error) {
-	if sender == nil {
-		return ErrSenderNil
-	}
 	if sender.Prompt == "" {
 		return ErrPromptEmpty
 	}
@@ -47,19 +47,18 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 	if err := ah.c(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
-	num := len(senderOpts.Context)
-	if num == 0 {
+	if senderOpts.Len() == 0 {
 		return nil, ErrContextNil
 	}
-	ms := senderOpts.Context[num - 1]
+	ms := senderOpts.Context[senderOpts.Len() - 1]
 	if senderOpts.ContextID == "" {
 		senderOpts.ContextID = uuid.New().String()
 	}
 	AddContextMaps(senderOpts.ContextID, ms)
-	if num == 1 {
+	if senderOpts.Len() == 1 {
 		senderOpts.Sender.Prompt, err = setPrompt(ms.Human, ms.Assistant)
 	} else {
-		senderOpts.Sender.Prompt, err = buildPrompts(senderOpts.Context)
+		senderOpts.Sender.Prompt, err = senderOpts.buildPrompts()
 	}
 	if err != nil {
 		return nil, err
@@ -82,46 +81,6 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 	}
 	return sender.Complete(ah.client)
 }*/
-
-func setPrompt(human, assistant string) (string, error) {
-	if human == "" {
-		return "", ErrPromptHumanEmpty
-	}
-	if assistant == "" {
-		return fmt.Sprintf("\n\nHuman: %v\n\nAssistant:", human), nil
-	}
-	return fmt.Sprintf("%v%v", human, assistant), nil
-}
-
-func buildPrompts(data []MessageModule) (string, error) {
-	if len(data) == 0 {
-        return "", nil
-    }
-	prompts, _ := setPrompt(data[0].Human, data[0].Assistant)
-	if len(data) < 2 {
-		return prompts, nil
-	}
-    for _, d := range data[1:] {
-		if d.Human == "" {
-			return "", ErrPromptHumanEmpty
-		}
-		if d.Assistant == "" {
-			return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", prompts, d.Human), nil
-		}
-        prompts = fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:%v", prompts, d.Human, d.Assistant)
-    }
-	return prompts, nil
-}
-
-func addPrompt(context, human string) (string, error) {
-	if human == "" {
-		return "", ErrPromptHumanEmpty
-	}
-	if context == "" {
-		return "", ErrPromptCtxEmpty
-	}
-	return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", context, human), nil
-}
 
 func setHeaders(api string) error {
 	if api == "" {

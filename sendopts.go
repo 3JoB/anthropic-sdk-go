@@ -6,6 +6,6 @@ type Opts struct{
 	Sender Sender
 }
 
-func (o *Opts) Null(){
-	
+func (o *Opts) Len() int {
+	return len(o.Context)
 }

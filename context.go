@@ -12,14 +12,14 @@ type MessageModule struct {
 	Human     string // input content
 }
 
-var contextMaps map[string][]MessageModule
+var cPools map[string][]MessageModule
 
 func init() {
-	contextMaps = make(map[string][]MessageModule)
+	cPools = make(map[string][]MessageModule)
 }
 
 func FindContext(key string) (v []MessageModule) {
-	return contextMaps[key]
+	return cPools[key]
 }
 
 func (c *Context) Find() (v []MessageModule) {
@@ -27,14 +27,14 @@ func (c *Context) Find() (v []MessageModule) {
 }
 
 func SetContext(key string, value []MessageModule) {
-	contextMaps[key] = value
+	cPools[key] = value
 }
 
 func (c *Context) Set() {}
 
 func SetLastContext(key string, value MessageModule) {
-	num := len(contextMaps[key])
-	contextMaps[key][num - 1] = value
+	num := len(cPools[key])
+	cPools[key][num - 1] = value
 }
 
 func (c *Context) SetLast() {
@@ -42,7 +42,7 @@ func (c *Context) SetLast() {
 }
 
 func AddContextMaps(key string, value MessageModule) {
-	contextMaps[key] = append(contextMaps[key], value)
+	cPools[key] = append(cPools[key], value)
 }
 
 func (c *Context) Add() {
@@ -50,5 +50,5 @@ func (c *Context) Add() {
 }
 
 func RefreshContext(key string) {
-	delete(contextMaps, key)
+	delete(cPools, key)
 }
