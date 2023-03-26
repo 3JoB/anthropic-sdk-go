@@ -19,10 +19,10 @@ func main() {
 	})*/
 	d, err := c.Send(&anthropic.Opts{
 		Context: []anthropic.MessageModule{
-			anthropic.MessageModule{
-                Human: "Do you know Golang, please answer me in the shortest possible way.",
-            },
-        },
+			{
+				Human: "Do you know Golang, please answer me in the shortest possible way.",
+			},
+		},
 		Sender: anthropic.Sender{MaxToken: 1200},
 	})
 	if err != nil {

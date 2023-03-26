@@ -34,12 +34,10 @@ func (c *Context) Set() {}
 
 func SetLastContext(key string, value MessageModule) {
 	num := len(cPools[key])
-	cPools[key][num - 1] = value
+	cPools[key][num-1] = value
 }
 
-func (c *Context) SetLast() {
-
-}
+func (c *Context) SetLast() {}
 
 func AddContextMaps(key string, value MessageModule) {
 	cPools[key] = append(cPools[key], value)

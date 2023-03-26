@@ -50,7 +50,7 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 	if senderOpts.Len() == 0 {
 		return nil, ErrContextNil
 	}
-	ms := senderOpts.Context[senderOpts.Len() - 1]
+	ms := senderOpts.Context[senderOpts.Len()-1]
 	if senderOpts.ContextID == "" {
 		senderOpts.ContextID = uuid.New().String()
 	}
