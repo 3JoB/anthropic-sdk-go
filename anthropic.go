@@ -69,7 +69,7 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 	}
 	ctx = &Context{
 		Response: &Response{},
-		Human: senderOpts.Context.Human,
+		Human:    senderOpts.Context.Human,
 	}
 	if senderOpts.ContextID == "" {
 		senderOpts.ContextID = uuid.New().String()[0:8]

@@ -23,16 +23,18 @@ func (c *Context) Set(value any) bool {
 	return SetContext(c.ID, value)
 }
 
+// Add a prompt to the context storage pool
 func (c *Context) Add() bool {
 	return AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: c.Human})
 }
 
 func (c *Context) Delete() {
-    DeleteContext(c.ID)
+	DeleteContext(c.ID)
 }
 
+// Refresh the context storage pool (clear all data)
 func (c *Context) Refresh() {
-    RefreshContext()
+	RefreshContext()
 }
 
 func AddContext(key string, value data.MessageModule) bool {
@@ -75,6 +77,6 @@ func DeleteContext(key string) {
 func RefreshContext() {
 	pool.Range(func(key, value any) bool {
 		pool.Delete(key)
-        return true
+		return true
 	})
 }

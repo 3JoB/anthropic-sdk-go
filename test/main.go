@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// fuck i accidentally leaked my keys and it's now disabled by me.
-	c, err := anthropic.New("keys ","")
+	c, err := anthropic.New("keys ", "")
 	if err != nil {
 		panic(err)
 	}
@@ -30,10 +30,10 @@ func main() {
 
 	ds, err := c.Send(&anthropic.Opts{
 		Context: data.MessageModule{
-            Human: "What is its current version number?",
-        },
+			Human: "What is its current version number?",
+		},
 		ContextID: d.ID,
-        Sender: anthropic.Sender{MaxToken: 1200},
+		Sender:    anthropic.Sender{MaxToken: 1200},
 	})
 	if err != nil {
 		panic(err)

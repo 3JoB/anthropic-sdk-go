@@ -124,6 +124,27 @@ Return:
 {"detail":null,"completion":"1.14.4 ","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1","truncated":false}
 ```
 
+### Delete the context in an ID
+```golang
+c, err := anthropic.New("api keys","modules")
+if err != nil {
+	panic(err)
+}
+
+d, err := c.Send(&anthropic.Opts{
+	Context: data.MessageModule{
+		Human: "Do you know Golang, please answer me in the shortest possible way.",
+	},
+	Sender: anthropic.Sender{MaxToken: 1200},
+})
+
+if err != nil {
+	panic(err)
+}
+
+d.Delete()
+```
+
 <br>
 
 # Other
