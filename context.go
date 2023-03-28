@@ -1,5 +1,7 @@
 package anthropic
 
+import "sync"
+
 type Context struct {
 	ID       string // Context ID
 	Human    string
@@ -12,41 +14,68 @@ type MessageModule struct {
 	Human     string // input content
 }
 
-var cPools map[string][]MessageModule
+var pool sync.Map
 
-func init() {
-	cPools = make(map[string][]MessageModule)
-}
-
-func FindContext(key string) (v []MessageModule) {
-	return cPools[key]
-}
-
-func (c *Context) Find() (v []MessageModule) {
+func (c *Context) Find() (v []MessageModule, ok bool) {
 	return FindContext(c.ID)
 }
 
-func SetContext(key string, value []MessageModule) {
-	cPools[key] = value
+func (c *Context) Set(value any) bool {
+	return SetContext(c.ID, value)
 }
 
-func (c *Context) Set() {}
-
-func SetLastContext(key string, value MessageModule) {
-	num := len(cPools[key])
-	cPools[key][num-1] = value
+func (c *Context) Add(human string) bool {
+	return AddContext(c.ID, MessageModule{Assistant: c.Response.Completion, Human: human})
 }
 
-func (c *Context) SetLast() {}
-
-func AddContextMaps(key string, value MessageModule) {
-	cPools[key] = append(cPools[key], value)
+func (c *Context) Delete() {
+    DeleteContext(c.ID)
 }
 
-func (c *Context) Add() {
-	AddContextMaps(c.ID, MessageModule{Assistant: c.Response.Completion})
+func (c *Context) Refresh() {
+    RefreshContext()
 }
 
-func RefreshContext(key string) {
-	delete(cPools, key)
+func AddContext(key string, value MessageModule) bool {
+	v, ok := FindContext(key)
+	if !ok {
+		return SetContext(key, value)
+	}
+	v = append(v, value)
+	SetContext(key, v)
+	return true
+}
+
+func FindContext(key string) (v []MessageModule, ok bool) {
+	vs, ok := pool.Load(key)
+	if !ok {
+		return nil, ok
+	}
+	return vs.([]MessageModule), ok
+}
+
+func SetContext(key string, value any) bool {
+	switch v := value.(type) {
+	case MessageModule:
+		r := []MessageModule{
+			v,
+		}
+		pool.Store(key, r)
+	case []MessageModule:
+		pool.Store(key, v)
+	default:
+		return false
+	}
+	return true
+}
+
+func DeleteContext(key string) {
+	pool.Delete(key)
+}
+
+func RefreshContext() {
+	pool.Range(func(key, value any) bool {
+		pool.Delete(key)
+        return true
+	})
 }

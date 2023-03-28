@@ -12,25 +12,25 @@ func setPrompt(human, assistant string) (string, error) {
 	return fmt.Sprintf("%v%v", human, assistant), nil
 }
 
-func (opts *Opts) buildPrompts() (string, error) {
-	if opts.Len() == 0 {
-		return "", nil
-	}
-
-	prompts, _ := setPrompt(opts.Context[0].Human, opts.Context[0].Assistant)
-	if opts.Len() < 2 {
+func buildPrompts(module any) (string, error) {
+	switch r := module.(type) {
+	case MessageModule:
+		return setPrompt(r.Human, r.Assistant)
+	case []MessageModule:
+		var prompts string
+		for _, d := range r {
+			if d.Human == "" {
+				return "", ErrPromptHumanEmpty
+			}
+			if d.Assistant == "" {
+				return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", prompts, d.Human), nil
+			}
+			prompts = fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:%v", prompts, d.Human, d.Assistant)
+		}
 		return prompts, nil
+	default:
+		return "", fmt.Errorf("unknown module type: %T", module)
 	}
-	for _, d := range opts.Context[1:] {
-		if d.Human == "" {
-			return "", ErrPromptHumanEmpty
-		}
-		if d.Assistant == "" {
-			return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", prompts, d.Human), nil
-		}
-		prompts = fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:%v", prompts, d.Human, d.Assistant)
-	}
-	return prompts, nil
 }
 
 func addPrompt(context, human string) (string, error) {

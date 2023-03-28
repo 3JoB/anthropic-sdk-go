@@ -2,6 +2,7 @@ package anthropic
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/3JoB/ulib/net/ua"
 	"github.com/go-resty/resty/v2"
@@ -15,18 +16,28 @@ type AnthropicClient struct {
 }
 
 // Create a new Client object.
-func New(conf *AnthropicClient) (*AnthropicClient, error) {
-	if err := setHeaders(conf.Key); err != nil {
+func New(key, defaultModel string) (*AnthropicClient, error) {
+	if err := setHeaders(key); err != nil {
 		return nil, err
 	}
-	conf.client = resty.New().SetBaseURL(API).SetHeaders(Headers)
-	if conf.DefaultModel == "" {
-		conf.DefaultModel = ModelClaudeInstantV1
+	conf := &AnthropicClient{
+		client: resty.New().SetBaseURL(API).SetHeaders(Headers),
+	}
+	if defaultModel == "" {
+		conf.DefaultModel = ModelClaudeV12
 	}
 	return conf, nil
 }
 
-func (ah *AnthropicClient) c(sender *Sender) (err error) {
+// is minute
+func (ah *AnthropicClient) SetTimeOut(times int) {
+	if times == 0 {
+		return
+	}
+	ah.client = ah.client.SetTimeout(time.Duration(times) * time.Minute)
+}
+
+func (ah *AnthropicClient) check(sender *Sender) (err error) {
 	if sender.Prompt == "" {
 		return ErrPromptEmpty
 	}
@@ -44,24 +55,21 @@ func (ah *AnthropicClient) c(sender *Sender) (err error) {
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
-	if err := ah.c(&senderOpts.Sender); err != nil {
+	if err := ah.check(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
-	if senderOpts.Len() == 0 {
+	if (senderOpts.Context == MessageModule{}) {
 		return nil, ErrContextNil
 	}
-	ms := senderOpts.Context[senderOpts.Len()-1]
 	if senderOpts.ContextID == "" {
 		senderOpts.ContextID = uuid.New().String()
-	}
-	AddContextMaps(senderOpts.ContextID, ms)
-	if senderOpts.Len() == 1 {
-		senderOpts.Sender.Prompt, err = setPrompt(ms.Human, ms.Assistant)
+		senderOpts.Sender.Prompt, err = buildPrompts(senderOpts.Context)
 	} else {
-		senderOpts.Sender.Prompt, err = senderOpts.buildPrompts()
-	}
-	if err != nil {
-		return nil, err
+		d, ok := ctx.Find()
+		if !ok {
+			return nil, ErrContextNotFound
+		}
+		senderOpts.Sender.Prompt, err = buildPrompts(d)
 	}
 	return senderOpts.Complete(ah.client)
 }

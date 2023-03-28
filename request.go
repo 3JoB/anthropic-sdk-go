@@ -25,6 +25,5 @@ func (req *Opts) Complete(client *resty.Client) (*Context, error) {
 		return nil, &err.Err{Op: "request_Complete", Err: ctx.Response.Detail.(string)}
 	}
 	ctx.RawData = unsafeConvert.StringReflect(r.Body())
-	ctx.Add()
 	return ctx, nil
 }

@@ -24,6 +24,7 @@ var (
 
 	ErrApiKeyEmpty      error = &err.Err{Op: "config", Err: "APIKey cannot be empty!"}
 	ErrContextNil       error = &err.Err{Op: "send", Err: "Context cannot be nil!"}
+	ErrContextNotFound  error = &err.Err{Op: "send", Err: "Context not found"}
 	ErrConfigEmpty      error = &err.Err{Op: "config", Err: "Configuration cannot be empty!"}
 	ErrSenderNil        error = &err.Err{Op: "sender", Err: "Sender cannot be nil!"}
 	ErrPromptHumanEmpty error = &err.Err{Op: "prompt", Err: "The value of human cannot be empty!"}
