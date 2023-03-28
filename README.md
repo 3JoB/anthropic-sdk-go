@@ -28,7 +28,7 @@ Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/
 ## Start
 Usage:
 ```sh
-$ go get github.com/3JoB/anthropic-sdk-go@v1.1.0
+$ go get github.com/3JoB/anthropic-sdk-go@v1.2.0
 ```
 
 <br>
@@ -41,20 +41,20 @@ import (
 	"fmt"
 
 	"github.com/3JoB/anthropic-sdk-go"
+	"github.com/3JoB/anthropic-sdk-go/data"
 )
 
 func main() {
-	c, err := anthropic.NewClient(&anthropic.AnthropicClient{
-		Key: "your keys",
-	})
-
+	c, err := anthropic.New("api keys","modules")
 	if err != nil {
 		panic(err)
 	}
 
-	d, err := c.Send(&anthropic.Sender{
-		Prompt: "Do you know Golang, please answer me in the shortest possible way.",
-		MaxToken: 1200,
+	d, err := c.Send(&anthropic.Opts{
+		Context: data.MessageModule{
+			Human: "Do you know Golang, please answer me in the shortest possible way.",
+		},
+		Sender: anthropic.Sender{MaxToken: 1200},
 	})
 
 	if err != nil {
@@ -80,20 +80,20 @@ import (
 	"fmt"
 
 	"github.com/3JoB/anthropic-sdk-go"
+	"github.com/3JoB/anthropic-sdk-go/data"
 )
 
 func main() {
-	c, err := anthropic.NewClient(&anthropic.AnthropicClient{
-		Key: "your keys",
-	})
-
+	c, err := anthropic.New("api keys","modules")
 	if err != nil {
 		panic(err)
 	}
 
-	d, err := c.Send(&anthropic.Sender{
-		Prompt: "Do you know Golang, please answer me in the shortest possible way.",
-		MaxToken: 1200,
+	d, err := c.Send(&anthropic.Opts{
+		Context: data.MessageModule{
+			Human: "Do you know Golang, please answer me in the shortest possible way.",
+		},
+		Sender: anthropic.Sender{MaxToken: 1200},
 	})
 
 	if err != nil {
@@ -102,11 +102,13 @@ func main() {
 
 	fmt.Println(d.Response.String())
 
-	ds, err := c.SendWithContext(&anthropic.Sender{
-		Prompt:   "What is its current version number?",
-		MaxToken: 1200,
-	},
-		d.CtxData)
+	ds, err := c.Send(&anthropic.Opts{
+		Context: data.MessageModule{
+            Human: "What is its current version number?",
+        },
+		ContextID: d.ID,
+        Sender: anthropic.Sender{MaxToken: 1200},
+	})
 
 	if err != nil {
 		panic(err)
