@@ -8,15 +8,13 @@ import (
 )
 
 // Make a processed request to an API endpoint.
-func (req *Opts) Complete(client *resty.Client) (*Context, error) {
+func (req *Opts) Complete(ctx *Context, client *resty.Client) (*Context, error) {
 	r, errs := client.R().SetBody(json.Marshal(req).Bytes()).Post(APIComplete)
 	if errs != nil {
 		return nil, &err.Err{Op: "request_Complete", Err: errs.Error()}
 	}
 	defer r.RawBody().Close()
-	ctx := &Context{
-		Response: &Response{},
-	}
+	ctx.Response = &Response{}
 	ctx.ID = req.ContextID
 	if errs := json.Unmarshal(r.Body(), ctx.Response); errs != nil {
 		return nil, &err.Err{Op: "request_Complete", Err: errs.Error()}
@@ -25,5 +23,9 @@ func (req *Opts) Complete(client *resty.Client) (*Context, error) {
 		return nil, &err.Err{Op: "request_Complete", Err: ctx.Response.Detail.(string)}
 	}
 	ctx.RawData = unsafeConvert.StringReflect(r.Body())
+	req.Context.Assistant = ctx.Response.Completion
+	if !ctx.Add() {
+		return nil, &err.Err{Op: "request_Complete", Err: "Add failed"}
+	}
 	return ctx, nil
 }

@@ -23,8 +23,8 @@ func (c *Context) Set(value any) bool {
 	return SetContext(c.ID, value)
 }
 
-func (c *Context) Add(human string) bool {
-	return AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: human})
+func (c *Context) Add() bool {
+	return AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: c.Human})
 }
 
 func (c *Context) Delete() {

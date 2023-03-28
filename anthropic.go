@@ -70,6 +70,7 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 	if (senderOpts.Context == data.MessageModule{}) {
 		return nil, data.ErrContextNil
 	}
+	ctx.Human = senderOpts.Context.Human
 	if senderOpts.ContextID == "" {
 		senderOpts.ContextID = uuid.New().String()
 		senderOpts.Sender.Prompt, err = prompt.Set(senderOpts.Context.Human, "")
@@ -83,7 +84,7 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return senderOpts.Complete(ah.client)
+	return senderOpts.Complete(ctx, ah.client)
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
