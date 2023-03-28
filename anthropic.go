@@ -7,12 +7,21 @@ import (
 	"github.com/3JoB/ulib/net/ua"
 	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
+
+	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/prompt"
 )
 
 type AnthropicClient struct {
 	Key          string        // API Keys
 	DefaultModel string        // Choose the default AI model
 	client       *resty.Client // http client
+}
+
+type Opts struct {
+	Context   data.MessageModule
+	ContextID string
+	Sender    Sender
 }
 
 // Create a new Client object.
@@ -37,9 +46,9 @@ func (ah *AnthropicClient) SetTimeOut(times int) {
 	ah.client = ah.client.SetTimeout(time.Duration(times) * time.Minute)
 }
 
-func (ah *AnthropicClient) check(sender *Sender) (err error) {
+func (ah *AnthropicClient) check(sender Sender) (err error) {
 	if sender.Prompt == "" {
-		return ErrPromptEmpty
+		return data.ErrPromptEmpty
 	}
 	if sender.Model == "" {
 		sender.Model = ah.DefaultModel
@@ -55,21 +64,24 @@ func (ah *AnthropicClient) check(sender *Sender) (err error) {
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
-	if err := ah.check(&senderOpts.Sender); err != nil {
+	if err := ah.check(senderOpts.Sender); err != nil {
 		return nil, err
 	}
-	if (senderOpts.Context == MessageModule{}) {
-		return nil, ErrContextNil
+	if (senderOpts.Context == data.MessageModule{}) {
+		return nil, data.ErrContextNil
 	}
 	if senderOpts.ContextID == "" {
 		senderOpts.ContextID = uuid.New().String()
-		senderOpts.Sender.Prompt, err = buildPrompts(senderOpts.Context)
+		senderOpts.Sender.Prompt, err = prompt.Set(senderOpts.Context.Human, "")
 	} else {
 		d, ok := ctx.Find()
 		if !ok {
-			return nil, ErrContextNotFound
+			return nil, data.ErrContextNotFound
 		}
-		senderOpts.Sender.Prompt, err = buildPrompts(d)
+		senderOpts.Sender.Prompt, err = prompt.Build(d)
+	}
+	if err != nil {
+		return nil, err
 	}
 	return senderOpts.Complete(ah.client)
 }
@@ -92,7 +104,7 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 
 func setHeaders(api string) error {
 	if api == "" {
-		return ErrApiKeyEmpty
+		return data.ErrApiKeyEmpty
 	}
 	Headers = map[string]string{
 		"Accept":       "application/json",

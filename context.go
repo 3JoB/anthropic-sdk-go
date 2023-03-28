@@ -1,6 +1,10 @@
 package anthropic
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/3JoB/anthropic-sdk-go/data"
+)
 
 type Context struct {
 	ID       string // Context ID
@@ -9,14 +13,9 @@ type Context struct {
 	Response *Response
 }
 
-type MessageModule struct {
-	Assistant string // returned data (do not modify)
-	Human     string // input content
-}
-
 var pool sync.Map
 
-func (c *Context) Find() (v []MessageModule, ok bool) {
+func (c *Context) Find() (v []data.MessageModule, ok bool) {
 	return FindContext(c.ID)
 }
 
@@ -25,7 +24,7 @@ func (c *Context) Set(value any) bool {
 }
 
 func (c *Context) Add(human string) bool {
-	return AddContext(c.ID, MessageModule{Assistant: c.Response.Completion, Human: human})
+	return AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: human})
 }
 
 func (c *Context) Delete() {
@@ -36,7 +35,7 @@ func (c *Context) Refresh() {
     RefreshContext()
 }
 
-func AddContext(key string, value MessageModule) bool {
+func AddContext(key string, value data.MessageModule) bool {
 	v, ok := FindContext(key)
 	if !ok {
 		return SetContext(key, value)
@@ -46,22 +45,22 @@ func AddContext(key string, value MessageModule) bool {
 	return true
 }
 
-func FindContext(key string) (v []MessageModule, ok bool) {
+func FindContext(key string) (v []data.MessageModule, ok bool) {
 	vs, ok := pool.Load(key)
 	if !ok {
 		return nil, ok
 	}
-	return vs.([]MessageModule), ok
+	return vs.([]data.MessageModule), ok
 }
 
 func SetContext(key string, value any) bool {
 	switch v := value.(type) {
-	case MessageModule:
-		r := []MessageModule{
+	case data.MessageModule:
+		r := []data.MessageModule{
 			v,
 		}
 		pool.Store(key, r)
-	case []MessageModule:
+	case []data.MessageModule:
 		pool.Store(key, v)
 	default:
 		return false

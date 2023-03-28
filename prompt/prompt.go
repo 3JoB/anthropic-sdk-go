@@ -1,10 +1,14 @@
-package anthropic
+package prompt
 
-import "fmt"
+import (
+	"fmt"
 
-func setPrompt(human, assistant string) (string, error) {
+	"github.com/3JoB/anthropic-sdk-go/data"
+)
+
+func Set(human, assistant string) (string, error) {
 	if human == "" {
-		return "", ErrPromptHumanEmpty
+		return "", data.ErrPromptHumanEmpty
 	}
 	if assistant == "" {
 		return fmt.Sprintf("\n\nHuman: %v\n\nAssistant:", human), nil
@@ -12,15 +16,15 @@ func setPrompt(human, assistant string) (string, error) {
 	return fmt.Sprintf("%v%v", human, assistant), nil
 }
 
-func buildPrompts(module any) (string, error) {
+func Build(module any) (string, error) {
 	switch r := module.(type) {
-	case MessageModule:
-		return setPrompt(r.Human, r.Assistant)
-	case []MessageModule:
+	case data.MessageModule:
+		return Set(r.Human, r.Assistant)
+	case []data.MessageModule:
 		var prompts string
 		for _, d := range r {
 			if d.Human == "" {
-				return "", ErrPromptHumanEmpty
+				return "", data.ErrPromptHumanEmpty
 			}
 			if d.Assistant == "" {
 				return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", prompts, d.Human), nil
@@ -33,12 +37,13 @@ func buildPrompts(module any) (string, error) {
 	}
 }
 
-func addPrompt(context, human string) (string, error) {
+/*func Add(context, human string) (string, error) {
 	if human == "" {
-		return "", ErrPromptHumanEmpty
+		return "", data.ErrPromptHumanEmpty
 	}
 	if context == "" {
-		return "", ErrPromptCtxEmpty
+		return "", data.ErrPromptCtxEmpty
 	}
 	return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", context, human), nil
 }
+*/
