@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	c, err := anthropic.New("sk-asPQ3uBYr-zVjZsRGX-QMHi9N-ok8wMhErPUtw00B0vtQLKRKZ5Uth-55T8xtDg2HvS6aDNmRR_9Xk43E-MbpQ","")
+	// fuck i accidentally leaked my keys and it's now disabled by me.
+	c, err := anthropic.New("keys ","")
 	if err != nil {
 		panic(err)
 	}
