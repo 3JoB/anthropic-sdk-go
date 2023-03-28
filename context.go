@@ -13,7 +13,7 @@ type Context struct {
 	Response *Response
 }
 
-var pool sync.Map
+var pool sync.Map = sync.Map{}
 
 func (c *Context) Find() (v []data.MessageModule, ok bool) {
 	return FindContext(c.ID)

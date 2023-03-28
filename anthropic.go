@@ -46,10 +46,7 @@ func (ah *AnthropicClient) SetTimeOut(times int) {
 	ah.client = ah.client.SetTimeout(time.Duration(times) * time.Minute)
 }
 
-func (ah *AnthropicClient) check(sender Sender) (err error) {
-	if sender.Prompt == "" {
-		return data.ErrPromptEmpty
-	}
+func (ah *AnthropicClient) check(sender *Sender) (err error) {
 	if sender.Model == "" {
 		sender.Model = ah.DefaultModel
 	}
@@ -64,21 +61,25 @@ func (ah *AnthropicClient) check(sender Sender) (err error) {
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
-	if err := ah.check(senderOpts.Sender); err != nil {
+	if err := ah.check(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
 	if (senderOpts.Context == data.MessageModule{}) {
 		return nil, data.ErrContextNil
 	}
-	ctx.Human = senderOpts.Context.Human
+	ctx = &Context{
+		Response: &Response{},
+		Human: senderOpts.Context.Human,
+	}
 	if senderOpts.ContextID == "" {
-		senderOpts.ContextID = uuid.New().String()
+		senderOpts.ContextID = uuid.New().String()[0:8]
 		senderOpts.Sender.Prompt, err = prompt.Set(senderOpts.Context.Human, "")
 	} else {
 		d, ok := ctx.Find()
 		if !ok {
 			return nil, data.ErrContextNotFound
 		}
+		d = append(d, senderOpts.Context)
 		senderOpts.Sender.Prompt, err = prompt.Build(d)
 	}
 	if err != nil {

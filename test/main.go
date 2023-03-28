@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	c, err := anthropic.New("your keys","")
+	c, err := anthropic.New("sk-asPQ3uBYr-zVjZsRGX-QMHi9N-ok8wMhErPUtw00B0vtQLKRKZ5Uth-55T8xtDg2HvS6aDNmRR_9Xk43E-MbpQ","")
 	if err != nil {
 		panic(err)
 	}
