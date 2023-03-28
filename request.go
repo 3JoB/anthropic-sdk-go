@@ -1,8 +1,6 @@
 package anthropic
 
 import (
-	"fmt"
-
 	"github.com/3JoB/ulib/err"
 	"github.com/3JoB/ulib/json"
 	"github.com/3JoB/unsafeConvert"
@@ -17,7 +15,6 @@ func (req *Opts) Complete(ctx *Context, client *resty.Client) (*Context, error) 
 	}
 	defer r.RawBody().Close()
 
-	fmt.Printf("Spawn ID: %v\n", req.ContextID)
 	ctx.ID = req.ContextID
 	if errs := json.Unmarshal(r.Body(), ctx.Response); errs != nil {
 		return nil, &err.Err{Op: "request", Err: errs.Error()}

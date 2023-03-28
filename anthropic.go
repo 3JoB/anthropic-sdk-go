@@ -75,6 +75,7 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 		senderOpts.ContextID = uuid.New().String()[0:8]
 		senderOpts.Sender.Prompt, err = prompt.Set(senderOpts.Context.Human, "")
 	} else {
+		ctx.ID = senderOpts.ContextID
 		d, ok := ctx.Find()
 		if !ok {
 			return nil, data.ErrContextNotFound
