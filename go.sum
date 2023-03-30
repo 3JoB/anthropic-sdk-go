@@ -1,7 +1,11 @@
 github.com/3JoB/resty-ilo v1.1.0 h1:P21r2D63FINxMDxFJpMBROa23fcGxiW3cNBaAHs194o=
 github.com/3JoB/resty-ilo v1.1.0/go.mod h1:DA8ucK8CNeN+9dgoepnk5DOC6wFE0qLaIG9gDzHpyxA=
+github.com/3JoB/resty-ilo v1.1.1 h1:iSkPSX8KMSp8tEY6fLfQkCddSTm6QyxHb4Y+6pEi4TA=
+github.com/3JoB/resty-ilo v1.1.1/go.mod h1:rbeaXOu4iN0afDO8T/jnZKO5JUVGZD4g7Lq4YOjENMo=
 github.com/3JoB/ulib v1.22.2 h1:UMVb0miePNX+vaL6fBRMpQfp/51hK3piAYLOt1FQpnI=
 github.com/3JoB/ulib v1.22.2/go.mod h1:kdsyiyOB7cz3PN0hyJZRipYuKhKt7j9Z/159Ds1E/iM=
+github.com/3JoB/ulib v1.23.0 h1:FHrOuSlhUISAJ7fk19zYBgwdgsqAjSpl1fPD0zPAB+g=
+github.com/3JoB/ulib v1.23.0/go.mod h1:AJwwS1pJcYR2wzOLHQWvNc7f/K+KiNEdJlDwRmFCU8A=
 github.com/3JoB/unsafeConvert v1.3.0 h1:HxWedv9pqNZjzkjdvyPToxolN+kjF55lMbsBedhuKR0=
 github.com/3JoB/unsafeConvert v1.3.0/go.mod h1:eSOZxiCOcyEi0vBO56ULYtfXJEn4vafvkebEfI0pYoE=
 github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da h1:KjTM2ks9d14ZYCvmHS9iAKVt9AyzRSqNU1qabPih5BY=
