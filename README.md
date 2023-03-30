@@ -28,7 +28,7 @@ Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/
 ## Start
 Usage:
 ```sh
-$ go get github.com/3JoB/anthropic-sdk-go@v1.2.1
+$ go get github.com/3JoB/anthropic-sdk-go@v1.2.2
 ```
 
 <br>

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/3JoB/resty-ilo"
 	"github.com/3JoB/ulib/net/ua"
-	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
