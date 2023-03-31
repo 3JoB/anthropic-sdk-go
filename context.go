@@ -7,6 +7,7 @@ import (
 )
 
 type Context struct {
+        sync.RWMutex
 	ID       string // Context ID
 	Human    string
 	RawData  string // Unprocessed raw json data returned by the API endpoint
@@ -16,24 +17,34 @@ type Context struct {
 var pool sync.Map = sync.Map{}
 
 func (c *Context) Find() (v []data.MessageModule, ok bool) {
+        c.RLock()
+        defer c.RUnlock()
 	return _FindContext(c.ID)
 }
 
 func (c *Context) Set(value any) bool {
+        c.Lock()
+        defer c.Unlock()
 	return _SetContext(c.ID, value)
 }
 
 // Add a prompt to the context storage pool
 func (c *Context) Add() bool {
+        c.Lock()
+        defer c.Unlock()
 	return _AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: c.Human})
 }
 
 func (c *Context) Delete() {
+        c.Lock()
+        defer c.Unlock()
 	_DeleteContext(c.ID)
 }
 
 // Refresh the context storage pool (clear all data)
 func (c *Context) Refresh() {
+        c.Lock()
+        defer c.Unlock()
 	RefreshContext()
 }
 
