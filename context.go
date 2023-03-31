@@ -16,11 +16,11 @@ type Context struct {
 var pool sync.Map = sync.Map{}
 
 func (c *Context) Find() (v []data.MessageModule, ok bool) {
-	return FindContext(c.ID)
+	return _FindContext(c.ID)
 }
 
 func (c *Context) Set(value any) bool {
-	return SetContext(c.ID, value)
+	return _SetContext(c.ID, value)
 }
 
 // Add a prompt to the context storage pool
@@ -37,7 +37,7 @@ func (c *Context) Refresh() {
 	RefreshContext()
 }
 
-func AddContext(key string, value data.MessageModule) bool {
+func _AddContext(key string, value data.MessageModule) bool {
 	v, ok := _FindContext(key)
 	if !ok {
 		return _SetContext(key, value)
