@@ -6,7 +6,9 @@ import (
 
 	"github.com/3JoB/resty-ilo"
 	"github.com/3JoB/ulib/net/ua"
-	"github.com/google/uuid"
+	"github.com/3JoB/ulid"
+	// "github.com/google/uuid"
+	"pgregory.net/rand"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
 	"github.com/3JoB/anthropic-sdk-go/prompt"
@@ -72,7 +74,8 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 		Human:    senderOpts.Context.Human,
 	}
 	if senderOpts.ContextID == "" {
-		senderOpts.ContextID = uuid.New().String()[0:8]
+		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
+		senderOpts.ContextID = id.String()
 		senderOpts.Sender.Prompt, err = prompt.Set(senderOpts.Context.Human, "")
 	} else {
 		ctx.ID = senderOpts.ContextID

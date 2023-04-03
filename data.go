@@ -3,7 +3,7 @@ package anthropic
 const (
 	API         string = "https://api.anthropic.com"
 	APIComplete string = "/v1/complete"
-	SDKVersion  string = "1.2.3"
+	SDKVersion  string = "1.3.0"
 
 	ModelClaudeV1             string = "claude-v1"
 	ModelClaudeDefault        string = "claude-v1.0"
