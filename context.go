@@ -7,6 +7,7 @@ import (
 )
 
 type Context struct {
+        sync.RWMutex
 	ID       string // Context ID
 	Human    string
 	RawData  string // Unprocessed raw json data returned by the API endpoint
@@ -16,20 +17,20 @@ type Context struct {
 var pool sync.Map = sync.Map{}
 
 func (c *Context) Find() (v []data.MessageModule, ok bool) {
-	return FindContext(c.ID)
+	return _FindContext(c.ID)
 }
 
 func (c *Context) Set(value any) bool {
-	return SetContext(c.ID, value)
+	return _SetContext(c.ID, value)
 }
 
 // Add a prompt to the context storage pool
 func (c *Context) Add() bool {
-	return AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: c.Human})
+	return _AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: c.Human})
 }
 
 func (c *Context) Delete() {
-	DeleteContext(c.ID)
+	_DeleteContext(c.ID)
 }
 
 // Refresh the context storage pool (clear all data)
@@ -37,17 +38,17 @@ func (c *Context) Refresh() {
 	RefreshContext()
 }
 
-func AddContext(key string, value data.MessageModule) bool {
-	v, ok := FindContext(key)
+func _AddContext(key string, value data.MessageModule) bool {
+	v, ok := _FindContext(key)
 	if !ok {
-		return SetContext(key, value)
+		return _SetContext(key, value)
 	}
 	v = append(v, value)
-	SetContext(key, v)
+	_SetContext(key, v)
 	return true
 }
 
-func FindContext(key string) (v []data.MessageModule, ok bool) {
+func _FindContext(key string) (v []data.MessageModule, ok bool) {
 	vs, ok := pool.Load(key)
 	if !ok {
 		return nil, ok
@@ -55,7 +56,7 @@ func FindContext(key string) (v []data.MessageModule, ok bool) {
 	return vs.([]data.MessageModule), ok
 }
 
-func SetContext(key string, value any) bool {
+func _SetContext(key string, value any) bool {
 	switch v := value.(type) {
 	case data.MessageModule:
 		r := []data.MessageModule{
@@ -70,7 +71,7 @@ func SetContext(key string, value any) bool {
 	return true
 }
 
-func DeleteContext(key string) {
+func _DeleteContext(key string) {
 	pool.Delete(key)
 }
 
