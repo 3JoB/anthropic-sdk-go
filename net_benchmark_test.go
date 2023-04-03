@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/3JoB/resty-ilo"
+	fc "github.com/3JoB/fasthttp-client"
 )
 
 func BenchmarkResty(b *testing.B) {
@@ -19,6 +20,28 @@ func BenchmarkResty(b *testing.B) {
 		}
 	  })
 }
+
+func BenchmarkFast(b *testing.B) {
+	b.ResetTimer()
+	pool := fc.NewClientPool()
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			client := pool.Get().(*fc.Client)
+			_, err := client.Get("https://example.com/")
+			if err !=nil {
+				panic(err)
+			}
+			pool.Put(client)
+		}
+	  })
+}
+
+/*1.1.3
+
+BenchmarkResty-32    	       1	1360634700 ns/op	  355216 B/op	    2421 allocs/op
+BenchmarkFast-32     	       1	1214312100 ns/op	  178616 B/op	    1740 allocs/op
+
+*/
 
 /*1.1.2
 
