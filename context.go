@@ -7,7 +7,6 @@ import (
 )
 
 type Context struct {
-        sync.RWMutex
 	ID       string // Context ID
 	Human    string
 	RawData  string // Unprocessed raw json data returned by the API endpoint
