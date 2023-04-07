@@ -2,16 +2,16 @@ package anthropic
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/3JoB/resty-ilo"
-	"github.com/3JoB/ulib/net/ua"
 	"github.com/3JoB/ulid"
 	// "github.com/google/uuid"
 	"pgregory.net/rand"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/anthropic-sdk-go/prompt"
+	"github.com/3JoB/anthropic-sdk-go/internal/prompt"
 )
 
 type AnthropicClient struct {
@@ -21,23 +21,35 @@ type AnthropicClient struct {
 }
 
 type Opts struct {
-	Context   data.MessageModule
+	Message   data.MessageModule
 	ContextID string
 	Sender    Sender
 }
 
 // Create a new Client object.
 func New(key, defaultModel string) (*AnthropicClient, error) {
-	if err := setHeaders(key); err != nil {
+	conf := &AnthropicClient{}
+	if headers, err := initHeaders(key); err != nil {
 		return nil, err
-	}
-	conf := &AnthropicClient{
-		client: resty.New().SetBaseURL(API).SetHeaders(Headers),
+	} else {
+		conf.client = resty.New().SetBaseURL(API).SetHeaders(headers)
 	}
 	if defaultModel == "" {
 		conf.DefaultModel = ModelClaudeV12
 	}
 	return conf, nil
+}
+
+func NewPool(key, defaultModel string) sync.Pool {
+	return sync.Pool{
+		New: func() any {
+			if client, err := New(key, defaultModel); err != nil {
+				panic(err)
+			} else {
+				return client
+			}
+		},
+	}
 }
 
 // is minute
@@ -62,28 +74,29 @@ func (ah *AnthropicClient) check(sender *Sender) (err error) {
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
-func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
+func (ah *AnthropicClient) Send(senderOpts *Opts) (*Context, error) {
+	var err error
 	if err := ah.check(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
-	if (senderOpts.Context == data.MessageModule{}) {
+	if (senderOpts.Message == data.MessageModule{}) {
 		return nil, data.ErrContextNil
 	}
-	ctx = &Context{
+	ctx := &Context{
 		Response: &Response{},
-		Human:    senderOpts.Context.Human,
+		Human:    senderOpts.Message.Human,
 	}
 	if senderOpts.ContextID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
 		senderOpts.ContextID = id.String()
-		senderOpts.Sender.Prompt, err = prompt.Set(senderOpts.Context.Human, "")
+		senderOpts.Sender.Prompt, err = prompt.Set(senderOpts.Message.Human, "")
 	} else {
 		ctx.ID = senderOpts.ContextID
 		d, ok := ctx.Find()
 		if !ok {
 			return nil, data.ErrContextNotFound
 		}
-		d = append(d, senderOpts.Context)
+		d = append(d, senderOpts.Message)
 		senderOpts.Sender.Prompt, err = prompt.Build(d)
 	}
 	if err != nil {
@@ -108,16 +121,15 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (ctx *Context, err error) {
 	return sender.Complete(ah.client)
 }*/
 
-func setHeaders(api string) error {
+func initHeaders(api string) (map[string]string, error) {
 	if api == "" {
-		return data.ErrApiKeyEmpty
+		return nil, data.ErrApiKeyEmpty
 	}
-	Headers = map[string]string{
+	return map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 		"Client":       fmt.Sprintf("anthropic-sdk-go/%v", SDKVersion),
 		"x-api-key":    api,
-		"User-Agent":   ua.Chrome,
-	}
-	return nil
+		"User-Agent":   UserAgent,
+	}, nil
 }

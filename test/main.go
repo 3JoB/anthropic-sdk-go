@@ -18,7 +18,7 @@ func main() {
 		MaxToken: 1200,
 	})*/
 	d, err := c.Send(&anthropic.Opts{
-		Context: data.MessageModule{
+		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
 		Sender: anthropic.Sender{MaxToken: 1200},
@@ -29,7 +29,7 @@ func main() {
 	fmt.Println(d.Response.String())
 
 	ds, err := c.Send(&anthropic.Opts{
-		Context: data.MessageModule{
+		Message: data.MessageModule{
 			Human: "What is its current version number?",
 		},
 		ContextID: d.ID,

@@ -48,11 +48,11 @@ func _AddContext(key string, value data.MessageModule) bool {
 }
 
 func _FindContext(key string) (v []data.MessageModule, ok bool) {
-	vs, ok := pool.Load(key)
-	if !ok {
+	if vs, ok := pool.Load(key); !ok {
 		return nil, ok
+	} else {
+		return vs.([]data.MessageModule), ok
 	}
-	return vs.([]data.MessageModule), ok
 }
 
 func _SetContext(key string, value any) bool {

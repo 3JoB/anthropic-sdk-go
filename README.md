@@ -28,7 +28,7 @@ Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/
 ## Start
 Usage:
 ```sh
-$ go get github.com/3JoB/anthropic-sdk-go@v1.3.0
+$ go get github.com/3JoB/anthropic-sdk-go@v1.4.0
 ```
 
 <br>
@@ -51,7 +51,7 @@ func main() {
 	}
 
 	d, err := c.Send(&anthropic.Opts{
-		Context: data.MessageModule{
+		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
 		Sender: anthropic.Sender{MaxToken: 1200},
@@ -90,7 +90,7 @@ func main() {
 	}
 
 	d, err := c.Send(&anthropic.Opts{
-		Context: data.MessageModule{
+		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
 		Sender: anthropic.Sender{MaxToken: 1200},
@@ -103,7 +103,7 @@ func main() {
 	fmt.Println(d.Response.String())
 
 	ds, err := c.Send(&anthropic.Opts{
-		Context: data.MessageModule{
+		Message: data.MessageModule{
             Human: "What is its current version number?",
         },
 		ContextID: d.ID,
@@ -132,7 +132,7 @@ if err != nil {
 }
 
 d, err := c.Send(&anthropic.Opts{
-	Context: data.MessageModule{
+	Message: data.MessageModule{
 		Human: "Do you know Golang, please answer me in the shortest possible way.",
 	},
 	Sender: anthropic.Sender{MaxToken: 1200},

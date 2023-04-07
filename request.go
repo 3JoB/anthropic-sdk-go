@@ -24,7 +24,7 @@ func (req *Opts) Complete(ctx *Context, client *resty.Client) (*Context, error) 
 		return nil, &err.Err{Op: "request", Err: ctx.RawData}
 	}
 
-	req.Context.Assistant = ctx.Response.Completion
+	req.Message.Assistant = ctx.Response.Completion
 
 	if !ctx.Add() {
 		return nil, &err.Err{Op: "request", Err: "Add failed"}

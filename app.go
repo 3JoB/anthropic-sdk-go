@@ -4,6 +4,21 @@ import (
 	"github.com/3JoB/ulib/json"
 )
 
+const (
+	API         string = "https://api.anthropic.com"
+	APIComplete string = "/v1/complete"
+	UserAgent   string = "Mozilla/5.0 (compatible; anthropic-sdk-go/1.4.0; +https://github.com/3JoB/anthropic-sdk-go/;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+	SDKVersion  string = "1.4.0"
+
+	ModelClaudeV1             string = "claude-v1"
+	ModelClaudeDefault        string = "claude-v1.0"
+	ModelClaudeV12            string = "claude-v1.2"
+	ModelClaudeInstantV1      string = "claude-instant-v1"
+	ModelClaudeInstantDefault string = "claude-instant-v1.0"
+)
+
+var StopSequences []string = []string{"\n\nHuman:"}
+
 type Sender struct {
 	Prompt        string   `json:"prompt"`                   // (required) The prompt you want Claude to complete. For proper response generation you will most likely want to format your prompt as follows:See [our comments on prompts](https://console.anthropic.com/docs/prompt-design#what-is-a-prompt) for more context.
 	Model         string   `json:"model"`                    // (required) As we improve Claude, we develop new versions of it that you can query. This controls which version of Claude answers your request
@@ -24,6 +39,6 @@ type Response struct {
 	Truncated  bool   `json:"truncated"`           // truncated
 }
 
-func (res *Response) String() string {
-	return json.Marshal(res).String()
+func (resp *Response) String() string {
+	return json.Marshal(resp).String()
 }
