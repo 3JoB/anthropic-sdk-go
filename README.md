@@ -17,9 +17,12 @@
 <br>
 
 ## Features
-- Prompt automatically handles
+- Contextual sequential memory 
+- Prompt automatically handles / Contextual automated processing
 - Concise and easy-to-use API
-- Support context memory (automatically handle context)
+- Fast data processing
+
+This is a third-party Claude SDK GO library, starting March 23, 2023.
 
 Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/docs)
 

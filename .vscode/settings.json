@@ -21,6 +21,7 @@
         "KHTML",
         "ldflags",
         "linewidth",
+        "litefmt",
         "lstlisting",
         "midrule",
         "nfmt",
@@ -48,6 +49,7 @@
         "ULIB",
         "undercompensating",
         "Upwork",
-        "zerolog"
+        "zerolog",
+        "zxda"
     ]
 }

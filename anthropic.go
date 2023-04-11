@@ -67,7 +67,7 @@ func (ah *AnthropicClient) check(sender *Sender) (err error) {
 	if len(sender.StopSequences) == 0 {
 		sender.StopSequences = StopSequences
 	}
-	if sender.MaxToken < 1 {
+	if sender.MaxToken < 100 {
 		sender.MaxToken = 400
 	}
 	return nil
@@ -76,7 +76,7 @@ func (ah *AnthropicClient) check(sender *Sender) (err error) {
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 func (ah *AnthropicClient) Send(senderOpts *Opts) (*Context, error) {
 	var err error
-	if err := ah.check(&senderOpts.Sender); err != nil {
+	if err = ah.check(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
 	if (senderOpts.Message == data.MessageModule{}) {
