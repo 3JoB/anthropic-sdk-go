@@ -35,7 +35,7 @@ func New(key, defaultModel string) (*AnthropicClient, error) {
 		conf.client = resty.New().SetBaseURL(API).SetHeaders(headers)
 	}
 	if defaultModel == "" {
-		conf.DefaultModel = ModelClaudeV12
+		conf.DefaultModel = ModelClaudeV13
 	}
 	if conf.TestBan() {
 		panic(data.ErrRegionBanned)
