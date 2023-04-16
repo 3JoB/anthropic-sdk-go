@@ -7,12 +7,13 @@ import (
 const (
 	API         string = "https://api.anthropic.com"
 	APIComplete string = "/v1/complete"
-	UserAgent   string = "Mozilla/5.0 (compatible; anthropic-sdk-go/1.4.0; +https://github.com/3JoB/anthropic-sdk-go/;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-	SDKVersion  string = "1.4.0"
+	UserAgent   string = "Mozilla/5.0 (compatible; anthropic-sdk-go/1.5.0; +https://github.com/3JoB/anthropic-sdk-go/;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+	SDKVersion  string = "1.5.0"
 
 	ModelClaudeV1             string = "claude-v1"
 	ModelClaudeDefault        string = "claude-v1.0"
 	ModelClaudeV12            string = "claude-v1.2"
+	ModelClaudeV13            string = "claude-v1.3"
 	ModelClaudeInstantV1      string = "claude-instant-v1"
 	ModelClaudeInstantDefault string = "claude-instant-v1.0"
 )
@@ -30,6 +31,7 @@ type Sender struct {
 }
 
 type Response struct {
+	cache      string `json:"-"`                   // not used
 	Completion string `json:"completion"`          // The resulting completion up to and excluding the stop sequences.
 	StopReason string `json:"stop_reason"`         // The reason we stopped sampling, either if we reached one of your provided , or if we exceeded `.stop_sequencestop_sequencesmax_tokensmax_tokens_to_sample`
 	Stop       string `json:"stop"`                // If the is , this contains the actual stop sequence (of the list passed-in) that was `seenstop_reasonstop_sequencestop_sequences`
@@ -40,5 +42,9 @@ type Response struct {
 }
 
 func (resp *Response) String() string {
-	return json.Marshal(resp).String()
+	if resp.cache != "" {
+		return resp.cache
+	}
+	resp.cache = json.Marshal(resp).String()
+	return resp.cache
 }

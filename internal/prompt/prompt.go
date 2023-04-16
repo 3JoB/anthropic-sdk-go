@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/3JoB/ulib/litefmt"
+
 	"github.com/3JoB/anthropic-sdk-go/data"
 )
 
@@ -13,10 +14,10 @@ func Set(human, assistant string) (string, error) {
 	}
 	if assistant == "" {
 		return litefmt.Sprint("\n\nHuman: ", human, "\n\nAssistant:"), nil
-		//return fmt.Sprintf("\n\nHuman: %v\n\nAssistant:", human), nil
+		// return fmt.Sprintf("\n\nHuman: %v\n\nAssistant:", human), nil
 	}
 	return litefmt.Sprint(human, assistant), nil
-	//return fmt.Sprintf("%v%v", human, assistant), nil
+	// return fmt.Sprintf("%v%v", human, assistant), nil
 }
 
 func Build(module any) (string, error) {
@@ -31,10 +32,10 @@ func Build(module any) (string, error) {
 			}
 			if d.Assistant == "" {
 				return litefmt.Sprint(prompts, "\n\nHuman: ", d.Human, "\n\nAssistant:"), nil
-				//return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", prompts, d.Human), nil
+				// return fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:", prompts, d.Human), nil
 			}
 			prompts = litefmt.Sprint(prompts, "\n\nHuman: ", d.Human, "\n\nAssistant:", d.Assistant)
-			//prompts = fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:%v", prompts, d.Human, d.Assistant)
+			// prompts = fmt.Sprintf("%v\n\nHuman: %v\n\nAssistant:%v", prompts, d.Human, d.Assistant)
 		}
 		return prompts, nil
 	default:

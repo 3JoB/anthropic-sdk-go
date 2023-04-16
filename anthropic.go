@@ -1,11 +1,11 @@
 package anthropic
 
 import (
-	"fmt"
 	"sync"
 	"time"
 
 	"github.com/3JoB/resty-ilo"
+	"github.com/3JoB/ulib/litefmt"
 	"github.com/3JoB/ulid"
 	// "github.com/google/uuid"
 	"pgregory.net/rand"
@@ -37,6 +37,9 @@ func New(key, defaultModel string) (*AnthropicClient, error) {
 	if defaultModel == "" {
 		conf.DefaultModel = ModelClaudeV12
 	}
+	if conf.TestBan() {
+		panic(data.ErrRegionBanned)
+	}
 	return conf, nil
 }
 
@@ -50,6 +53,16 @@ func NewPool(key, defaultModel string) sync.Pool {
 			}
 		},
 	}
+}
+
+func (ah *AnthropicClient) TestBan() bool {
+	resp, err := ah.client.R().Get("/")
+	if err != nil {
+		return true
+	}
+	defer resp.RawBody().Close()
+	resp.RawResponse.Close = true
+	return resp.StatusCode() == 403
 }
 
 // is minute
@@ -76,6 +89,9 @@ func (ah *AnthropicClient) check(sender *Sender) (err error) {
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 func (ah *AnthropicClient) Send(senderOpts *Opts) (*Context, error) {
 	var err error
+	if ah.TestBan() {
+		return nil, data.ErrRegionBanned
+	}
 	if err = ah.check(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
@@ -128,7 +144,7 @@ func initHeaders(api string) (map[string]string, error) {
 	return map[string]string{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
-		"Client":       fmt.Sprintf("anthropic-sdk-go/%v", SDKVersion),
+		"Client":       litefmt.Sprint("anthropic-sdk-go/", SDKVersion),
 		"x-api-key":    api,
 		"User-Agent":   UserAgent,
 	}, nil

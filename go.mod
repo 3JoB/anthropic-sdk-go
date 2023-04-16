@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/3JoB/resty-ilo v1.1.3
-	github.com/3JoB/ulib v1.28.0
+	github.com/3JoB/ulib v1.30.0
 	github.com/3JoB/ulid v0.0.1
 	pgregory.net/rand v1.0.2
 )
