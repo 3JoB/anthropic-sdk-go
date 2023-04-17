@@ -38,7 +38,7 @@ func New(key, defaultModel string) (*AnthropicClient, error) {
 		conf.DefaultModel = ModelClaudeV13
 	}
 	if conf.TestBan() {
-		panic(data.ErrRegionBanned)
+		return nil, data.ErrRegionBanned
 	}
 	return conf, nil
 }
@@ -80,7 +80,7 @@ func (ah *AnthropicClient) check(sender *Sender) (err error) {
 	if len(sender.StopSequences) == 0 {
 		sender.StopSequences = StopSequences
 	}
-	if sender.MaxToken < 100 {
+	if sender.MaxToken < 400 {
 		sender.MaxToken = 400
 	}
 	return nil
