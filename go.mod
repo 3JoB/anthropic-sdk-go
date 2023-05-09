@@ -10,7 +10,7 @@ require (
 )
 
 require (
-	github.com/3JoB/go-json v0.10.3 // indirect
+	github.com/3JoB/go-json v0.10.4 // indirect
 	github.com/3JoB/go-reflect v1.0.1 // indirect
 	github.com/3JoB/nhtp v0.0.3 // indirect
 	github.com/3JoB/unsafeConvert v1.3.0 // indirect

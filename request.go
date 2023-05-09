@@ -9,25 +9,26 @@ import (
 func (req *Opts) Complete(ctx *Context, client *resty.Client) (*Context, error) {
 	r, errs := client.R().SetBody(req.Sender).Post(APIComplete)
 	if errs != nil {
-		return nil, &err.Err{Op: "request", Err: errs.Error()}
+		return ctx, &err.Err{Op: "request", Err: errs.Error()}
 	}
 	defer r.RawBody().Close()
+	r.RawResponse.Close = true
 
 	ctx.ID = req.ContextID
 	if errs := r.Bind(ctx.Response); errs != nil {
-		return nil, &err.Err{Op: "request", Err: errs.Error()}
+		return ctx, &err.Err{Op: "request", Err: errs.Error()}
 	}
 
 	ctx.RawData = r.String()
 
 	if !r.IsStatusCode(200) {
-		return nil, &err.Err{Op: "request", Err: ctx.RawData}
+		return ctx, &err.Err{Op: "request", Err: ctx.RawData}
 	}
 
 	req.Message.Assistant = ctx.Response.Completion
 
 	if !ctx.Add() {
-		return nil, &err.Err{Op: "request", Err: "Add failed"}
+		return ctx, &err.Err{Op: "request", Err: "Add failed"}
 	}
 
 	return ctx, nil

@@ -1,5 +1,5 @@
-github.com/3JoB/go-json v0.10.3 h1:LuFlaH1EhYQsyzRE59CBLrNE5vIr28z2CKrhy83WYno=
-github.com/3JoB/go-json v0.10.3/go.mod h1:mZcc16VxPgNwB9hnFumjhGNKLel5AkQpO1AOQB7odF4=
+github.com/3JoB/go-json v0.10.4 h1:88YxLjaFoLP6gV7kI+XVSnib4VPu2gBT8DCbNfb6np0=
+github.com/3JoB/go-json v0.10.4/go.mod h1:mZcc16VxPgNwB9hnFumjhGNKLel5AkQpO1AOQB7odF4=
 github.com/3JoB/go-reflect v1.0.1 h1:o8FsdGDAq32rM84vjIcoEs6ezB2whS0MCR+w7HNIuqI=
 github.com/3JoB/go-reflect v1.0.1/go.mod h1:uqE8sGxe7gZKaXFFhkzOhXgAPnSdlXaT1Oy8CDYDWfE=
 github.com/3JoB/nhtp v0.0.3 h1:uJMaPMwFHy4V/ivUx7ratmALc64Pnt1YPt0M0vgD42M=

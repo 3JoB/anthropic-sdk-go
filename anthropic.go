@@ -86,22 +86,23 @@ func (ah *AnthropicClient) check(sender *Sender) (err error) {
 	return nil
 }
 
+func (opts *Opts) newCtx() *Context {
+	return &Context{
+		Response: &Response{},
+		Human:    opts.Message.Human,
+	}
+}
+
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 func (ah *AnthropicClient) Send(senderOpts *Opts) (*Context, error) {
 	var err error
-	if ah.TestBan() {
-		return nil, data.ErrRegionBanned
-	}
 	if err = ah.check(&senderOpts.Sender); err != nil {
 		return nil, err
 	}
 	if (senderOpts.Message == data.MessageModule{}) {
 		return nil, data.ErrContextNil
 	}
-	ctx := &Context{
-		Response: &Response{},
-		Human:    senderOpts.Message.Human,
-	}
+	ctx := senderOpts.newCtx()
 	if senderOpts.ContextID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
 		senderOpts.ContextID = id.String()
@@ -116,9 +117,13 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (*Context, error) {
 		senderOpts.Sender.Prompt, err = prompt.Build(d)
 	}
 	if err != nil {
-		return nil, err
+		return ctx, err
 	}
 	return senderOpts.Complete(ctx, ah.client)
+}
+
+func (ah *AnthropicClient) ResetContextPool() {
+	RefreshContext()
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.

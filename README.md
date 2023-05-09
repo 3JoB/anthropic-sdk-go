@@ -45,7 +45,7 @@ main.main()
 ## Start
 Usage:
 ```sh
-$ go get github.com/3JoB/anthropic-sdk-go@v1.5.0
+$ go get github.com/3JoB/anthropic-sdk-go@v1.6.0
 ```
 
 <br>
