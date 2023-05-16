@@ -4,7 +4,7 @@ import "github.com/3JoB/ulib/err"
 
 var (
 	ErrApiKeyEmpty      error = &err.Err{Op: "config", Err: "APIKey cannot be empty!"}
-	ErrRegionBanned     error = &err.Err{Op: "check", Err: "Oh no, your region may be blocked by Anthropic! Please enable a proxy to bypass the block!"}
+	ErrRegionBanned     error = &err.Err{Op: "403", Err: "Region blocked"}
 	ErrContextNil       error = &err.Err{Op: "send", Err: "Context cannot be nil!"}
 	ErrContextNotFound  error = &err.Err{Op: "send", Err: "Context not found"}
 	ErrConfigEmpty      error = &err.Err{Op: "config", Err: "Configuration cannot be empty!"}
