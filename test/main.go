@@ -39,4 +39,22 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(ds.Response.String())
+
+	// Set UserID
+	dsr, err := c.Send(&anthropic.Opts{
+		Message: data.MessageModule{
+			Human: "What is its current version number?",
+		},
+		ContextID: d.ID,
+		Sender:    anthropic.Sender{
+			MaxToken: 1200,
+			MetaData: anthropic.MetaData{
+				UserID: "rand id",
+			},
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(dsr.Response.String())
 }

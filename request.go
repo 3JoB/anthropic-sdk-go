@@ -7,12 +7,14 @@ import (
 
 // Make a processed request to an API endpoint.
 func (req *Opts) Complete(ctx *Context, client *resty.Client) (*Context, error) {
-	r, errs := client.R().SetBody(req.Sender).Post(APIComplete)
+	rq := client.R().SetBody(req.Sender)
+	rq.RawRequest.Close = true
+	rq.RawRequest.Response.Close = true
+	r, errs := rq.Post(APIComplete)
 	if errs != nil {
 		return ctx, &err.Err{Op: "request", Err: errs.Error()}
 	}
 	defer r.RawBody().Close()
-	r.RawResponse.Close = true
 
 	ctx.ID = req.ContextID
 	if errs := r.Bind(ctx.Response); errs != nil {
