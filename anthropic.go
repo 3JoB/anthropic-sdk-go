@@ -56,12 +56,14 @@ func NewPool(key, defaultModel string) sync.Pool {
 }
 
 func (ah *AnthropicClient) TestBan() bool {
-	resp, err := ah.client.R().Get("/")
+	req := ah.client.R()
+	req.RawRequest.Close = true
+	req.RawRequest.Response.Close = true
+	resp, err := req.Get("/")
 	if err != nil {
 		return true
 	}
 	defer resp.RawBody().Close()
-	resp.RawResponse.Close = true
 	return resp.StatusCode() == 403
 }
 
