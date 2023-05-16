@@ -14,6 +14,7 @@ var (
 	ErrPromptEmpty      error = &err.Err{Op: "send", Err: "The value of prompt cannot be empty!"}
 )
 
+// Chunked message structure
 type MessageModule struct {
 	Assistant string // returned data (do not modify)
 	Human     string // input content

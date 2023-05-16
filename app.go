@@ -11,11 +11,13 @@ const (
 	SDKVersion  string = "1.6.0"
 
 	ModelClaudeV1             string = "claude-v1"
-	ModelClaudeDefault        string = "claude-v1.0"
-	ModelClaudeV12            string = "claude-v1.2"
+	ModelClaudeV1_Big         string = "claude-v1-100k"
 	ModelClaudeV13            string = "claude-v1.3"
+	ModelClaudeV13_Big        string = "claude-v1.3-100k"
 	ModelClaudeInstantV1      string = "claude-instant-v1"
-	ModelClaudeInstantDefault string = "claude-instant-v1.0"
+	ModelClaudeInstantV1_Big  string = "claude-instant-v1-100k"
+	ModelClaudeInstantV11     string = "claude-instant-v1.1"
+	ModelClaudeInstantV11_Big string = "claude-instant-v1.1-100k"
 )
 
 var StopSequences []string = []string{"\n\nHuman:"}
@@ -28,6 +30,16 @@ type Sender struct {
 	MaxToken      int      `json:"max_tokens_to_sample"`     // (required) A maximum number of tokens to generate before stopping.
 	TopK          int      `json:"top_k,omitempty"`          // (optional) Only sample from the top K options for each subsequent token. Used to remove "long tail" low probability responses. Defaults to -1, which disables it.
 	TopP          int      `json:"top_p,omitempty"`          // (optional) Does nucleus sampling, in which we compute the cumulative distribution over all the options for each subsequent token in decreasing probability order and cut it off once it reaches a particular probability specified by . Defaults to -1, which disables it. Note that you should either alter or , but not both.`top_ptemperaturetop_p``
+	MetaData      MetaData `json:"metadata,omitempty"` // An object describing metadata about the request. 
+}
+
+type MetaData struct {
+	UserID string `json:"user_id,omitempty"` // A uuid, hash value, or other external identifier for the user who is associated with the request. Anthropic may use this id to help detect abuse. Do not include any identifying information such as name, email address, or phone number.
+}
+
+// A uuid, hash value, or other external identifier for the user who is associated with the request. Anthropic may use this id to help detect abuse. Do not include any identifying information such as name, email address, or phone number.
+func (s *Sender) SetUserID(userID string) {
+	s.MetaData = MetaData{userID}
 }
 
 type Response struct {
