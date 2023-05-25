@@ -22,7 +22,7 @@
 - Concise and easy-to-use API
 - Fast data processing
 
-This is a third-party Claude SDK GO library, starting March 23, 2023.
+I'm working on some new projects, so this repo won't be rolling out feature updates for a while, but it will still sync with Anthropic's updates.
 
 Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/docs)
 
