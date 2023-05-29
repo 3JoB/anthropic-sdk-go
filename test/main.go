@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// fuck i accidentally leaked my keys and it's now disabled by me.
-	c, err := anthropic.New("keys ", "")
+	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.ModelClaudeInstantV11})
 	if err != nil {
 		panic(err)
 	}

@@ -1,31 +1,35 @@
 package anthropic
 
 import (
-	"pgregory.net/rand"
+	"errors"
 	"sync"
 	"time"
 
-	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/anthropic-sdk-go/internal/prompt"
 	"github.com/3JoB/resty-ilo"
 	"github.com/3JoB/ulid"
+	"pgregory.net/rand"
+
+	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/internal/prompt"
 )
 
-type AnthropicClient struct {
+type Client struct {
 	Key          string        // API Keys
 	DefaultModel string        // Choose the default AI model
 	client       *resty.Client // http client
 }
 
 // Create a new Client object.
-func New(key, defaultModel string) (*AnthropicClient, error) {
-	conf := &AnthropicClient{}
-	if headers, err := initHeaders(key); err != nil {
+func New(conf *Client) (*Client, error) {
+	if conf == nil {
+		return nil, errors.New("client is nil")
+	}
+	if headers, err := initHeaders(conf.Key); err != nil {
 		return nil, err
 	} else {
 		conf.client = resty.New().SetBaseURL(API).SetHeaders(headers)
 	}
-	if defaultModel == "" {
+	if conf.DefaultModel == "" {
 		conf.DefaultModel = ModelClaudeV13
 	}
 	if conf.TestBan() {
@@ -34,10 +38,10 @@ func New(key, defaultModel string) (*AnthropicClient, error) {
 	return conf, nil
 }
 
-func NewPool(key, defaultModel string) sync.Pool {
+func NewPool(conf *Client) sync.Pool {
 	return sync.Pool{
 		New: func() any {
-			if client, err := New(key, defaultModel); err != nil {
+			if client, err := New(conf); err != nil {
 				panic(err)
 			} else {
 				return client
@@ -47,7 +51,7 @@ func NewPool(key, defaultModel string) sync.Pool {
 }
 
 // is minute
-func (ah *AnthropicClient) SetTimeOut(times int) {
+func (ah *Client) SetTimeOut(times int) {
 	if times == 0 {
 		return
 	}
@@ -55,7 +59,7 @@ func (ah *AnthropicClient) SetTimeOut(times int) {
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
-func (ah *AnthropicClient) Send(senderOpts *Opts) (*Context, error) {
+func (ah *Client) Send(senderOpts *Opts) (*Context, error) {
 	var err error
 	if err = ah.check(&senderOpts.Sender); err != nil {
 		return nil, err
@@ -83,11 +87,11 @@ func (ah *AnthropicClient) Send(senderOpts *Opts) (*Context, error) {
 	return senderOpts.Complete(ctx, ah.client)
 }
 
-func (ah *AnthropicClient) ResetContextPool() {
+func (ah *Client) ResetContextPool() {
 	RefreshContext()
 }
 
-func (ah *AnthropicClient) TestBan() bool {
+func (ah *Client) TestBan() bool {
 	req := ah.client.R()
 	req.RawRequest.Close = true
 	req.RawRequest.Response.Close = true
@@ -99,7 +103,7 @@ func (ah *AnthropicClient) TestBan() bool {
 	return resp.StatusCode() == 403
 }
 
-func (ah *AnthropicClient) check(sender *Sender) (err error) {
+func (ah *Client) check(sender *Sender) (err error) {
 	if sender.Model == "" {
 		sender.Model = ah.DefaultModel
 	}
