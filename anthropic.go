@@ -1,8 +1,8 @@
 package anthropic
 
 import (
+	"github.com/3JoB/resty-ilo"
 	"github.com/3JoB/ulib/litefmt"
-
 	// "github.com/google/uuid"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
@@ -10,7 +10,7 @@ import (
 
 type Opts struct {
 	Message   data.MessageModule // Chunked message structure
-	ContextID string // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
+	ContextID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
 	Sender    Sender
 }
 
@@ -37,16 +37,17 @@ func (opts *Opts) newCtx() *Context {
 	return sender.Complete(ah.client)
 }*/
 
-func initHeaders(api string) (map[string]string, error) {
-	if api == "" {
-		return nil, data.ErrApiKeyEmpty
+func (c *Client) initHeaders() error {
+	if c.Key == "" {
+		return data.ErrApiKeyEmpty
 	}
-	return map[string]string{
-		"Accept":       "application/json",
-		"Content-Type": "application/json",
-		"Client":       litefmt.Sprint("anthropic-sdk-go/", SDKVersion),
+	c.client = resty.New().SetBaseURL(API).SetHeaders(map[string]string{
+		"Accept":            "application/json",
+		"Content-Type":      "application/json",
+		"Client":            litefmt.Sprint("anthropic-sdk-go/", SDKVersion),
 		"anthropic-version": "2023-06-01",
-		"x-api-key":    api,
-		"User-Agent":   UserAgent,
-	}, nil
+		"x-api-key":         c.Key,
+		"User-Agent":        UserAgent,
+	})
+	return nil
 }

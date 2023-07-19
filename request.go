@@ -18,7 +18,7 @@ func (req *Opts) Complete(ctx *Context, client *resty.Client) (*Context, error) 
 
 	ctx.ID = req.ContextID
 	if errs := r.Bind(ctx.Response); errs != nil {
-		return ctx, &err.Err{Op: "request", Err: errs.Error()}
+		return ctx, &err.Err{Op: "request", E: errs}
 	}
 
 	ctx.RawData = r.String()

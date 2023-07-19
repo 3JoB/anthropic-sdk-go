@@ -57,7 +57,7 @@ type MetaData struct {
 
 // A uuid, hash value, or other external identifier for the user who is associated with the request. Anthropic may use this id to help detect abuse. Do not include any identifying information such as name, email address, or phone number.
 func (s *Sender) SetUserID(userID string) {
-	s.MetaData = MetaData{userID}
+	s.MetaData = MetaData{UserID: userID}
 }
 
 type Response struct {
@@ -80,5 +80,4 @@ func (resp *Response) String() string {
 }
 
 type ErrorResponse struct {
-	
 }

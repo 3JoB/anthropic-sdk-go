@@ -46,7 +46,7 @@ func main() {
 			Human: "What is its current version number?",
 		},
 		ContextID: d.ID,
-		Sender:    anthropic.Sender{
+		Sender: anthropic.Sender{
 			MaxToken: 1200,
 			MetaData: anthropic.MetaData{
 				UserID: "rand id",

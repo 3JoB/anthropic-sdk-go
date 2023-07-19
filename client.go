@@ -24,10 +24,8 @@ func New(conf *Client) (*Client, error) {
 	if conf == nil {
 		return nil, errors.New("client is nil")
 	}
-	if headers, err := initHeaders(conf.Key); err != nil {
+	if err := conf.initHeaders(); err != nil {
 		return nil, err
-	} else {
-		conf.client = resty.New().SetBaseURL(API).SetHeaders(headers)
 	}
 	if conf.DefaultModel == "" {
 		conf.DefaultModel = Model.Major.Instant1
