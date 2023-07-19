@@ -4,6 +4,32 @@ import (
 	"github.com/3JoB/ulib/json"
 )
 
+var Model = struct {
+	Major struct {
+		Instant1 string
+		Claude2  string
+	}
+	Full struct {
+		Instant1 string
+		Claude2  string
+	}
+}{
+	Major: struct {
+		Instant1 string
+		Claude2  string
+	}{
+		Instant1: "claude-instant-1",
+		Claude2:  "claude-2",
+	},
+	Full: struct {
+		Instant1 string
+		Claude2  string
+	} {
+		Instant1: "claude-instant-1.1",
+		Claude2:  "claude-2.0",
+	},
+}
+
 const (
 	API         string = "https://api.anthropic.com"
 	APIComplete string = "/v1/complete"
@@ -30,7 +56,7 @@ type Sender struct {
 	MaxToken      int      `json:"max_tokens_to_sample"`     // (required) A maximum number of tokens to generate before stopping.
 	TopK          int      `json:"top_k,omitempty"`          // (optional) Only sample from the top K options for each subsequent token. Used to remove "long tail" low probability responses. Defaults to -1, which disables it.
 	TopP          int      `json:"top_p,omitempty"`          // (optional) Does nucleus sampling, in which we compute the cumulative distribution over all the options for each subsequent token in decreasing probability order and cut it off once it reaches a particular probability specified by . Defaults to -1, which disables it. Note that you should either alter or , but not both.`top_ptemperaturetop_p``
-	MetaData      MetaData `json:"metadata,omitempty"` // An object describing metadata about the request. 
+	MetaData      MetaData `json:"metadata,omitempty"`       // An object describing metadata about the request.
 }
 
 type MetaData struct {

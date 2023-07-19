@@ -45,6 +45,7 @@ func initHeaders(api string) (map[string]string, error) {
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
 		"Client":       litefmt.Sprint("anthropic-sdk-go/", SDKVersion),
+		"anthropic-version": "2023-06-01",
 		"x-api-key":    api,
 		"User-Agent":   UserAgent,
 	}, nil
