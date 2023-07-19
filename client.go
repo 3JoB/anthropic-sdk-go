@@ -30,7 +30,7 @@ func New(conf *Client) (*Client, error) {
 		conf.client = resty.New().SetBaseURL(API).SetHeaders(headers)
 	}
 	if conf.DefaultModel == "" {
-		conf.DefaultModel = ModelClaudeV13
+		conf.DefaultModel = Model.Major.Instant1
 	}
 	if conf.TestBan() {
 		return nil, data.ErrRegionBanned
