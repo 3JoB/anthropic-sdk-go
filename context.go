@@ -28,7 +28,12 @@ func (c *Context) Add() bool {
 	return _AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: c.Human})
 }
 
+// Deprecated: Use Close() instead.
 func (c *Context) Delete() {
+	_DeleteContext(c.ID)
+}
+
+func (c *Context) Close() {
 	_DeleteContext(c.ID)
 }
 
