@@ -30,16 +30,7 @@ Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/
 # Note
 
 Anthropic began to block some areas and returned 403 errors.
-We have added inspections to V1.5.0. The example is as follows:
-```sh
-panic: check: Oh no, your region may be blocked by Anthropic! Please enable a proxy to bypass the block!
-
-goroutine 1 [running]:
-github.com/3JoB/anthropic-sdk-go.New({0xf774d2, 0x5}, {0x0?, 0x0})
-        D:/Dev/Go/pW2/lib/anthropic-sdk-go/anthropic.go:41 +0x187
-main.main()
-        D:/Dev/Go/pW2/lib/anthropic-sdk-go/test/main.go:12 +0x3e
-```
+We have added inspections to V1.5.0.
 
 ## Start
 Usage:
@@ -61,7 +52,7 @@ import (
 )
 
 func main() {
-	c, err := anthropic.New("api keys","modules")
+	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
 	if err != nil {
 		panic(err)
 	}
@@ -100,7 +91,7 @@ import (
 )
 
 func main() {
-	c, err := anthropic.New("api keys","modules")
+	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
 	if err != nil {
 		panic(err)
 	}
@@ -142,7 +133,7 @@ Return:
 
 ### Delete the context in an ID
 ```golang
-c, err := anthropic.New("api keys","modules")
+c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
 if err != nil {
 	panic(err)
 }
@@ -158,7 +149,7 @@ if err != nil {
 	panic(err)
 }
 
-d.Delete()
+d.Close()
 ```
 
 <br>

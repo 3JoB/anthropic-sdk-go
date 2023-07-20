@@ -1,4 +1,4 @@
-package prompt
+package anthropic
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/data"
 )
 
-func Set(human, assistant string) (string, error) {
+func _Set(human, assistant string) (string, error) {
 	if human == "" {
 		return "", data.ErrPromptHumanEmpty
 	}
@@ -20,10 +20,12 @@ func Set(human, assistant string) (string, error) {
 	// return fmt.Sprintf("%v%v", human, assistant), nil
 }
 
-func Build(module any) (string, error) {
+// 
+// Commit: The loop overhead here is too large, caching may need to be set up
+func (c *Context) build(module any) (string, error) {
 	switch r := module.(type) {
 	case data.MessageModule:
-		return Set(r.Human, r.Assistant)
+		return _Set(r.Human, r.Assistant)
 	case []data.MessageModule:
 		var prompts string
 		for _, d := range r {
