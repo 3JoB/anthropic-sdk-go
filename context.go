@@ -8,6 +8,7 @@ import (
 
 type Context struct {
 	ID       string // Context ID
+	cache    bool
 	Human    string
 	RawData  string // Unprocessed raw json data returned by the API endpoint
 	Response *Response
@@ -33,8 +34,9 @@ func (c *Context) Delete() {
 	_DeleteContext(c.ID)
 }
 
-func (c *Context) Close() {
+func (c *Context) Close() error {
 	_DeleteContext(c.ID)
+	return nil
 }
 
 // Refresh the context storage pool (clear all data)

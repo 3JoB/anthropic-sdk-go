@@ -1,12 +1,11 @@
 package anthropic
 
 import (
-
+	"github.com/3JoB/resty-ilo"
+	"github.com/3JoB/ulib/err"
 	// "github.com/google/uuid"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/resty-ilo"
-	"github.com/3JoB/ulib/err"
 )
 
 type Opts struct {

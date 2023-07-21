@@ -2,11 +2,24 @@ package anthropic
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/3JoB/ulib/litefmt"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
 )
+
+type Cache interface {
+	Get(key string) (value string, ok bool)
+	Set(key, value string)
+	Delete(key string)
+}
+
+type CacheItem struct {
+	Key        string
+	Value      string
+	ExpireTime time.Time
+}
 
 func _Set(human, assistant string) (string, error) {
 	if human == "" {
@@ -20,9 +33,11 @@ func _Set(human, assistant string) (string, error) {
 	// return fmt.Sprintf("%v%v", human, assistant), nil
 }
 
-// 
 // Commit: The loop overhead here is too large, caching may need to be set up
 func (c *Context) build(module any) (string, error) {
+	if c.cache {
+	}
+
 	switch r := module.(type) {
 	case data.MessageModule:
 		return _Set(r.Human, r.Assistant)
