@@ -7,13 +7,15 @@ import (
 	"github.com/3JoB/ulib/litefmt"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/internel/compress"
 )
 
 type CacheItem struct {
 	Key        string
 	Value      string
-	Type       string
+	String     bool
 	Compress   bool
+	IO         compress.Interface
 	ExpireTime time.Time
 }
 
