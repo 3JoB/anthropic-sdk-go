@@ -9,15 +9,11 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/data"
 )
 
-type Cache interface {
-	Get(key string) (value string, ok bool)
-	Set(key, value string)
-	Delete(key string)
-}
-
 type CacheItem struct {
 	Key        string
 	Value      string
+	Type       string
+	Compress   bool
 	ExpireTime time.Time
 }
 

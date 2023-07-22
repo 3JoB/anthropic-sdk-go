@@ -2,8 +2,8 @@ package lru
 
 type LRUCache struct {
 	capacity int
-	list *DoublyLinkedList
-	cache map[string]*DoublyLinkedListNode
+	list     *DoublyLinkedList
+	cache    map[string]*DoublyLinkedListNode
 }
 
 type cacheItem struct {
