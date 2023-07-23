@@ -1,4 +1,4 @@
-module github.com/3JoB/anthropic-sdk-go
+module github.com/3JoB/anthropic-sdk-go/v2
 
 go 1.20
 

@@ -5,9 +5,9 @@ import (
 	"github.com/3JoB/ulib/err"
 	// "github.com/google/uuid"
 
-	"github.com/3JoB/anthropic-sdk-go/context"
-	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/anthropic-sdk-go/resp"
+	"github.com/3JoB/anthropic-sdk-go/v2/context"
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 type Opts struct {

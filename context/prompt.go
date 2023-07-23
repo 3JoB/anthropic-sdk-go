@@ -5,7 +5,7 @@ import (
 
 	"github.com/3JoB/ulib/litefmt"
 
-	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
 func Set(human, assistant string) (string, error) {

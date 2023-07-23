@@ -8,9 +8,9 @@ import (
 	"github.com/3JoB/ulid"
 	"pgregory.net/rand"
 
-	"github.com/3JoB/anthropic-sdk-go/context"
-	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/anthropic-sdk-go/resp"
+	"github.com/3JoB/anthropic-sdk-go/v2/context"
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 type Client struct {

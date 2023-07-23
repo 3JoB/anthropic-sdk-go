@@ -4,9 +4,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/anthropic-sdk-go/internel/compress"
-	"github.com/3JoB/anthropic-sdk-go/resp"
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
+	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 type CacheItem struct {

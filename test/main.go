@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/3JoB/anthropic-sdk-go"
-	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/anthropic-sdk-go/resp"
+	"github.com/3JoB/anthropic-sdk-go/v2"
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 func main() {
