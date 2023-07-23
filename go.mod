@@ -3,7 +3,7 @@ module github.com/3JoB/anthropic-sdk-go/v2
 go 1.20
 
 require (
-	github.com/3JoB/resty-ilo v1.1.5
+	github.com/3JoB/resty-ilo v1.1.6
 	github.com/3JoB/ulib v1.31.0
 	github.com/3JoB/ulid v0.0.2
 	github.com/andybalholm/brotli v1.0.5

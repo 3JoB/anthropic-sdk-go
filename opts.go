@@ -42,8 +42,6 @@ func (opts *Opts) newCtx() *context.Context {
 // Make a processed request to an API endpoint.
 func (req *Opts) Complete(ctx *context.Context, client *resty.Client) (*context.Context, error) {
 	rq := client.R().SetBody(req.Sender)
-	rq.RawRequest.Close = true
-	rq.RawRequest.Response.Close = true
 	r, errs := rq.Post(APIComplete)
 	if errs != nil {
 		return ctx, &err.Err{Op: "request", Err: errs.Error()}

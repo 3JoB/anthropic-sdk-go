@@ -3,6 +3,8 @@ github.com/3JoB/go-reflect v1.0.1 h1:o8FsdGDAq32rM84vjIcoEs6ezB2whS0MCR+w7HNIuqI
 github.com/3JoB/go-reflect v1.0.1/go.mod h1:uqE8sGxe7gZKaXFFhkzOhXgAPnSdlXaT1Oy8CDYDWfE=
 github.com/3JoB/resty-ilo v1.1.5 h1:Iro6zzILb+6LYVJKOa8c3+2ADY0++iVE1L6ohjhbypQ=
 github.com/3JoB/resty-ilo v1.1.5/go.mod h1:9DsPot1Nb4sNijmmJLHAg5C3kHrTgumffQuWD4mFLX4=
+github.com/3JoB/resty-ilo v1.1.6 h1:cI78PiEwQRoi1eofN3LP68UbiBt0ap7CaN49n1JXFYI=
+github.com/3JoB/resty-ilo v1.1.6/go.mod h1:jIwEaSK/04myh9Dw6ed+7O9bnBYg57UwnNRnS21hh0E=
 github.com/3JoB/ulib v1.31.0 h1:vylKAk7wuxH5mChe8GM/U0gDap1gVCL9OYWCMj5icd4=
 github.com/3JoB/ulib v1.31.0/go.mod h1:5Yh9NGxmsH76MN/RI0OL4k84NlMfyDGYswyTXJ+4cWg=
 github.com/3JoB/ulid v0.0.2 h1:hH+kmrEb+7fNTqJRK5rLBXDcHGd1xJruYtK2W+wpId4=
