@@ -4,15 +4,14 @@ go 1.20
 
 require (
 	github.com/3JoB/resty-ilo v1.1.5
-	github.com/3JoB/ulib v1.30.0
-	github.com/3JoB/ulid v0.0.1
+	github.com/3JoB/ulib v1.31.0
+	github.com/3JoB/ulid v0.0.2
 	github.com/andybalholm/brotli v1.0.5
 	github.com/klauspost/compress v1.16.7
 	pgregory.net/rand v1.0.2
 )
 
 require (
-	github.com/3JoB/go-json v0.10.3 // indirect
 	github.com/3JoB/go-reflect v1.0.1 // indirect
 	github.com/3JoB/unsafeConvert v1.5.0 // indirect
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect
@@ -28,8 +27,8 @@ require (
 	github.com/quic-go/quic-go v0.37.0 // indirect
 	github.com/stretchr/testify v1.8.2 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
-	golang.org/x/exp v0.0.0-20230321023759-10a507213a29 // indirect
-	golang.org/x/mod v0.10.0 // indirect
+	golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1 // indirect
+	golang.org/x/mod v0.11.0 // indirect
 	golang.org/x/net v0.12.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
