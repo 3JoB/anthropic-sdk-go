@@ -1,17 +1,31 @@
-package anthropic
+package context
 
 import (
 	"sync"
+	"time"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/internel/compress"
+	"github.com/3JoB/anthropic-sdk-go/resp"
 )
+
+type CacheItem struct {
+	Key        string
+	Value      string
+	String     bool
+	Compress   bool
+	IO         compress.Interface
+	ExpireTime time.Time
+}
+
+type ContextItem struct {
+}
 
 type Context struct {
 	ID       string // Context ID
-	cache    bool
 	Human    string
 	RawData  string // Unprocessed raw json data returned by the API endpoint
-	Response *Response
+	Response *resp.Response
 }
 
 var pool sync.Map = sync.Map{}

@@ -2,8 +2,9 @@ package compress
 
 import (
 	"bytes"
-	"compress/zlib"
 	"io"
+
+	"github.com/klauspost/compress/zlib"
 )
 
 type Zlib struct{}

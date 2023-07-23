@@ -5,18 +5,20 @@ import (
 	"github.com/3JoB/ulib/err"
 	// "github.com/google/uuid"
 
+	"github.com/3JoB/anthropic-sdk-go/context"
 	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/resp"
 )
 
 type Opts struct {
 	Message   data.MessageModule // Chunked message structure
 	ContextID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
-	Sender    Sender
+	Sender    resp.Sender
 }
 
-func (opts *Opts) newCtx() *Context {
-	return &Context{
-		Response: &Response{},
+func (opts *Opts) newCtx() *context.Context {
+	return &context.Context{
+		Response: &resp.Response{},
 		Human:    opts.Message.Human,
 	}
 }
@@ -38,7 +40,7 @@ func (opts *Opts) newCtx() *Context {
 }*/
 
 // Make a processed request to an API endpoint.
-func (req *Opts) Complete(ctx *Context, client *resty.Client) (*Context, error) {
+func (req *Opts) Complete(ctx *context.Context, client *resty.Client) (*context.Context, error) {
 	rq := client.R().SetBody(req.Sender)
 	rq.RawRequest.Close = true
 	rq.RawRequest.Response.Close = true

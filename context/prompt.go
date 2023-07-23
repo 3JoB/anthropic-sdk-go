@@ -1,25 +1,14 @@
-package anthropic
+package context
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/3JoB/ulib/litefmt"
 
 	"github.com/3JoB/anthropic-sdk-go/data"
-	"github.com/3JoB/anthropic-sdk-go/internel/compress"
 )
 
-type CacheItem struct {
-	Key        string
-	Value      string
-	String     bool
-	Compress   bool
-	IO         compress.Interface
-	ExpireTime time.Time
-}
-
-func _Set(human, assistant string) (string, error) {
+func Set(human, assistant string) (string, error) {
 	if human == "" {
 		return "", data.ErrPromptHumanEmpty
 	}
@@ -32,13 +21,10 @@ func _Set(human, assistant string) (string, error) {
 }
 
 // Commit: The loop overhead here is too large, caching may need to be set up
-func (c *Context) build(module any) (string, error) {
-	if c.cache {
-	}
-
+func (c *Context) Build(module any) (string, error) {
 	switch r := module.(type) {
 	case data.MessageModule:
-		return _Set(r.Human, r.Assistant)
+		return Set(r.Human, r.Assistant)
 	case []data.MessageModule:
 		var prompts string
 		for _, d := range r {

@@ -7,8 +7,7 @@ import (
 	"github.com/klauspost/compress/zstd"
 )
 
-type ZSTD struct {
-}
+type ZSTD struct{}
 
 func (zs *ZSTD) Encode(v []byte) []byte {
 	var i bytes.Buffer

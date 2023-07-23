@@ -5,6 +5,7 @@ import (
 
 	"github.com/3JoB/anthropic-sdk-go"
 	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/resp"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
-		Sender: anthropic.Sender{MaxToken: 1200},
+		Sender: resp.Sender{MaxToken: 1200},
 	})
 	if err != nil {
 		panic(err)
@@ -33,7 +34,7 @@ func main() {
 			Human: "What is its current version number?",
 		},
 		ContextID: d.ID,
-		Sender:    anthropic.Sender{MaxToken: 1200},
+		Sender:    resp.Sender{MaxToken: 1200},
 	})
 	if err != nil {
 		panic(err)
@@ -46,9 +47,9 @@ func main() {
 			Human: "What is its current version number?",
 		},
 		ContextID: d.ID,
-		Sender: anthropic.Sender{
+		Sender: resp.Sender{
 			MaxToken: 1200,
-			MetaData: anthropic.MetaData{
+			MetaData: resp.MetaData{
 				UserID: "rand id",
 			},
 		},
