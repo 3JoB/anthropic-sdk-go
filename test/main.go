@@ -25,6 +25,7 @@ func main() {
 		Sender: resp.Sender{MaxToken: 1200},
 	})
 	if err != nil {
+		fmt.Println(d.ErrorResp.Message)
 		panic(err)
 	}
 	fmt.Println(d.Response.String())

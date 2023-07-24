@@ -1,6 +1,8 @@
 package anthropic
 
 import (
+	"errors"
+
 	"github.com/3JoB/resty-ilo"
 	"github.com/3JoB/ulib/err"
 	// "github.com/google/uuid"
@@ -44,25 +46,30 @@ func (req *Opts) Complete(ctx *context.Context, client *resty.Client) (*context.
 	rq := client.R().SetBody(req.Sender)
 	r, errs := rq.Post(APIComplete)
 	if errs != nil {
-		return ctx, &err.Err{Op: "request", Err: errs.Error()}
+		return ctx, &err.Err{Op: "opts:50", Err: errs.Error()}
 	}
 	defer r.RawBody().Close()
 
 	ctx.ID = req.ContextID
 	if errs := r.Bind(ctx.Response); errs != nil {
-		return ctx, &err.Err{Op: "request", E: errs}
+		return ctx, &err.Err{Op: "opts:56", E: errs}
 	}
 
 	ctx.RawData = r.String()
 
 	if !r.IsStatusCode(200) {
-		return ctx, &err.Err{Op: "request", Err: ctx.RawData}
+		errs, _ := resp.Error(r.String())
+		if (errs != resp.ErrorResponse{}) {
+			ctx.ErrorResp = errs
+			return ctx, errors.New(errs.String())
+		}
+		return ctx, &err.Err{Op: "opts:67", Err: ctx.RawData}
 	}
 
 	req.Message.Assistant = ctx.Response.Completion
 
 	if !ctx.Add() {
-		return ctx, &err.Err{Op: "request", Err: "Add failed"}
+		return ctx, &err.Err{Op: "opts:73", Err: "Add failed"}
 	}
 
 	return ctx, nil

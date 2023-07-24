@@ -22,10 +22,11 @@ type ContextItem struct {
 }
 
 type Context struct {
-	ID       string // Context ID
-	Human    string
-	RawData  string // Unprocessed raw json data returned by the API endpoint
-	Response *resp.Response
+	ID        string // Context ID
+	Human     string
+	RawData   string // Unprocessed raw json data returned by the API endpoint
+	Response  *resp.Response
+	ErrorResp resp.ErrorResponse
 }
 
 var pool sync.Map = sync.Map{}

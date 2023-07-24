@@ -43,4 +43,22 @@ func (resp *Response) String() string {
 }
 
 type ErrorResponse struct {
+	Type    string `json:"type"`
+	Message string `json:"message"`
+}
+
+type R struct {
+	Error ErrorResponse `json:"error"`
+}
+
+func Error(v string) (ErrorResponse, error) {
+	var e = R{
+		Error: ErrorResponse{},
+	}
+	err := json.UnmarshalString(v, &e)
+	return e.Error, err
+}
+
+func (e ErrorResponse) String() string {
+	return json.Marshal(&e).String()
 }
