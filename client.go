@@ -16,7 +16,7 @@ import (
 type Client struct {
 	Key          string        // API Keys
 	DefaultModel string        // Choose the default AI model
-	UseCache     bool          // Enable Prompt build cache (disable slice)
+	UseCache     bool          // Enable Prompt build cache
 	client       *resty.Client // http client
 }
 
