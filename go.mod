@@ -3,7 +3,7 @@ module github.com/3JoB/anthropic-sdk-go/v2
 go 1.20
 
 require (
-	github.com/3JoB/resty-ilo v1.1.6
+	github.com/3JoB/resty-ilo v1.1.7
 	github.com/3JoB/ulib v1.31.0
 	github.com/3JoB/ulid v0.0.2
 	github.com/andybalholm/brotli v1.0.5
@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/3JoB/brotli v0.0.1 // indirect
 	github.com/3JoB/go-reflect v1.0.1 // indirect
 	github.com/3JoB/unsafeConvert v1.5.0 // indirect
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect

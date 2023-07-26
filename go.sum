@@ -1,8 +1,10 @@
+github.com/3JoB/brotli v0.0.1 h1:ugJsMozj0PN2AyMYQGpK14c15LzW85BM2LiT99y8PrQ=
+github.com/3JoB/brotli v0.0.1/go.mod h1:sVglhBA8+BXimQTYS472Olg0f9Ftc6Df3g27yiWzDNI=
 github.com/3JoB/go-json v0.10.4 h1:88YxLjaFoLP6gV7kI+XVSnib4VPu2gBT8DCbNfb6np0=
 github.com/3JoB/go-reflect v1.0.1 h1:o8FsdGDAq32rM84vjIcoEs6ezB2whS0MCR+w7HNIuqI=
 github.com/3JoB/go-reflect v1.0.1/go.mod h1:uqE8sGxe7gZKaXFFhkzOhXgAPnSdlXaT1Oy8CDYDWfE=
-github.com/3JoB/resty-ilo v1.1.6 h1:cI78PiEwQRoi1eofN3LP68UbiBt0ap7CaN49n1JXFYI=
-github.com/3JoB/resty-ilo v1.1.6/go.mod h1:jIwEaSK/04myh9Dw6ed+7O9bnBYg57UwnNRnS21hh0E=
+github.com/3JoB/resty-ilo v1.1.7 h1:HlzRW/3xxLFXbZja7KI6L2/quUZM2f4kbg+2Wzg+4i0=
+github.com/3JoB/resty-ilo v1.1.7/go.mod h1:xUU/afN0ksRFvnNpw+MBmMJUtwCDRaGBc6q5vCm3zAU=
 github.com/3JoB/ulib v1.31.0 h1:vylKAk7wuxH5mChe8GM/U0gDap1gVCL9OYWCMj5icd4=
 github.com/3JoB/ulib v1.31.0/go.mod h1:5Yh9NGxmsH76MN/RI0OL4k84NlMfyDGYswyTXJ+4cWg=
 github.com/3JoB/ulid v0.0.2 h1:hH+kmrEb+7fNTqJRK5rLBXDcHGd1xJruYtK2W+wpId4=
