@@ -21,7 +21,7 @@ var Model = struct {
 		Instant1 string
 		Claude2  string
 	}{
-		Instant1: "claude-instant-1.1",
+		Instant1: "claude-instant-1.2",
 		Claude2:  "claude-2.0",
 	},
 }
