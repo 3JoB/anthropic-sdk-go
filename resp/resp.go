@@ -48,12 +48,12 @@ type ErrorResponse struct {
 }
 
 type R struct {
-	Error ErrorResponse `json:"error"`
+	Error *ErrorResponse `json:"error"`
 }
 
-func Error(v string) (ErrorResponse, error) {
+func Error(v string) (*ErrorResponse, error) {
 	var e = R{
-		Error: ErrorResponse{},
+		Error: &ErrorResponse{},
 	}
 	err := json.UnmarshalString(v, &e)
 	return e.Error, err

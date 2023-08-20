@@ -46,30 +46,30 @@ func (req *Opts) Complete(ctx *context.Context, client *resty.Client) (*context.
 	rq := client.R().SetBody(req.Sender)
 	r, errs := rq.Post(APIComplete)
 	if errs != nil {
-		return ctx, &err.Err{Op: "opts:50", Err: errs.Error()}
+		return ctx, &err.Err{Op: "opts:49", Err: errs.Error()}
 	}
 	defer r.RawBody().Close()
 
 	ctx.ID = req.ContextID
 	if errs := r.Bind(ctx.Response); errs != nil {
-		return ctx, &err.Err{Op: "opts:56", E: errs}
+		return ctx, &err.Err{Op: "opts:55", E: errs}
 	}
 
 	ctx.RawData = r.String()
 
 	if !r.IsStatusCode(200) {
 		errs, _ := resp.Error(r.String())
-		if (errs != resp.ErrorResponse{}) {
+		if errs != nil {
 			ctx.ErrorResp = errs
 			return ctx, errors.New(errs.String())
 		}
-		return ctx, &err.Err{Op: "opts:67", Err: ctx.RawData}
+		return ctx, &err.Err{Op: "opts:66", Err: ctx.RawData}
 	}
 
 	req.Message.Assistant = ctx.Response.Completion
 
 	if !ctx.Add() {
-		return ctx, &err.Err{Op: "opts:73", Err: "Add failed"}
+		return ctx, &err.Err{Op: "opts:72", Err: "Add failed"}
 	}
 
 	return ctx, nil

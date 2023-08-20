@@ -26,7 +26,7 @@ type Context struct {
 	Human     string
 	RawData   string // Unprocessed raw json data returned by the API endpoint
 	Response  *resp.Response
-	ErrorResp resp.ErrorResponse
+	ErrorResp *resp.ErrorResponse
 }
 
 var pool sync.Map = sync.Map{}

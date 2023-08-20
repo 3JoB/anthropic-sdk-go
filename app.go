@@ -29,8 +29,8 @@ var Model = struct {
 const (
 	API         string = "https://api.anthropic.com"
 	APIComplete string = "/v1/complete"
-	UserAgent   string = "Mozilla/5.0 (compatible; anthropic-sdk-go/1.7.0; +https://github.com/3JoB/anthropic-sdk-go/;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
-	SDKVersion  string = "1.7.0"
+	UserAgent   string = "Mozilla/5.0 (compatible; anthropic-sdk-go/1.8.0; +https://github.com/3JoB/anthropic-sdk-go/;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+	SDKVersion  string = "1.8.0"
 )
 
 var StopSequences []string = []string{"\n\nHuman:"}
