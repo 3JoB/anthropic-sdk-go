@@ -18,7 +18,7 @@ type Opts struct {
 	Sender    resp.Sender
 }
 
-func (opts *Opts) newCtx() *context.Context {
+func (opts *Opts) new() *context.Context {
 	return &context.Context{
 		Response: &resp.Response{},
 		Human:    opts.Message.Human,

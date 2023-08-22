@@ -37,7 +37,7 @@ func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 	if (senderOpts.Message == data.MessageModule{}) {
 		return nil, data.ErrContextNil
 	}
-	ctx := senderOpts.newCtx()
+	ctx := senderOpts.new()
 	if senderOpts.ContextID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
 		senderOpts.ContextID = id.String()
