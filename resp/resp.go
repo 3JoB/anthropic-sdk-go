@@ -59,6 +59,16 @@ func Error(v string) (*ErrorResponse, error) {
 	return e.Error, err
 }
 
-func (e ErrorResponse) String() string {
+/*
+	Example:
+		func E() error {
+			return &ErrorResponse{}
+		}
+*/
+func (e *ErrorResponse) Error() string {
+	return e.Message
+}
+
+func (e *ErrorResponse) String() string {
 	return json.Marshal(&e).String()
 }
