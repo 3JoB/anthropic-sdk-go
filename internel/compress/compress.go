@@ -1,8 +1,8 @@
 package compress
 
 type Interface interface {
-	Encode(string) string
-	Decode(string) string
+	Encode([]byte) []byte
+	Decode([]byte) []byte
 }
 
 func New()

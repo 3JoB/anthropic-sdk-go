@@ -4,23 +4,26 @@ import (
 	"bytes"
 	"io"
 
-	"github.com/andybalholm/brotli"
+	"github.com/3JoB/brotli"
 )
 
 type Brotli struct{}
 
 func (b *Brotli) Encode(v []byte) []byte {
 	var i bytes.Buffer
+	defer i.Reset()
 	w := brotli.NewWriter(&i)
+	defer w.Close()
 	w.Write(v)
-	w.Close()
 	return i.Bytes()
 }
 
 func (b *Brotli) Decode(v []byte) []byte {
 	n := bytes.NewReader(v)
-	var o bytes.Buffer
+	var i bytes.Buffer
+	defer i.Reset()
 	r := brotli.NewReader(n)
-	io.Copy(&o, r)
-	return o.Bytes()
+	defer r.Close()
+	io.Copy(&i, r)
+	return i.Bytes()
 }

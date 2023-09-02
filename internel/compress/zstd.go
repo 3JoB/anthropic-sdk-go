@@ -11,16 +11,19 @@ type ZSTD struct{}
 
 func (zs *ZSTD) Encode(v []byte) []byte {
 	var i bytes.Buffer
+	defer i.Reset()
 	w, _ := zstd.NewWriter(&i)
+	defer w.Close()
 	w.Write(v)
-	w.Close()
 	return i.Bytes()
 }
 
 func (zs *ZSTD) Decode(v []byte) []byte {
 	b := bytes.NewReader(v)
-	var o bytes.Buffer
+	var i bytes.Buffer
+	defer i.Reset()
 	r, _ := zstd.NewReader(b)
-	io.Copy(&o, r)
-	return o.Bytes()
+	defer r.Close()
+	io.Copy(&i, r)
+	return i.Bytes()
 }
