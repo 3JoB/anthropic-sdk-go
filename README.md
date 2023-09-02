@@ -27,6 +27,21 @@ Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/
 
 <br><br>
 
+## TODO
+
+Here is the to-do list for v2. When most of them are completed and stable tested, the v2 sdk will be released to the stable version.
+
+There seems to be a lot to do (sad) and I have other work, so progress may be slow.
+
+- [ ] New ContextPool (should be hashmap now)
+- [ ] Switch to fasthttp
+- [ ] Support SSE (still exploring, but fasthttp seems to have support)
+- [ ] Brand new API (I know, the API design of v1 is too messy)
+- [ ] Support prompt cache function (means fewer builds, but may cause some API conflicts, I'm still exploring)
+- [ ] Context Prompt Pool supports compression.
+
+<br><br>
+
 # Note
 
 Anthropic began to block some areas and returned 403 errors.

@@ -1,25 +1,29 @@
 package anthropic
 
 import (
-	"errors"
 	"sync"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
 // Create a new Client object.
-func New(conf *Client) (*Client, error) {
+func New(conf *Config) (*Client, error) {
 	if conf == nil {
-		return nil, errors.New("client is nil")
+		return nil, data.ErrConfigEmpty
 	}
-	if err := conf.headers(); err != nil {
+	client := &Client{
+		cfg: conf,
+	}
+	if err := client.headers(); err != nil {
 		return nil, err
 	}
 	if conf.DefaultModel == "" {
 		conf.DefaultModel = Model.Major.Instant1
 	}
-	return conf, nil
+	return client, nil
 }
 
-func NewPool(conf *Client) sync.Pool {
+func NewPool(conf *Config) sync.Pool {
 	return sync.Pool{
 		New: func() any {
 			if client, err := New(conf); err != nil {

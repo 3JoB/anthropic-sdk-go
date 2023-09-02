@@ -14,10 +14,14 @@ import (
 )
 
 type Client struct {
-	Key          string        // API Keys
-	DefaultModel string        // Choose the default AI model
-	UseCache     bool          // Enable Prompt build cache
-	client       *resty.Client // http client
+	cfg    *Config       // Config
+	client *resty.Client // http client
+}
+
+type Config struct {
+	Key          string // API Keys
+	DefaultModel string // Choose the default AI model
+	UseCache     bool   // Enable Prompt build cache
 }
 
 // is minute
@@ -35,7 +39,7 @@ func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 		return nil, err
 	}
 	if (senderOpts.Message == data.MessageModule{}) {
-		return nil, data.ErrContextNil
+		return nil, data.ErrContextIsNil
 	}
 	ctx := senderOpts.new()
 	if senderOpts.ContextID == "" {
@@ -59,7 +63,7 @@ func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 
 func (ah *Client) check(sender *resp.Sender) (err error) {
 	if sender.Model == "" {
-		sender.Model = ah.DefaultModel
+		sender.Model = ah.cfg.DefaultModel
 	}
 	if len(sender.StopSequences) == 0 {
 		sender.StopSequences = StopSequences
@@ -71,7 +75,7 @@ func (ah *Client) check(sender *resp.Sender) (err error) {
 }
 
 func (c *Client) headers() error {
-	if c.Key == "" {
+	if c.cfg.Key == "" {
 		return data.ErrApiKeyEmpty
 	}
 	c.client = resty.New().SetBaseURL(API).SetHeaders(map[string]string{
@@ -79,7 +83,7 @@ func (c *Client) headers() error {
 		"Content-Type":      "application/json",
 		"Client":            litefmt.Sprint("anthropic-sdk-go/", SDKVersion),
 		"anthropic-version": "2023-06-01",
-		"x-api-key":         c.Key,
+		"x-api-key":         c.cfg.Key,
 		"User-Agent":        UserAgent,
 	})
 	return nil

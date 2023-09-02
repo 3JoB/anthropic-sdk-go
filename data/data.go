@@ -1,17 +1,21 @@
 package data
 
-import "github.com/3JoB/ulib/err"
+import (
+	"errors"
+)
 
 var (
-	ErrApiKeyEmpty      error = &err.Err{Op: "config", Err: "APIKey cannot be empty!"}
-	ErrRegionBanned     error = &err.Err{Op: "403", Err: "Region blocked"}
-	ErrContextNil       error = &err.Err{Op: "send", Err: "Context cannot be nil!"}
-	ErrContextNotFound  error = &err.Err{Op: "send", Err: "Context not found"}
-	ErrConfigEmpty      error = &err.Err{Op: "config", Err: "Configuration cannot be empty!"}
-	ErrSenderNil        error = &err.Err{Op: "sender", Err: "Sender cannot be nil!"}
-	ErrPromptHumanEmpty error = &err.Err{Op: "prompt", Err: "The value of human cannot be empty!"}
-	ErrPromptCtxEmpty   error = &err.Err{Op: "prompt", Err: "The value of context cannot be empty!"}
-	ErrPromptEmpty      error = &err.Err{Op: "send", Err: "The value of prompt cannot be empty!"}
+	ErrApiKeyEmpty      = errors.New("APIKey cannot be empty!")
+	ErrRegionBanned     = errors.New("Region blocked")
+	ErrClientIsNil      = errors.New("Client cannot be nil!")
+	ErrContextIsNil     = errors.New("Context cannot be nil!")
+	ErrContextNotFound  = errors.New("Context not found")
+	ErrConfigIsNil      = errors.New("Configuration cannot be nil!")
+	ErrConfigEmpty      = errors.New("Configuration cannot be empty!")
+	ErrSenderIsNil      = errors.New("Sender cannot be nil!")
+	ErrPromptHumanEmpty = errors.New("The value of human cannot be empty!")
+	ErrPromptCtxEmpty   = errors.New("The value of context cannot be empty!")
+	ErrPromptEmpty      = errors.New("The value of prompt cannot be empty!")
 )
 
 // Chunked message structure

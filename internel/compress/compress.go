@@ -5,4 +5,6 @@ type Interface interface {
 	Decode([]byte) []byte
 }
 
-func New()
+func New() {
+	
+}
