@@ -9,6 +9,10 @@ import (
 
 type Brotli struct{}
 
+func NewBrotli() Interface {
+	return &Brotli{}
+}
+
 func (b *Brotli) Encode(v []byte) []byte {
 	var i bytes.Buffer
 	defer i.Reset()

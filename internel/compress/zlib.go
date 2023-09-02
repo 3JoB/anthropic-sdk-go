@@ -9,6 +9,10 @@ import (
 
 type Zlib struct{}
 
+func NewZlib() Interface {
+	return &Zlib{}
+}
+
 func (z *Zlib) Encode(v []byte) []byte {
 	var i bytes.Buffer
 	defer i.Reset()

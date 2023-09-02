@@ -9,6 +9,10 @@ import (
 
 type ZSTD struct{}
 
+func NewZSTD() Interface {
+	return &ZSTD{}
+}
+
 func (zs *ZSTD) Encode(v []byte) []byte {
 	var i bytes.Buffer
 	defer i.Reset()

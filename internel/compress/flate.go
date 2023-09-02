@@ -9,6 +9,10 @@ import (
 
 type Flate struct{}
 
+func NewFlate() Interface {
+	return &Flate{}
+}
+
 func (f *Flate) Encode(v []byte) []byte {
 	var i bytes.Buffer
 	defer i.Reset()
