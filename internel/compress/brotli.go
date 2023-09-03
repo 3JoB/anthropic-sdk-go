@@ -2,7 +2,6 @@ package compress
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/3JoB/brotli"
 )
@@ -23,11 +22,10 @@ func (b *Brotli) Encode(v []byte) []byte {
 }
 
 func (b *Brotli) Decode(v []byte) []byte {
-	n := bytes.NewReader(v)
 	var i bytes.Buffer
+	i.Write(v)
 	defer i.Reset()
-	r := brotli.NewReader(n)
+	r := brotli.NewReader(&i)
 	defer r.Close()
-	io.Copy(&i, r)
-	return i.Bytes()
+	return reader(r)
 }

@@ -2,7 +2,6 @@ package compress
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/klauspost/compress/zlib"
 )
@@ -23,11 +22,10 @@ func (z *Zlib) Encode(v []byte) []byte {
 }
 
 func (z *Zlib) Decode(v []byte) []byte {
-	b := bytes.NewReader(v)
 	var i bytes.Buffer
+	i.Write(v)
 	defer i.Reset()
-	r, _ := zlib.NewReader(b)
+	r, _ := zlib.NewReader(&i)
 	defer r.Close()
-	io.Copy(&i, r)
-	return i.Bytes()
+	return reader(r)
 }

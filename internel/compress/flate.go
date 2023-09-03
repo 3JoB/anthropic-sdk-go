@@ -2,7 +2,6 @@ package compress
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/klauspost/compress/flate"
 )
@@ -23,11 +22,10 @@ func (f *Flate) Encode(v []byte) []byte {
 }
 
 func (f *Flate) Decode(v []byte) []byte {
-	b := bytes.NewReader(v)
-	var o bytes.Buffer
-	defer o.Reset()
-	r := flate.NewReader(b)
+	var i bytes.Buffer
+	i.Write(v)
+	defer i.Reset()
+	r := flate.NewReader(&i)
 	defer r.Close()
-	io.Copy(&o, r)
-	return o.Bytes()
+	return reader(r)
 }

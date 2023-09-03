@@ -19,4 +19,8 @@ func NewPoolWithSlice() *Pool[[]data.MessageModule] {
 	}
 }
 
-func NewPoolWithCache()
+func NewPoolWithCache() *Pool[string] {
+	return &Pool[string]{
+		pool: &hashmap.Map[string, string]{},
+	}
+}

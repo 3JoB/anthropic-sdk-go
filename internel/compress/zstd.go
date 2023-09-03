@@ -2,7 +2,6 @@ package compress
 
 import (
 	"bytes"
-	"io"
 
 	"github.com/klauspost/compress/zstd"
 )
@@ -23,11 +22,10 @@ func (zs *ZSTD) Encode(v []byte) []byte {
 }
 
 func (zs *ZSTD) Decode(v []byte) []byte {
-	b := bytes.NewReader(v)
 	var i bytes.Buffer
 	defer i.Reset()
-	r, _ := zstd.NewReader(b)
+	i.Write(v)
+	r, _ := zstd.NewReader(&i)
 	defer r.Close()
-	io.Copy(&i, r)
-	return i.Bytes()
+	return reader(r)
 }
