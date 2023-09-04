@@ -1,0 +1,95 @@
+---
+name: "Bug Report"
+description: Report a bug on anthropic-sdk-go
+body:
+- type: markdown
+  attributes:
+    value: |
+      Please [search for existing issues](https://github.com/3JoB/anthropic-sdk-go/issues) before creating a new one.
+      Please do not use this template to report irrelevant information or your issues will be closed.
+
+- type: dropdown
+  attributes:
+    label: Version
+    placeholder: "Anthropic-SDK-GO [Version 2.0.2-Beta  CommitID xxxxx]"
+    options:
+      - v2.0.2 Beta (Default)
+      - v2.0.1 Beta
+      - v2.0.0 Beta
+      - v2.0.0 Beta.2
+      - v2.0.0 Beta.1
+      - v1.6.0
+      - v1.5.0
+      - v1.4.0
+      - v1.3.0
+      - v1.2.3
+      - v1.2.2
+      - v1.2.1
+      - v1.2.0
+      - v1.1.0
+      - v1.0.0
+  validations:
+    required: true
+
+- type: dropdown
+  id: readme
+  attributes:
+    label: README.md.
+    description: Have you read the README.md and CONTRIBUTING.md.
+    options:
+      - No (Default)
+      - YES (real)
+  validations:
+    required: true
+
+- type: input
+  attributes:
+    label: Distro Version
+    description: |
+      Please tell us what distro you are using (if applicable). 
+      You can get additional information about the version where possible, e.g. on Debian / Ubuntu, run `lsb_release -r`
+    placeholder: "Debian 11"
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Other Software
+    description: If you're reporting a bug involving SDK's interaction with other applications, please tell us. What applications? What versions?
+    placeholder: |
+      go1.19.4 windows/amd64
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: Repro Steps
+    description: Please list out the steps to reproduce your bug.  
+    placeholder: Your steps go here. Include relevant environmental variables or any other configuration.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Expected Behavior
+    description: What were you expecting to see? Include any relevant examples or documentation links.
+    placeholder: If you want to include screenshots, paste them into the text area or follow up with a separate comment. 
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Actual Behavior
+    description: What happened instead?
+    placeholder: Include the terminal output, straces of the failing command, etc. as necessary.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Diagnostic Logs
+    description: | 
+      Please provide additional diagnostics if needed.
+    placeholder: Your links to logs or other information go here.
+  validations:
+    required: false

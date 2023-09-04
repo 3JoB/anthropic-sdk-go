@@ -1,0 +1,47 @@
+---
+name: "Feature request"
+description: Suggest an idea for this project
+body:
+- type: markdown
+  attributes:
+    value: |
+      Please [search for existing issues](https://github.com/3JoB/anthropic-sdk-go/issues) before creating a new one.
+      Please do not use this template to report irrelevant information or your issues will be closed.
+
+- type: input
+  attributes:
+    label: Feature Request
+    description: |
+      Is your feature request related to a problem? Please describe.
+      A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+    placeholder: "request"
+  validations:
+    required: true
+
+- type: input
+  attributes:
+    label: Solution
+    description: |
+      Describe the solution you'd like.
+      A clear and concise description of what you want to happen.
+    placeholder: "solution"
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: Alternatives
+    description: |
+      Describe alternatives you've considered.
+      A clear and concise description of any alternative solutions or features you've considered.
+    placeholder: alternatives
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: Additional context
+    description: Add any other context or screenshots about the feature request here.
+    placeholder: Add any other context or screenshots about the feature request here.
+  validations:
+    required: false
