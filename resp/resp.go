@@ -49,7 +49,7 @@ func (resp *Response) String() string {
 type ErrorResponse struct {
 	Type    string `json:"type"`
 	Message string `json:"message"`
-	Code int `json:"-"` // HTTP status code, please do not parse
+	Code    int    `json:"-"` // HTTP status code, please do not parse
 }
 
 type R struct {

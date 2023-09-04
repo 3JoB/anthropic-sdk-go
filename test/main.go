@@ -29,7 +29,7 @@ Of laughter, joy and mirth
 Find beauty in each season
 And wonder in the earth`
 
-func main(){
+func main() {
 	data := []byte(c_data)
 	fmt.Println("Size: ", len(data))
 	cp := compress.NewSnappy()

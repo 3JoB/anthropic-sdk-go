@@ -11,18 +11,18 @@ import (
 )
 
 type Pool[T []data.MessageModule | string] struct {
-	pool *hashmap.Map[string, T]
-	c compress.Interface
-	cmp bool // Compress status
+	pool  *hashmap.Map[string, T]
+	c     compress.Interface
+	cmp   bool // Compress status
 	slice bool
 }
 
 // Create a new pool in slicing mode.
 //
 // Methods not available in this mode: UseCompress()
-func NewPoolWithSlice() (*Pool[[]data.MessageModule]) {
+func NewPoolWithSlice() *Pool[[]data.MessageModule] {
 	return &Pool[[]data.MessageModule]{
-		pool: hashmap.New[string, []data.MessageModule](),
+		pool:  hashmap.New[string, []data.MessageModule](),
 		slice: true,
 	}
 }

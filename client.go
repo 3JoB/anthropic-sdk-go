@@ -36,7 +36,7 @@ func (ah *Client) SetTimeOut(times int) {
 	ah.timeout = time.Duration(times) * time.Minute
 }
 
-// Send data to the API endpoint. Before sending out, 
+// Send data to the API endpoint. Before sending out,
 // the data will be processed into a form that the API can recognize.
 func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 	var err error
