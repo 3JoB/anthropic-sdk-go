@@ -21,13 +21,14 @@ type Client struct {
 	header  *hashmap.Map[string, string] // http header
 }
 
+// Anthropic-SDK-Go configuration
 type Config struct {
 	Key          string // API Keys
 	DefaultModel string // Choose the default AI model
 	UseCache     bool   // Enable Prompt build cache
 }
 
-// is minute
+// Set the response timeout in minutes.
 func (ah *Client) SetTimeOut(times int) {
 	if times == 0 {
 		return
@@ -35,7 +36,8 @@ func (ah *Client) SetTimeOut(times int) {
 	ah.timeout = time.Duration(times) * time.Minute
 }
 
-// Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
+// Send data to the API endpoint. Before sending out, 
+// the data will be processed into a form that the API can recognize.
 func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 	var err error
 	if err = ah.check(&senderOpts.Sender); err != nil {
@@ -44,7 +46,7 @@ func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 	if (senderOpts.Message == data.MessageModule{}) {
 		return nil, data.ErrContextIsNil
 	}
-	ctx := senderOpts.new()
+	ctx := senderOpts.newCtx()
 	if senderOpts.ContextID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
 		senderOpts.ContextID = id.String()
@@ -65,6 +67,7 @@ func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 	return senderOpts.Complete(ctx)
 }
 
+// Basic check
 func (ah *Client) check(sender *resp.Sender) (err error) {
 	if sender.Model == "" {
 		sender.Model = ah.cfg.DefaultModel

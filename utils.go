@@ -8,6 +8,9 @@ import (
 	"github.com/valyala/fasthttp/fasthttpproxy"
 )
 
+// Set Body for *fasthttp.Request.
+//
+// Need to export io.Writer in BodyWriter() as w.
 func setBody(v any, w io.Writer) error {
 	return encoder.NewStreamEncoder(w).Encode(v)
 }

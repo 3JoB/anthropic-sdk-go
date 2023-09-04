@@ -6,13 +6,13 @@ import (
 	"github.com/klauspost/compress/zstd"
 )
 
-type ZSTD struct{}
+type ZST struct{}
 
-func NewZSTD() Interface {
-	return &ZSTD{}
+func NewZST() Interface {
+	return &ZST{}
 }
 
-func (zs *ZSTD) Encode(v []byte) *bytes.Buffer {
+func (zs *ZST) Encode(v []byte) *bytes.Buffer {
 	var i bytes.Buffer
 	w, _ := zstd.NewWriter(&i)
 	w.Write(v)
@@ -20,7 +20,7 @@ func (zs *ZSTD) Encode(v []byte) *bytes.Buffer {
 	return &i
 }
 
-func (zs *ZSTD) Decode(v *bytes.Buffer) []byte {
+func (zs *ZST) Decode(v *bytes.Buffer) []byte {
 	r, _ := zstd.NewReader(v)
 	defer r.Close()
 	return reader(r)

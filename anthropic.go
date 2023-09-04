@@ -9,28 +9,28 @@ import (
 )
 
 // Create a new Client object.
-func New(conf *Config) (*Client, error) {
-	if conf == nil {
+func New(c *Config) (*Client, error) {
+	if c == nil {
 		return nil, data.ErrConfigEmpty
 	}
 	client := &Client{
-		cfg:    conf,
+		cfg:    c,
 		header: hashmap.New[string, string](),
 	}
 	client.setDefaultClient()
 	if err := client.headers(); err != nil {
 		return nil, err
 	}
-	if conf.DefaultModel == "" {
-		conf.DefaultModel = Model.Major.Instant1
+	if c.DefaultModel == "" {
+		c.DefaultModel = Model.Major.Instant1
 	}
 	return client, nil
 }
 
-func NewPool(conf *Config) sync.Pool {
+func NewPool(c *Config) sync.Pool {
 	return sync.Pool{
 		New: func() any {
-			if client, err := New(conf); err != nil {
+			if client, err := New(c); err != nil {
 				panic(err)
 			} else {
 				return client
