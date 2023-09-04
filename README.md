@@ -48,6 +48,9 @@ Anthropic began to block some areas and returned 403 errors.
 We have added inspections to V1.5.0.
 
 ## Start
+
+**Since the v2 SDK has not released a stable version, the documentation still only provides v1 support for the time being.**
+
 Usage:
 ```sh
 $ go get github.com/3JoB/anthropic-sdk-go@v1.6.0
