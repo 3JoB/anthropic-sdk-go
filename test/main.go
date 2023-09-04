@@ -6,6 +6,7 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/v2"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
 	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
+	"github.com/3JoB/anthropic-sdk-go/v2/pool"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
@@ -29,7 +30,20 @@ Of laughter, joy and mirth
 Find beauty in each season
 And wonder in the earth`
 
-func main() {
+func main(){
+	p := pool.NewPoolWithCache()
+	if err := p.UseComress("br"); err != nil {
+		panic(err)
+	}
+	p.Set("c_data", c_data)
+	d, ok := p.Get("c_data")
+	if !ok {
+		panic("get failed")
+	}
+	fmt.Println(d)
+}
+
+func cmain() {
 	data := []byte(c_data)
 	fmt.Println("Size: ", len(data))
 	cp := compress.NewSnappy()
