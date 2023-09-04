@@ -1,6 +1,9 @@
 package resp
 
-import "github.com/3JoB/ulib/json"
+import (
+	"github.com/3JoB/unsafeConvert"
+	"github.com/bytedance/sonic"
+)
 
 type Sender struct {
 	Prompt        string   `json:"prompt"`                   // (required) The prompt you want Claude to complete. For proper response generation you will most likely want to format your prompt as follows:See [our comments on prompts](https://console.anthropic.com/docs/prompt-design#what-is-a-prompt) for more context.
@@ -38,7 +41,8 @@ func (resp *Response) String() string {
 	if resp.cache != "" {
 		return resp.cache
 	}
-	resp.cache = json.Marshal(resp).String()
+	d, _ := sonic.Marshal(resp)
+	resp.cache = unsafeConvert.StringSlice(d)
 	return resp.cache
 }
 
@@ -51,11 +55,12 @@ type R struct {
 	Error *ErrorResponse `json:"error"`
 }
 
-func Error(v string) (*ErrorResponse, error) {
+func Error(v []byte) (*ErrorResponse, error) {
 	var e = R{
 		Error: &ErrorResponse{},
 	}
-	err := json.UnmarshalString(v, &e)
+
+	err := sonic.Unmarshal(v, &e)
 	return e.Error, err
 }
 
@@ -71,5 +76,6 @@ func (e *ErrorResponse) Error() string {
 }
 
 func (e *ErrorResponse) String() string {
-	return json.Marshal(&e).String()
+	d, _ := sonic.Marshal(e)
+	return unsafeConvert.StringSlice(d)
 }

@@ -33,11 +33,11 @@ Here is the to-do list for v2. When most of them are completed and stable tested
 
 There seems to be a lot to do (sad) and I have other work, so progress may be slow.
 
-- [ ] New ContextPool (should be hashmap now)
-- [ ] Switch to fasthttp
-- [ ] Support SSE (still exploring, but fasthttp seems to have support)
-- [ ] Brand new API (I know, the API design of v1 is too messy)
-- [ ] Support prompt cache function (means fewer builds, but may cause some API conflicts, I'm still exploring)
+- [   ] New ContextPool (should be hashmap now)
+- [ X ] Switch to fasthttp
+- [   ] Support SSE (still exploring, but fasthttp seems to have support)
+- [   ] Brand new API (I know, the API design of v1 is too messy)
+- [   ] Support prompt cache function (means fewer builds, but may cause some API conflicts, I'm still exploring)
 - [ ] Context Prompt Pool supports compression.
 
 <br><br>

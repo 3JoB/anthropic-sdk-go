@@ -3,6 +3,8 @@ package anthropic
 import (
 	"sync"
 
+	"github.com/cornelk/hashmap"
+
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
@@ -12,8 +14,10 @@ func New(conf *Config) (*Client, error) {
 		return nil, data.ErrConfigEmpty
 	}
 	client := &Client{
-		cfg: conf,
+		cfg:    conf,
+		header: hashmap.New[string, string](),
 	}
+	client.setDefaultClient()
 	if err := client.headers(); err != nil {
 		return nil, err
 	}

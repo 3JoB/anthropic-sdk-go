@@ -3,9 +3,10 @@ package anthropic
 import (
 	"time"
 
-	"github.com/3JoB/resty-ilo"
 	"github.com/3JoB/ulib/litefmt"
 	"github.com/3JoB/ulid"
+	"github.com/cornelk/hashmap"
+	"github.com/valyala/fasthttp"
 	"pgregory.net/rand"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/context"
@@ -14,8 +15,10 @@ import (
 )
 
 type Client struct {
-	cfg    *Config       // Config
-	client *resty.Client // http client
+	client  *fasthttp.Client
+	timeout time.Duration
+	cfg     *Config                      // Config
+	header  *hashmap.Map[string, string] // http header
 }
 
 type Config struct {
@@ -29,7 +32,7 @@ func (ah *Client) SetTimeOut(times int) {
 	if times == 0 {
 		return
 	}
-	ah.client = ah.client.SetTimeout(time.Duration(times) * time.Minute)
+	ah.timeout = time.Duration(times) * time.Minute
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
@@ -58,7 +61,8 @@ func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
 	if err != nil {
 		return ctx, err
 	}
-	return senderOpts.Complete(ctx, ah.client)
+	senderOpts.With(ah)
+	return senderOpts.Complete(ctx)
 }
 
 func (ah *Client) check(sender *resp.Sender) (err error) {
@@ -78,13 +82,11 @@ func (c *Client) headers() error {
 	if c.cfg.Key == "" {
 		return data.ErrApiKeyEmpty
 	}
-	c.client = resty.New().SetBaseURL(API).SetHeaders(map[string]string{
-		"Accept":            "application/json",
-		"Content-Type":      "application/json",
-		"Client":            litefmt.Sprint("anthropic-sdk-go/", SDKVersion),
-		"anthropic-version": "2023-06-01",
-		"x-api-key":         c.cfg.Key,
-		"User-Agent":        UserAgent,
-	})
+	c.header.Set("Accept", "application/json")
+	c.header.Set("Content-Type", "application/json")
+	c.header.Set("Client", litefmt.Sprint("anthropic-sdk-go/", SDKVersion))
+	c.header.Set("anthropic-version", "2023-06-01")
+	c.header.Set("x-api-key", c.cfg.Key)
+	c.header.Set("User-Agent", UserAgent)
 	return nil
 }

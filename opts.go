@@ -3,8 +3,9 @@ package anthropic
 import (
 	"errors"
 
-	"github.com/3JoB/resty-ilo"
 	"github.com/3JoB/ulib/err"
+	"github.com/3JoB/unsafeConvert"
+	"github.com/bytedance/sonic"
 	// "github.com/google/uuid"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/context"
@@ -16,6 +17,7 @@ type Opts struct {
 	Message   data.MessageModule // Chunked message structure
 	ContextID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
 	Sender    resp.Sender
+	client    *Client
 }
 
 func (opts *Opts) new() *context.Context {
@@ -23,6 +25,10 @@ func (opts *Opts) new() *context.Context {
 		Response: &resp.Response{},
 		Human:    opts.Message.Human,
 	}
+}
+
+func (opts *Opts) With(client *Client) {
+	opts.client = client
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
@@ -42,34 +48,39 @@ func (opts *Opts) new() *context.Context {
 }*/
 
 // Make a processed request to an API endpoint.
-func (req *Opts) Complete(ctx *context.Context, client *resty.Client) (*context.Context, error) {
-	rq := client.R().SetBody(req.Sender)
-	r, errs := rq.Post(APIComplete)
-	if errs != nil {
-		return ctx, &err.Err{Op: "opts:49", Err: errs.Error()}
+func (opt *Opts) Complete(ctx *context.Context) (*context.Context, error) {
+	// Get fasthttp object
+	request, response := acquire()
+	defer release(request, response)
+
+	// Initialize Request
+	opt.client.setHeaderWithURI(request)
+	setBody(&opt.Sender, request.BodyWriter())
+
+	if errs := opt.client.do(request, response); errs != nil {
+		return ctx, &err.Err{Op: "opts:62", Err: errs.Error()}
 	}
-	defer r.RawBody().Close()
 
-	ctx.ID = req.ContextID
-	if errs := r.Bind(ctx.Response); errs != nil {
-		return ctx, &err.Err{Op: "opts:55", E: errs}
+	ctx.ID = opt.ContextID
+	if errs := sonic.Unmarshal(response.Body(), ctx.Response); errs != nil {
+		return ctx, &err.Err{Op: "opts:67", E: errs}
 	}
 
-	ctx.RawData = r.String()
+	ctx.RawData = response.Body()
 
-	if !r.IsStatusCode(200) {
-		errs, _ := resp.Error(r.String())
+	if response.StatusCode() != 200 {
+		errs, _ := resp.Error(response.Body())
 		if errs != nil {
 			ctx.ErrorResp = errs
 			return ctx, errors.New(errs.String())
 		}
-		return ctx, &err.Err{Op: "opts:66", Err: ctx.RawData}
+		return ctx, &err.Err{Op: "opts:80", Err: unsafeConvert.StringSlice(ctx.RawData)}
 	}
 
-	req.Message.Assistant = ctx.Response.Completion
+	opt.Message.Assistant = ctx.Response.Completion
 
 	if !ctx.Add() {
-		return ctx, &err.Err{Op: "opts:72", Err: "Add failed"}
+		return ctx, &err.Err{Op: "opts:86", Err: "Add failed"}
 	}
 
 	return ctx, nil
