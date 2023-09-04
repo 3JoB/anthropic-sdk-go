@@ -1,4 +1,4 @@
-# anthropic-sdk-go
+<h1 align="center">Anthropic-SDK-Go</h1>
 
 <p align="center">
         <a href="https://pkg.go.dev/github.com/3JoB/anthropic-sdk-go"><img src="https://pkg.go.dev/badge/github.com/3JoB/anthropic-sdk-go.svg" alt="Go Reference"></a>
@@ -41,11 +41,6 @@ There seems to be a lot to do (sad) and I have other work, so progress may be sl
 - [ ] Context Prompt Pool supports compression.
 
 <br><br>
-
-# Note
-
-Anthropic began to block some areas and returned 403 errors.
-We have added inspections to V1.5.0.
 
 ## Start
 
@@ -172,9 +167,9 @@ d.Close()
 
 <br>
 
-# Other
-This project only guarantees basic usability, if you need new features or improvements, please create a `Pull Requests`
 
+# Contribute
+Move => [CONTRIBUTING](/CONTRIBUTING.md)
 
 
 # Contact
