@@ -12,20 +12,16 @@ func NewZlib() Interface {
 	return &Zlib{}
 }
 
-func (z *Zlib) Encode(v []byte) []byte {
+func (z *Zlib) Encode(v []byte) *bytes.Buffer {
 	var i bytes.Buffer
-	defer i.Reset()
 	w := zlib.NewWriter(&i)
-	defer w.Close()
 	w.Write(v)
-	return i.Bytes()
+	w.Close()
+	return &i
 }
 
-func (z *Zlib) Decode(v []byte) []byte {
-	var i bytes.Buffer
-	i.Write(v)
-	defer i.Reset()
-	r, _ := zlib.NewReader(&i)
+func (z *Zlib) Decode(v *bytes.Buffer) []byte {
+	r, _ := zlib.NewReader(v)
 	defer r.Close()
 	return reader(r)
 }

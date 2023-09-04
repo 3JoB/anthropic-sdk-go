@@ -1,6 +1,10 @@
 package compress
 
+import "bytes"
+
+//	Done
+
 type Interface interface {
-	Encode([]byte) []byte
-	Decode([]byte) []byte
+	Encode([]byte) *bytes.Buffer
+	Decode(*bytes.Buffer) []byte
 }

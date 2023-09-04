@@ -5,10 +5,42 @@ import (
 
 	"github.com/3JoB/anthropic-sdk-go/v2"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
-func main() {
+var c_data = `Seasons come and seasons go
+The world is always changing
+New life springs, old life fades
+A cycle ever ranging
+
+The sun will rise, the moon will set
+The stars blink in the sky
+Clouds will form, rain will fall
+And time will pass us by
+
+But some things remain through it all
+The love we have inside
+Bindings of family, bonds of friends
+With us they will abide
+
+So cherish every moment
+Of laughter, joy and mirth
+Find beauty in each season
+And wonder in the earth`
+
+func main(){
+	data := []byte(c_data)
+	fmt.Println("Size: ", len(data))
+	cp := compress.NewSnappy()
+	en_data := cp.Encode(data)
+	fmt.Println("Encode Size: ", en_data.Len())
+	fmt.Println("Encode Data: ", string(en_data.Bytes()))
+	fmt.Println("Decode Data: ")
+	fmt.Println(string(cp.Decode(en_data)))
+}
+
+func xmain() {
 	// fuck i accidentally leaked my keys and it's now disabled by me.
 	c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
 	if err != nil {

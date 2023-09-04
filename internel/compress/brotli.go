@@ -12,20 +12,17 @@ func NewBrotli() Interface {
 	return &Brotli{}
 }
 
-func (b *Brotli) Encode(v []byte) []byte {
+func (b *Brotli) Encode(v []byte) *bytes.Buffer {
+	// Done
 	var i bytes.Buffer
-	defer i.Reset()
 	w := brotli.NewWriter(&i)
-	defer w.Close()
 	w.Write(v)
-	return i.Bytes()
+	w.Close()
+	return &i
 }
 
-func (b *Brotli) Decode(v []byte) []byte {
-	var i bytes.Buffer
-	i.Write(v)
-	defer i.Reset()
-	r := brotli.NewReader(&i)
+func (b *Brotli) Decode(v *bytes.Buffer) []byte {
+	r := brotli.NewReader(v)
 	defer r.Close()
 	return reader(r)
 }

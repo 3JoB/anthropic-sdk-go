@@ -7,10 +7,13 @@ import (
 	"github.com/cornelk/hashmap"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
 )
 
 type Pool[v []data.MessageModule | string] struct {
 	pool *hashmap.Map[string, v]
+	c compress.Interface
+	cmp bool // Compress status
 }
 
 func NewPoolWithSlice() *Pool[[]data.MessageModule] {

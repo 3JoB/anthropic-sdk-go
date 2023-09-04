@@ -12,20 +12,16 @@ func NewFlate() Interface {
 	return &Flate{}
 }
 
-func (f *Flate) Encode(v []byte) []byte {
+func (f *Flate) Encode(v []byte) *bytes.Buffer {
 	var i bytes.Buffer
-	defer i.Reset()
-	w, _ := flate.NewWriter(&i, 7)
-	defer w.Close()
+	w, _ := flate.NewWriter(&i, 9)
 	w.Write(v)
-	return i.Bytes()
+	w.Close()
+	return &i
 }
 
-func (f *Flate) Decode(v []byte) []byte {
-	var i bytes.Buffer
-	i.Write(v)
-	defer i.Reset()
-	r := flate.NewReader(&i)
+func (f *Flate) Decode(v *bytes.Buffer) []byte {
+	r := flate.NewReader(v)
 	defer r.Close()
 	return reader(r)
 }
