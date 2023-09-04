@@ -12,7 +12,6 @@ body:
   id: version
   attributes:
     label: Version
-    placeholder: "Anthropic-SDK-GO [Version 2.0.2-Beta  CommitID xxxxx]"
     options:
       - v2.0.2 Beta (Default)
       - v2.0.1 Beta
