@@ -3,9 +3,10 @@ package pool
 import (
 	"bytes"
 
-	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
 	"github.com/3JoB/unsafeConvert"
 	"github.com/cornelk/hashmap"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
 )
 
 type cache_pool struct {

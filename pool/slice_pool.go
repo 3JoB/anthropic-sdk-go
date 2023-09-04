@@ -1,8 +1,9 @@
 package pool
 
 import (
-	"github.com/3JoB/anthropic-sdk-go/v2/data"
 	"github.com/cornelk/hashmap"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
 type slice_pool struct {
@@ -20,9 +21,9 @@ func (p *slice_pool) Get(k string) ([]data.MessageModule, bool) {
 	return p.pool.Get(k)
 }
 
-// Set sets the value under the specified key to the map. 
-// An existing item for this key will be overwritten. 
-// If a resizing operation is happening concurrently while calling Set, 
+// Set sets the value under the specified key to the map.
+// An existing item for this key will be overwritten.
+// If a resizing operation is happening concurrently while calling Set,
 // the item might show up in the map after the resize operation is finished.
 func (p *slice_pool) Set(k string, v []data.MessageModule) {
 	p.pool.Set(k, v)
@@ -38,7 +39,7 @@ func (p *slice_pool) Len() int {
 	return p.pool.Len()
 }
 
-// Range calls f sequentially for each key and value present in the map. 
+// Range calls f sequentially for each key and value present in the map.
 // If f returns false, range stops the iteration.
 func (p *slice_pool) Range(f func(string, []data.MessageModule) bool) {
 	p.pool.Range(f)
