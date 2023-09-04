@@ -9,6 +9,7 @@ body:
       Please do not use this template to report irrelevant information or your issues will be closed.
 
 - type: dropdown
+  id: version
   attributes:
     label: Version
     placeholder: "Anthropic-SDK-GO [Version 2.0.2-Beta  CommitID xxxxx]"
