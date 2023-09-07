@@ -14,7 +14,7 @@ type errorF struct {
 
 func New(err string) *errorF {
 	ptr, s, l, _ := runtime.Caller(1)
-	return &errorF{s: litefmt.Sprint(s, ":", unsafeConvert.IntToString(l), " 0x", strconv.FormatUint(uint64(ptr), 16), "\n", err)}
+	return &errorF{s: litefmt.Sprint(s, ":", unsafeConvert.IntToString(l), " 0x", strconv.FormatUint(uint64(ptr), 16), " ", err)}
 }
 
 func (e *errorF) Error() string {

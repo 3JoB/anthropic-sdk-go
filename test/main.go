@@ -6,7 +6,7 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/v2"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
 	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
-	"github.com/3JoB/anthropic-sdk-go/v2/pool"
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/hashpool"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
