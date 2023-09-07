@@ -13,9 +13,12 @@ type Interface[T []data.MessageModule | string] interface {
 	UseComress(compress_model string) error
 	Get(string) (T, bool)
 	Set(string, T)
+	Insert(string, T) bool
+	Append(string, T)
 	Del(string) bool
+	Flush()
 	Len() int
-	Range(f func(string, T) bool)
+	Range(f func(k string, v T) bool)
 }
 
 // Create a new pool in slicing mode.

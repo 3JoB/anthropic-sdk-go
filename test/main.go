@@ -30,12 +30,18 @@ Of laughter, joy and mirth
 Find beauty in each season
 And wonder in the earth`
 
-func main(){
-	p := pool.NewPoolWithCache()
+func main() {
+	p := pool.NewPoolWithSlice()
 	if err := p.UseComress("br"); err != nil {
 		panic(err)
 	}
-	p.Set("c_data", c_data)
+	b := []data.MessageModule{
+		{
+			Human:     "123",
+			Assistant: "456",
+		},
+	}
+	p.Set("c_data", b)
 	d, ok := p.Get("c_data")
 	if !ok {
 		panic("get failed")

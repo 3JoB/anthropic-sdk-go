@@ -76,6 +76,25 @@ func (p *cache_pool) Del(k string) bool {
 	return p.pool.Del(k)
 }
 
+// Insert sets the value under the specified key to the map if it does not exist yet.
+// If a resizing operation is happening concurrently while calling Insert,
+// the item might show up in the map after the resize operation is finished.
+// Returns true if the item was inserted or false if it existed.
+func (p *cache_pool) Insert(k, v string) bool {
+	return p.pool.Insert(k, v)
+}
+
+// Flush will clear all data in the Pool.
+func (p *cache_pool) Flush() {
+	p.pool.Range(func(k, v string) bool {
+		return p.pool.Del(k)
+	})
+}
+
+// Append will take out the data,
+// and then append a new piece of data to the end before saving it.
+func (p *cache_pool) Append(k, v string) {}
+
 // Len returns the number of elements within the map.
 func (p *cache_pool) Len() int {
 	return p.pool.Len()
@@ -83,6 +102,6 @@ func (p *cache_pool) Len() int {
 
 // Range calls f sequentially for each key and value present in the map.
 // If f returns false, range stops the iteration.
-func (p *cache_pool) Range(f func(string, string) bool) {
+func (p *cache_pool) Range(f func(k string, v string) bool) {
 	p.pool.Range(f)
 }

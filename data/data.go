@@ -1,8 +1,6 @@
 package data
 
-import (
-	"errors"
-)
+import "github.com/3JoB/anthropic-sdk-go/v2/internel/errors"
 
 var (
 	ErrApiKeyEmpty      = errors.New("APIKey cannot be empty!")

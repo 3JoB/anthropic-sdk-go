@@ -34,6 +34,25 @@ func (p *slice_pool) Del(k string) bool {
 	return p.pool.Del(k)
 }
 
+// Insert sets the value under the specified key to the map if it does not exist yet.
+// If a resizing operation is happening concurrently while calling Insert,
+// the item might show up in the map after the resize operation is finished.
+// Returns true if the item was inserted or false if it existed.
+func (p *slice_pool) Insert(k string, v []data.MessageModule) bool {
+	return p.pool.Insert(k, v)
+}
+
+// Flush will clear all data in the Pool.
+func (p *slice_pool) Flush() {
+	p.pool.Range(func(k string, v []data.MessageModule) bool {
+		return p.pool.Del(k)
+	})
+}
+
+// Append will take out the data,
+// and then append a new piece of data to the end before saving it.
+func (p *slice_pool) Append(k string, v []data.MessageModule) {}
+
 // Len returns the number of elements within the map.
 func (p *slice_pool) Len() int {
 	return p.pool.Len()
