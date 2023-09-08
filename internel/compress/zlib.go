@@ -27,7 +27,7 @@ func (z *Zlib) Encode(v []byte) (*bytes.Buffer, error) {
 	return &i, nil
 }
 
-// The Decode method will first decode and then 
+// The Decode method will first decode and then
 // overwrite the data in the input *bytes.Buffer.
 func (z *Zlib) Decode(v *bytes.Buffer) {
 	r, _ := zlib.NewReader(v)
