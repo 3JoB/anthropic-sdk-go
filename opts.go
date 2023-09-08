@@ -18,6 +18,8 @@ type Opts struct {
 	client    *Client
 }
 
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 func (opts *Opts) newCtx() *context.Context {
 	return &context.Context{
 		Response: &resp.Response{},
@@ -25,6 +27,8 @@ func (opts *Opts) newCtx() *context.Context {
 	}
 }
 
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 func (opts *Opts) With(client *Client) {
 	opts.client = client
 }
@@ -46,6 +50,9 @@ func (opts *Opts) With(client *Client) {
 }*/
 
 // Make a processed request to an API endpoint.
+//
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 func (opt *Opts) Complete(ctx *context.Context) (*context.Context, error) {
 	// Get fasthttp object
 	request, response := acquire()

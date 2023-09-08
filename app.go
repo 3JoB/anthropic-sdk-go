@@ -1,20 +1,28 @@
 package anthropic
 
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 type AppModel struct {
 	Major ModelMajor
 	Full  ModelFull
 }
 
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 type ModelMajor struct {
 	Instant1 string
 	Claude2  string
 }
 
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 type ModelFull struct {
 	Instant1 string
 	Claude2  string
 }
 
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 var Model = AppModel{
 	Major: ModelMajor{
 		Instant1: "claude-instant-1",

@@ -2,24 +2,10 @@ package context
 
 import (
 	"sync"
-	"time"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
-	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
-
-type CacheItem struct {
-	Key        string
-	Value      string
-	String     bool
-	Compress   bool
-	IO         compress.Interface
-	ExpireTime time.Time
-}
-
-type ContextItem struct {
-}
 
 type Context struct {
 	ID        string // Context ID
@@ -29,35 +15,67 @@ type Context struct {
 	ErrorResp *resp.ErrorResponse
 }
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 var pool sync.Map = sync.Map{}
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func (c *Context) Find() (v []data.MessageModule, ok bool) {
 	return _FindContext(c.ID)
 }
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func (c *Context) Set(value any) bool {
 	return _SetContext(c.ID, value)
 }
 
 // Add a prompt to the context storage pool
+//
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func (c *Context) Add() bool {
 	return _AddContext(c.ID, data.MessageModule{Assistant: c.Response.Completion, Human: c.Human})
 }
 
-// Deprecated: Use Close() instead.
-func (c *Context) Delete() {
-	_DeleteContext(c.ID)
-}
-
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func (c *Context) Close() {
 	_DeleteContext(c.ID)
 }
 
 // Refresh the context storage pool (clear all data)
+//
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func (c *Context) Refresh() {
 	RefreshContext()
 }
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func _AddContext(key string, value data.MessageModule) bool {
 	v, ok := _FindContext(key)
 	if !ok {
@@ -68,6 +86,11 @@ func _AddContext(key string, value data.MessageModule) bool {
 	return true
 }
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func _FindContext(key string) (v []data.MessageModule, ok bool) {
 	if vs, ok := pool.Load(key); !ok {
 		return nil, ok
@@ -76,6 +99,11 @@ func _FindContext(key string) (v []data.MessageModule, ok bool) {
 	}
 }
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func _SetContext(key string, value any) bool {
 	switch v := value.(type) {
 	case data.MessageModule:
@@ -91,10 +119,20 @@ func _SetContext(key string, value any) bool {
 	return true
 }
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func _DeleteContext(key string) {
 	pool.Delete(key)
 }
 
+// Deprecated: Due to design and performance issues,
+// ContextPool will be deprecated in the v2 sdk stable
+// version soon, and the relevant code will be removed
+// at that time. Please prepare to migrate to HashPool
+// which will replace it as soon as possible.
 func RefreshContext() {
 	pool.Range(func(key, value any) bool {
 		pool.Delete(key)

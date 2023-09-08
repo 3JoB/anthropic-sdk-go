@@ -8,6 +8,9 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
+// Deprecated: Prompt v1 will be deprecated in v2
+// sdk due to the need to adapt to the new HashPool.
+// Please prepare for migration as soon as possible.
 func Set(human, assistant string) (string, error) {
 	if human == "" {
 		return "", data.ErrPromptHumanEmpty
@@ -20,7 +23,12 @@ func Set(human, assistant string) (string, error) {
 	// return fmt.Sprintf("%v%v", human, assistant), nil
 }
 
-// Commit: The loop overhead here is too large, caching may need to be set up
+// Commit: The loop overhead here is too large,
+// caching may need to be set up.
+//
+// Deprecated: Prompt v1 will be deprecated in v2
+// sdk due to the need to adapt to the new HashPool.
+// Please prepare for migration as soon as possible.
 func (c *Context) Build(module any) (string, error) {
 	switch r := module.(type) {
 	case data.MessageModule:

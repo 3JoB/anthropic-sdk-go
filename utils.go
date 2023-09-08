@@ -16,6 +16,9 @@ func (opt *Opts) setBody(w io.Writer) error {
 }
 
 // Initialize a fasthttp.Client object for Client
+//
+// Deprecated: This method will be deprecated in v2 sdk
+// stable version and use new implementation.
 func (c *Client) setDefaultClient() {
 	c.client = &fasthttp.Client{
 		NoDefaultUserAgentHeader:      true,
