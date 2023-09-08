@@ -86,3 +86,16 @@ func (c *Client) headers() error {
 	c.header.Set("User-Agent", data.UserAgent)
 	return nil
 }
+
+func (c *Client) setHeaderWithURI(req *fasthttp.Request) {
+	c.header.Range(func(k, v string) bool {
+		req.Header.Set(k, v)
+		return true
+	})
+	req.SetRequestURI(data.API)
+	req.Header.SetMethod("POST")
+}
+
+func (c *Client) do(req *fasthttp.Request, res *fasthttp.Response) error {
+	return c.client.Do(req, res)
+}

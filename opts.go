@@ -1,9 +1,12 @@
 package anthropic
 
 import (
+	"io"
+
 	"github.com/3JoB/ulib/err"
 	"github.com/3JoB/unsafeConvert"
 	"github.com/bytedance/sonic"
+	"github.com/bytedance/sonic/encoder"
 	// "github.com/google/uuid"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/context"
@@ -91,4 +94,11 @@ func (opt *Opts) Complete(ctx *context.Context) (*context.Context, error) {
 	}
 
 	return ctx, nil
+}
+
+// Set Body for *fasthttp.Request.
+//
+// Need to export io.Writer in BodyWriter() as w.
+func (opt *Opts) setBody(w io.Writer) error {
+	return encoder.NewStreamEncoder(w).Encode(&opt.Sender)
 }

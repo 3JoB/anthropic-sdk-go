@@ -4,6 +4,8 @@ import (
 	"sync"
 
 	"github.com/cornelk/hashmap"
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttp/fasthttpproxy"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
@@ -16,8 +18,12 @@ func New(c *Config) (*Client, error) {
 	client := &Client{
 		cfg:    c,
 		header: hashmap.New[string, string](),
+		client: &fasthttp.Client{
+			NoDefaultUserAgentHeader:      true,
+			DisableHeaderNamesNormalizing: false,
+			Dial:                          fasthttpproxy.FasthttpProxyHTTPDialer(),
+		},
 	}
-	client.setDefaultClient()
 	if err := client.headers(); err != nil {
 		return nil, err
 	}
