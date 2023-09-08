@@ -66,7 +66,7 @@ func (ah *Client) check(sender *resp.Sender) (err error) {
 		sender.Model = ah.cfg.DefaultModel
 	}
 	if len(sender.StopSequences) == 0 {
-		sender.StopSequences = StopSequences
+		sender.StopSequences = data.StopSequences
 	}
 	if sender.MaxToken < 400 {
 		sender.MaxToken = 400
@@ -80,9 +80,9 @@ func (c *Client) headers() error {
 	}
 	c.header.Set("Accept", "application/json")
 	c.header.Set("Content-Type", "application/json")
-	c.header.Set("Client", litefmt.Sprint("anthropic-sdk-go/", SDKVersion))
+	c.header.Set("Client", litefmt.Sprint("anthropic-sdk-go/", data.SDKVersion))
 	c.header.Set("anthropic-version", "2023-06-01")
 	c.header.Set("x-api-key", c.cfg.Key)
-	c.header.Set("User-Agent", UserAgent)
+	c.header.Set("User-Agent", data.UserAgent)
 	return nil
 }

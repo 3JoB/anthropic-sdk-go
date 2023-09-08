@@ -6,6 +6,8 @@ import (
 	"github.com/bytedance/sonic/encoder"
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttp/fasthttpproxy"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
 // Set Body for *fasthttp.Request.
@@ -32,7 +34,7 @@ func (c *Client) setHeaderWithURI(req *fasthttp.Request) {
 		req.Header.Set(k, v)
 		return true
 	})
-	req.SetRequestURI(API)
+	req.SetRequestURI(data.API)
 	req.Header.SetMethod("POST")
 }
 

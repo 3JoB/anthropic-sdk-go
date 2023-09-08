@@ -22,7 +22,7 @@ func New(c *Config) (*Client, error) {
 		return nil, err
 	}
 	if c.DefaultModel == "" {
-		c.DefaultModel = Model.Major.Instant1
+		c.DefaultModel = data.ModelMajorInstant
 	}
 	return client, nil
 }

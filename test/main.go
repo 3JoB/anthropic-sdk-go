@@ -66,7 +66,7 @@ func cmain() {
 
 func xmain() {
 	// fuck i accidentally leaked my keys and it's now disabled by me.
-	c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
+	c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: data.ModelFullInstant})
 	if err != nil {
 		panic(err)
 	}
