@@ -14,4 +14,4 @@ jobs:
           cache: true
       - uses: golangci/golangci-lint-action@v3
         with:
-          version: v3.7.0
+          version: v1.54.2
