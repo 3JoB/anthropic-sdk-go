@@ -49,9 +49,8 @@ func (c *Context) Delete() {
 	_DeleteContext(c.ID)
 }
 
-func (c *Context) Close() error {
+func (c *Context) Close() {
 	_DeleteContext(c.ID)
-	return nil
 }
 
 // Refresh the context storage pool (clear all data)
@@ -65,7 +64,7 @@ func _AddContext(key string, value data.MessageModule) bool {
 		return _SetContext(key, value)
 	}
 	v = append(v, value)
-	_SetContext(key, v)
+	_ = _SetContext(key, v)
 	return true
 }
 

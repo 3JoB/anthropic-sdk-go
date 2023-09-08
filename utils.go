@@ -11,8 +11,8 @@ import (
 // Set Body for *fasthttp.Request.
 //
 // Need to export io.Writer in BodyWriter() as w.
-func setBody(v any, w io.Writer) error {
-	return encoder.NewStreamEncoder(w).Encode(v)
+func (opt *Opts) setBody(w io.Writer) error {
+	return encoder.NewStreamEncoder(w).Encode(&opt.Sender)
 }
 
 // Initialize a fasthttp.Client object for Client
@@ -41,9 +41,8 @@ func (c *Client) do(req *fasthttp.Request, res *fasthttp.Response) error {
 //
 // The returned fasthttp instance may be passed to Release when it is no longer needed.
 // This allows Request recycling, reduces GC pressure and usually improves performance.
-func acquire() (req *fasthttp.Request, resp *fasthttp.Response) {
-	req, resp = fasthttp.AcquireRequest(), fasthttp.AcquireResponse()
-	return
+func acquire() (*fasthttp.Request, *fasthttp.Response) {
+	return fasthttp.AcquireRequest(), fasthttp.AcquireResponse()
 }
 
 // Release returns req and resp acquired via Acquire to request pool.

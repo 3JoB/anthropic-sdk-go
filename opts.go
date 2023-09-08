@@ -53,7 +53,9 @@ func (opt *Opts) Complete(ctx *context.Context) (*context.Context, error) {
 
 	// Initialize Request
 	opt.client.setHeaderWithURI(request)
-	setBody(&opt.Sender, request.BodyWriter())
+	if errs := opt.setBody(request.BodyWriter()); errs != nil {
+		return nil, errs
+	}
 
 	if errs := opt.client.do(request, response); errs != nil {
 		return ctx, &err.Err{Op: "opts:61", Err: errs.Error()}
