@@ -48,12 +48,12 @@ func (p *cache_pool) Get(k string) (string, bool) {
 		}
 		var b *bytes.Buffer
 		b.WriteString(d)
-		data := p.c.Decode(b)
-		if len(data) == 0 {
+		p.c.Decode(b)
+		if b.Len() == 0 {
 			return "", ok
 		}
 		b.Reset()
-		return unsafeConvert.StringSlice(data), ok
+		return unsafeConvert.StringSlice(b.Bytes()), ok
 	}
 	return d, ok
 }
@@ -62,13 +62,17 @@ func (p *cache_pool) Get(k string) (string, bool) {
 // An existing item for this key will be overwritten.
 // If a resizing operation is happening concurrently while calling Set,
 // the item might show up in the map after the resize operation is finished.
-func (p *cache_pool) Set(k string, v string) {
+func (p *cache_pool) Set(k string, v string) bool {
 	if p.cmp {
-		data := p.c.Encode(unsafeConvert.ByteSlice(v))
-		v = unsafeConvert.StringSlice(data.Bytes())
-		defer data.Reset()
+		buf, err := p.c.Encode(unsafeConvert.ByteSlice(v))
+		if err != nil {
+			return false
+		}
+		v = unsafeConvert.StringSlice(buf.Bytes())
+		defer buf.Reset()
 	}
 	p.pool.Set(k, v)
+	return true
 }
 
 // Del deletes the key from the map and returns whether the key was deleted.

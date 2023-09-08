@@ -53,11 +53,15 @@ func cmain() {
 	data := []byte(c_data)
 	fmt.Println("Size: ", len(data))
 	cp := compress.NewSnappy()
-	en_data := cp.Encode(data)
-	fmt.Println("Encode Size: ", en_data.Len())
-	fmt.Println("Encode Data: ", string(en_data.Bytes()))
+	en_buf, err := cp.Encode(data)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Encode Size: ", en_buf.Len())
+	fmt.Println("Encode Data: ", string(en_buf.Bytes()))
 	fmt.Println("Decode Data: ")
-	fmt.Println(string(cp.Decode(en_data)))
+	cp.Decode(en_buf)
+	fmt.Println(string(en_buf.Bytes()))
 }
 
 func xmain() {

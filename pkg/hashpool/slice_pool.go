@@ -25,8 +25,9 @@ func (p *slice_pool) Get(k string) ([]data.MessageModule, bool) {
 // An existing item for this key will be overwritten.
 // If a resizing operation is happening concurrently while calling Set,
 // the item might show up in the map after the resize operation is finished.
-func (p *slice_pool) Set(k string, v []data.MessageModule) {
+func (p *slice_pool) Set(k string, v []data.MessageModule) bool {
 	p.pool.Set(k, v)
+	return true
 }
 
 // Del deletes the key from the map and returns whether the key was deleted.

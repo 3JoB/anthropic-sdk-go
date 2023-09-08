@@ -8,20 +8,31 @@ import (
 
 type Zlib struct{}
 
+// Initialize a new Zlib object based on the Interface interface
 func NewZlib() Interface {
 	return &Zlib{}
 }
 
-func (z *Zlib) Encode(v []byte) *bytes.Buffer {
+// Encode compresses the given bytes using ZLIB compression,
+// returning the compressed data in a new bytes.Buffer.
+func (z *Zlib) Encode(v []byte) (*bytes.Buffer, error) {
 	var i bytes.Buffer
 	w := zlib.NewWriter(&i)
-	w.Write(v)
-	w.Close()
-	return &i
+	if _, err := w.Write(v); err != nil {
+		return nil, err
+	}
+	if err := w.Close(); err != nil {
+		return nil, err
+	}
+	return &i, nil
 }
 
-func (z *Zlib) Decode(v *bytes.Buffer) []byte {
+// The Decode method will first decode and then 
+// overwrite the data in the input *bytes.Buffer.
+func (z *Zlib) Decode(v *bytes.Buffer) {
 	r, _ := zlib.NewReader(v)
-	defer r.Close()
-	return reader(r)
+	d := reader(r)
+	_ = r.Close()
+	v.Reset()
+	_, _ = v.Write(d)
 }
