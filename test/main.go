@@ -5,7 +5,6 @@ import (
 
 	"github.com/3JoB/anthropic-sdk-go/v2"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
-	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
 	"github.com/3JoB/anthropic-sdk-go/v2/pkg/hashpool"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
@@ -32,7 +31,7 @@ And wonder in the earth`
 
 func main() {
 	p := hashpool.NewPoolWithCache()
-	if err := p.UseComress("br"); err != nil {
+	if err := p.UseCompress("br"); err != nil {
 		panic(err)
 	}
 	p.Set("c_data", c_data)
@@ -43,22 +42,7 @@ func main() {
 	fmt.Println(d)
 }
 
-func cmain() {
-	data := []byte(c_data)
-	fmt.Println("Size: ", len(data))
-	cp := compress.NewSnappy()
-	en_buf, err := cp.Encode(data)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Encode Size: ", en_buf.Len())
-	fmt.Println("Encode Data: ", string(en_buf.Bytes()))
-	fmt.Println("Decode Data: ")
-	cp.Decode(en_buf)
-	fmt.Println(string(en_buf.Bytes()))
-}
-
-func xmain() {
+func G_main() {
 	// fuck i accidentally leaked my keys and it's now disabled by me.
 	c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: data.ModelFullInstant})
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 )
 
 type Interface[T []data.MessageModule | string] interface {
-	UseComress(compress_model string) error
+	UseCompress(compress_model string) error
 	Get(string) (T, bool)
 	Set(string, T) bool
 	Insert(string, T) bool

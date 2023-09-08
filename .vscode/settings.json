@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
         "bottomrule",
+        "brotli",
         "buntdb",
         "CAIPM",
+        "cornelk",
         "CPTA",
         "crowdworker",
         "crowdworkers",
@@ -16,9 +18,11 @@
         "footnotesize",
         "goccy",
         "Goodharting",
+        "hashpool",
         "hyperparameters",
         "includegraphics",
         "KHTML",
+        "klauspost",
         "ldflags",
         "linewidth",
         "litefmt",
@@ -49,6 +53,7 @@
         "ULIB",
         "undercompensating",
         "Upwork",
+        "valyala",
         "zerolog",
         "zxda"
     ]

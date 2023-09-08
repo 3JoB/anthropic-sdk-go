@@ -16,7 +16,7 @@ type cache_pool struct {
 }
 
 // Enable Compress
-func (p *cache_pool) UseComress(compress_model string) error {
+func (p *cache_pool) UseCompress(compress_model string) error {
 	if p.c != nil {
 		return ErrDisableSwitchCmp
 	}

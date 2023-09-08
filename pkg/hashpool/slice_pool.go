@@ -11,7 +11,7 @@ type slice_pool struct {
 }
 
 // Enable Compress
-func (p *slice_pool) UseComress(compress_model string) error {
+func (p *slice_pool) UseCompress(compress_model string) error {
 	// Compression cannot be used in slice mode.
 	return ErrSliceNoCmp
 }
