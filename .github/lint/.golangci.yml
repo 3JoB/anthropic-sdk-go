@@ -1,0 +1,6 @@
+run:
+  concurrency: 4
+  timeout: 10m
+  issues-exit-code: 2
+  skip-dirs:
+    - test
