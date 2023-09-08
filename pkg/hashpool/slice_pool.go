@@ -1,4 +1,4 @@
-package pool
+package hashpool
 
 import (
 	"github.com/cornelk/hashmap"
@@ -43,7 +43,7 @@ func (p *slice_pool) Insert(k string, v []data.MessageModule) bool {
 }
 
 // Flush will clear all data in the Pool.
-func (p *slice_pool) Flush() {
+func (p *slice_pool) ResetPool() {
 	p.pool.Range(func(k string, v []data.MessageModule) bool {
 		return p.pool.Del(k)
 	})

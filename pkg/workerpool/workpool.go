@@ -7,13 +7,11 @@ import (
 
 type WorkerPool struct {
 	p *hashmap.Map[string, *workerpool.WorkerPool]
-	l *hashmap.Map[string, bool]
 }
 
 func NewGlobal() *WorkerPool {
 	return &WorkerPool{
 		p: hashmap.New[string, *workerpool.WorkerPool](),
-		l: hashmap.New[string, bool](),
 	}
 }
 
@@ -24,7 +22,7 @@ func (w *WorkerPool) NewPool(pool_id string, pool_process int) error {
 	if pool_process < 1 {
 		pool_process = 1
 	}
-	_, ok := w.l.Get(pool_id)
+	_, ok := w.p.Get(pool_id)
 	if ok {
 		return ErrPIDHasLocked
 	}
@@ -41,5 +39,10 @@ func (w *WorkerPool) GetPool(pool_id string) (*workerpool.WorkerPool, bool) {
 
 func (w *WorkerPool) DelPool(pool_id string) {
 	w.p.Del(pool_id)
-	w.l.Del(pool_id)
+}
+
+func (w *WorkerPool) ResetPool() {
+	w.p.Range(func(k string, v *workerpool.WorkerPool) bool {
+		return w.p.Del(k)
+	})
 }

@@ -1,1 +1,1 @@
-package pool
+package hashpool

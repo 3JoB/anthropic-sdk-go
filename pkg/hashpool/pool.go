@@ -1,7 +1,7 @@
 // The pool subpackage is the new hashmap cache pool, which is only for testing now.
 //
 // It will replace the Context cache pool in the future.
-package pool
+package hashpool
 
 import (
 	"github.com/cornelk/hashmap"
@@ -16,7 +16,7 @@ type Interface[T []data.MessageModule | string] interface {
 	Insert(string, T) bool
 	Append(string, T)
 	Del(string) bool
-	Flush()
+	ResetPool()
 	Len() int
 	Range(f func(k string, v T) bool)
 }

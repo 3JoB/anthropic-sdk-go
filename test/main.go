@@ -31,7 +31,7 @@ Find beauty in each season
 And wonder in the earth`
 
 func main() {
-	p := pool.NewPoolWithSlice()
+	p := hashpool.NewPoolWithSlice()
 	if err := p.UseComress("br"); err != nil {
 		panic(err)
 	}

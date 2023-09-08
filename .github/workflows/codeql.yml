@@ -39,7 +39,7 @@ jobs:
       fail-fast: false
       matrix:
         language: [ 'go' ]
-        go-version: [ '1.21.0' ]
+        go-version: [ '1.21.1' ]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby', 'swift' ]
         # Use only 'java' to analyze code written in Java, Kotlin or both
         # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
@@ -53,7 +53,7 @@ jobs:
       uses: actions/setup-go@v4.0.0
       with:
        # The Go version to download (if necessary) and use. Supports semver spec and ranges.
-        go-version: '1.21.0' # optional
+        go-version: '1.21.1' # optional
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

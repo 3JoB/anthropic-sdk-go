@@ -1,4 +1,4 @@
-package pool
+package hashpool
 
 import (
 	"bytes"
@@ -85,7 +85,7 @@ func (p *cache_pool) Insert(k, v string) bool {
 }
 
 // Flush will clear all data in the Pool.
-func (p *cache_pool) Flush() {
+func (p *cache_pool) ResetPool() {
 	p.pool.Range(func(k, v string) bool {
 		return p.pool.Del(k)
 	})

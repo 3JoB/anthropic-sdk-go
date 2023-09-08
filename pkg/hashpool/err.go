@@ -1,4 +1,4 @@
-package pool
+package hashpool
 
 import "github.com/3JoB/anthropic-sdk-go/v2/internel/errors"
 
