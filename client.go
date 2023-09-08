@@ -21,13 +21,6 @@ type Client struct {
 	header  *hashmap.Map[string, string] // http header
 }
 
-// Anthropic-SDK-Go configuration
-type Config struct {
-	Key          string // API Keys
-	DefaultModel string // Choose the default AI model
-	UseCache     bool   // Enable Prompt build cache
-}
-
 // Set the response timeout in minutes.
 func (ah *Client) SetTimeOut(times int) {
 	if times == 0 {
