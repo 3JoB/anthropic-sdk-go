@@ -25,6 +25,8 @@ func (p *cache_pool) UseComress(compress_model string) error {
 		p.c = compress.NewBrotli()
 	case "zs", "zst":
 		p.c = compress.NewZST()
+	case "xz":
+		p.c = compress.NewXZ()
 	case "gzip", "pgzip":
 		p.c = compress.NewPGZip()
 	case "deflate":
@@ -97,7 +99,8 @@ func (p *cache_pool) ResetPool() {
 
 // Append will take out the data,
 // and then append a new piece of data to the end before saving it.
-func (p *cache_pool) Append(k, v string) {}
+func (p *cache_pool) Append(k, v string) {
+}
 
 // Len returns the number of elements within the map.
 func (p *cache_pool) Len() int {

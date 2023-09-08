@@ -13,7 +13,7 @@ func NewSnappy() Interface {
 	return &Snappy{}
 }
 
-// Encode compresses the given bytes using Snappy/S2 compression,
+// Encode compresses the given bytes using Snappy compression,
 // returning the compressed data in a new bytes.Buffer.
 //
 // Snappy only has the advantage of compression speed, and its

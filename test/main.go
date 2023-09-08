@@ -31,17 +31,11 @@ Find beauty in each season
 And wonder in the earth`
 
 func main() {
-	p := hashpool.NewPoolWithSlice()
+	p := hashpool.NewPoolWithCache()
 	if err := p.UseComress("br"); err != nil {
 		panic(err)
 	}
-	b := []data.MessageModule{
-		{
-			Human:     "123",
-			Assistant: "456",
-		},
-	}
-	p.Set("c_data", b)
+	p.Set("c_data", c_data)
 	d, ok := p.Get("c_data")
 	if !ok {
 		panic("get failed")

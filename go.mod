@@ -12,6 +12,7 @@ require (
 	github.com/cornelk/hashmap v1.0.8
 	github.com/klauspost/compress v1.16.7
 	github.com/klauspost/pgzip v1.2.6
+	github.com/ulikunitz/xz v0.5.11
 	github.com/valyala/fasthttp v1.49.0
 	pgregory.net/rand v1.0.2
 )
