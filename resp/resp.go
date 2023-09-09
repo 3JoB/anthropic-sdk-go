@@ -55,7 +55,6 @@ func Error(code int, v []byte) (*ErrorResponse, error) {
 	var e = R{
 		Error: &ErrorResponse{},
 	}
-
 	err := sonic.Unmarshal(v, &e)
 	e.Error.Code = code
 	return e.Error, err

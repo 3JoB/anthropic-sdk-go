@@ -14,33 +14,33 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
-type Sender struct {
+type Sender[T []data.MessageModule | string] struct {
 	Message   data.MessageModule // Chunked message structure
 	ContextID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
 	Sender    resp.Sender
-	client    *Client
+	client    *Client[T]
 }
 
-func NewSender() *Sender {
-	return &Sender{}
+func NewSenderWithSlice() *Sender[[]data.MessageModule] {
+	return &Sender[[]data.MessageModule]{}
 }
 
-// Deprecated: This method will be deprecated in v2 sdk
-// stable version and use new implementation.
-func (s *Sender) newCtx() *context.Context {
+func NewSenderWithCache() *Sender[string] {
+	return &Sender[string]{}
+}
+
+func (s *Sender[T]) newCtx() *context.Context {
 	return &context.Context{
 		Response: resp.Response{},
 		Human:    s.Message.Human,
 	}
 }
 
-// Deprecated: This method will be deprecated in v2 sdk
-// stable version and use new implementation.
-func (s *Sender) With(client *Client) {
+func (s *Sender[T]) With(client *Client[T]) {
 	s.client = client
 }
 
-func (s *Sender) SetHuman(v string) {}
+func (s *Sender[T]) SetHuman(v string) {}
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
 //
@@ -59,10 +59,7 @@ func (s *Sender) SetHuman(v string) {}
 }*/
 
 // Make a processed request to an API endpoint.
-//
-// Deprecated: This method will be deprecated in v2 sdk
-// stable version and use new implementation.
-func (s *Sender) Complete(ctx *context.Context) (*context.Context, error) {
+func (s *Sender[T]) Complete(ctx *context.Context) (*context.Context, error) {
 	// Get fasthttp object
 	request, response := acquire()
 	defer release(request, response)
@@ -105,6 +102,6 @@ func (s *Sender) Complete(ctx *context.Context) (*context.Context, error) {
 // Set Body for *fasthttp.Request.
 //
 // Need to export io.Writer in BodyWriter() as w.
-func (opt *Sender) setBody(w io.Writer) error {
+func (opt *Sender[T]) setBody(w io.Writer) error {
 	return encoder.NewStreamEncoder(w).Encode(&opt.Sender)
 }

@@ -10,15 +10,15 @@ const (
 
 // old model (Availability not guaranteed)
 const (
-	ModelMajorClaude1      string = "claude-v1"
-	ModelMajorClaude1_Big  string = "claude-v1-100k"
-	ModelFullClaude10      string = "claude-v1.0"
-	ModelFullClaude12      string = "claude-v1.2"
-	ModelFullClaude13      string = "claude-v1.3"
-	ModelFullClaude13_Big  string = "claude-v1.3-100k"
-	ModelMajorInstant1     string = "claude-instant-v1"
-	ModelMajorInstant1_Big string = "claude-instant-v1-100k"
-	ModelFullInstant10     string = "claude-instant-v1.0"
-	ModelFullInstant11     string = "claude-instant-1.1"
-	ModelFullInstant11_Big string = "claude-instant-v1.1-100k"
+	Model_O_MajorClaude1      string = "claude-v1"
+	Model_O_MajorClaude1_Big  string = "claude-v1-100k"
+	Model_O_FullClaude10      string = "claude-v1.0"
+	Model_O_FullClaude12      string = "claude-v1.2"
+	Model_O_FullClaude13      string = "claude-v1.3"
+	Model_O_FullClaude13_Big  string = "claude-v1.3-100k"
+	Model_O_MajorInstant1     string = "claude-instant-v1"
+	Model_O_MajorInstant1_Big string = "claude-instant-v1-100k"
+	Model_O_FullInstant10     string = "claude-instant-v1.0"
+	Model_O_FullInstant11     string = "claude-instant-1.1"
+	Model_O_FullInstant11_Big string = "claude-instant-v1.1-100k"
 )

@@ -14,15 +14,15 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
-type Client struct {
+type Client[T []data.MessageModule | string] struct {
 	client  *fasthttp.Client
-	cfg     *Config                      // Config
+	cfg     *Config[T]                   // Config
 	header  *hashmap.Map[string, string] // http
 	timeout time.Duration
 }
 
 // Set the response timeout in minutes.
-func (ah *Client) SetTimeOut(times int) {
+func (ah *Client[T]) SetTimeOut(times int) {
 	if times == 0 {
 		return
 	}
@@ -31,7 +31,7 @@ func (ah *Client) SetTimeOut(times int) {
 
 // Send data to the API endpoint. Before sending out,
 // the data will be processed into a form that the API can recognize.
-func (ah *Client) Send(sender *Sender) (*context.Context, error) {
+func (ah *Client[T]) Send(sender *Sender[T]) (*context.Context, error) {
 	var err error
 	if err = ah.check(&sender.Sender); err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (ah *Client) Send(sender *Sender) (*context.Context, error) {
 }
 
 // Basic check
-func (ah *Client) check(sender *resp.Sender) (err error) {
+func (ah *Client[T]) check(sender *resp.Sender) (err error) {
 	if sender.Model == "" {
 		sender.Model = ah.cfg.DefaultModel
 	}
@@ -74,7 +74,7 @@ func (ah *Client) check(sender *resp.Sender) (err error) {
 	return nil
 }
 
-func (c *Client) headers() error {
+func (c *Client[T]) headers() error {
 	if c.cfg.Key == "" {
 		return data.ErrApiKeyEmpty
 	}
@@ -87,7 +87,7 @@ func (c *Client) headers() error {
 	return nil
 }
 
-func (c *Client) setHeaderWithURI(req *fasthttp.Request) {
+func (c *Client[T]) setHeaderWithURI(req *fasthttp.Request) {
 	c.header.Range(func(k, v string) bool {
 		req.Header.Set(k, v)
 		return true
@@ -96,6 +96,6 @@ func (c *Client) setHeaderWithURI(req *fasthttp.Request) {
 	req.Header.SetMethod("POST")
 }
 
-func (c *Client) do(req *fasthttp.Request, res *fasthttp.Response) error {
+func (c *Client[T]) do(req *fasthttp.Request, res *fasthttp.Response) error {
 	return c.client.Do(req, res)
 }
