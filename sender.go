@@ -14,26 +14,34 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
-type Opts struct {
+type Sender struct {
 	Message   data.MessageModule // Chunked message structure
 	ContextID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
 	Sender    resp.Sender
 	client    *Client
 }
 
+func NewSender() *Sender {
+	return &Sender{}
+}
+
 // Deprecated: This method will be deprecated in v2 sdk
 // stable version and use new implementation.
-func (opts *Opts) newCtx() *context.Context {
+func (s *Sender) newCtx() *context.Context {
 	return &context.Context{
 		Response: &resp.Response{},
-		Human:    opts.Message.Human,
+		Human:    s.Message.Human,
 	}
 }
 
 // Deprecated: This method will be deprecated in v2 sdk
 // stable version and use new implementation.
-func (opts *Opts) With(client *Client) {
-	opts.client = client
+func (s *Sender) With(client *Client) {
+	s.client = client
+}
+
+func (s *Sender) SetHuman(v string) {
+
 }
 
 // Send data to the API endpoint. Before sending out, the data will be processed into a form that the API can recognize.
@@ -56,7 +64,7 @@ func (opts *Opts) With(client *Client) {
 //
 // Deprecated: This method will be deprecated in v2 sdk
 // stable version and use new implementation.
-func (opt *Opts) Complete(ctx *context.Context) (*context.Context, error) {
+func (opt *Sender) Complete(ctx *context.Context) (*context.Context, error) {
 	// Get fasthttp object
 	request, response := acquire()
 	defer release(request, response)
@@ -99,6 +107,6 @@ func (opt *Opts) Complete(ctx *context.Context) (*context.Context, error) {
 // Set Body for *fasthttp.Request.
 //
 // Need to export io.Writer in BodyWriter() as w.
-func (opt *Opts) setBody(w io.Writer) error {
+func (opt *Sender) setBody(w io.Writer) error {
 	return encoder.NewStreamEncoder(w).Encode(&opt.Sender)
 }

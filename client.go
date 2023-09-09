@@ -16,9 +16,9 @@ import (
 
 type Client struct {
 	client  *fasthttp.Client
-	timeout time.Duration
 	cfg     *Config                      // Config
-	header  *hashmap.Map[string, string] // http header
+	header  *hashmap.Map[string, string] // http 
+	timeout time.Duration
 }
 
 // Set the response timeout in minutes.
@@ -31,33 +31,33 @@ func (ah *Client) SetTimeOut(times int) {
 
 // Send data to the API endpoint. Before sending out,
 // the data will be processed into a form that the API can recognize.
-func (ah *Client) Send(senderOpts *Opts) (*context.Context, error) {
+func (ah *Client) Send(sender *Sender) (*context.Context, error) {
 	var err error
-	if err = ah.check(&senderOpts.Sender); err != nil {
+	if err = ah.check(&sender.Sender); err != nil {
 		return nil, err
 	}
-	if (senderOpts.Message == data.MessageModule{}) {
+	if (sender.Message == data.MessageModule{}) {
 		return nil, data.ErrContextIsNil
 	}
-	ctx := senderOpts.newCtx()
-	if senderOpts.ContextID == "" {
+	ctx := sender.newCtx()
+	if sender.ContextID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
-		senderOpts.ContextID = id.String()
-		senderOpts.Sender.Prompt, err = context.Set(senderOpts.Message.Human, "")
+		sender.ContextID = id.String()
+		sender.Sender.Prompt, err = context.Set(sender.Message.Human, "")
 	} else {
-		ctx.ID = senderOpts.ContextID
+		ctx.ID = sender.ContextID
 		d, ok := ctx.Find()
 		if !ok {
 			return nil, data.ErrContextNotFound
 		}
-		d = append(d, senderOpts.Message)
-		senderOpts.Sender.Prompt, err = ctx.Build(d)
+		d = append(d, sender.Message)
+		sender.Sender.Prompt, err = ctx.Build(d)
 	}
 	if err != nil {
 		return ctx, err
 	}
-	senderOpts.With(ah)
-	return senderOpts.Complete(ctx)
+	sender.With(ah)
+	return sender.Complete(ctx)
 }
 
 // Basic check

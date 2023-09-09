@@ -52,7 +52,7 @@ func G_main() {
 		Prompt:   "Do you know Golang, please answer me in the shortest possible way.",
 		MaxToken: 1200,
 	})*/
-	d, err := c.Send(&anthropic.Opts{
+	d, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
@@ -64,7 +64,7 @@ func G_main() {
 	}
 	fmt.Println(d.Response.String())
 
-	ds, err := c.Send(&anthropic.Opts{
+	ds, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "What is its current version number?",
 		},
@@ -77,7 +77,7 @@ func G_main() {
 	fmt.Println(ds.Response.String())
 
 	// Set UserID
-	dsr, err := c.Send(&anthropic.Opts{
+	dsr, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "What is its current version number?",
 		},
