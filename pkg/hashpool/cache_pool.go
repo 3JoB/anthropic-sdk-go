@@ -99,8 +99,7 @@ func (p *cache_pool) ResetPool() {
 
 // Append will take out the data,
 // and then append a new piece of data to the end before saving it.
-func (p *cache_pool) Append(k, v string) {
-}
+func (p *cache_pool) Append(k, v string) {}
 
 // Len returns the number of elements within the map.
 func (p *cache_pool) Len() int {

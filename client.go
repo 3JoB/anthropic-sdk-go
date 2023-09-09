@@ -17,7 +17,7 @@ import (
 type Client struct {
 	client  *fasthttp.Client
 	cfg     *Config                      // Config
-	header  *hashmap.Map[string, string] // http 
+	header  *hashmap.Map[string, string] // http
 	timeout time.Duration
 }
 

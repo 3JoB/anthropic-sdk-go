@@ -27,7 +27,6 @@ func (s *Sender) SetUserID(userID string) {
 }
 
 type Response struct {
-	cache      string `json:"-"`                   // not used
 	Completion string `json:"completion"`          // The resulting completion up to and excluding the stop sequences.
 	StopReason string `json:"stop_reason"`         // The reason we stopped sampling, either if we reached one of your provided , or if we exceeded `.stop_sequencestop_sequencesmax_tokensmax_tokens_to_sample`
 	Stop       string `json:"stop"`                // If the is , this contains the actual stop sequence (of the list passed-in) that was `seenstop_reasonstop_sequencestop_sequences`
@@ -37,13 +36,9 @@ type Response struct {
 	Truncated  bool   `json:"truncated"`           // truncated
 }
 
-func (resp *Response) String() string {
-	if resp.cache != "" {
-		return resp.cache
-	}
-	d, _ := sonic.Marshal(resp)
-	resp.cache = unsafeConvert.StringSlice(d)
-	return resp.cache
+func (resp Response) String() string {
+	d, _ := sonic.Marshal(&resp)
+	return unsafeConvert.StringSlice(d)
 }
 
 type ErrorResponse struct {
