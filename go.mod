@@ -7,7 +7,7 @@ require (
 	github.com/3JoB/ulib v1.31.0
 	github.com/3JoB/ulid v0.0.2
 	github.com/3JoB/unsafeConvert v1.5.0
-	github.com/bytedance/sonic v1.10.0
+	github.com/bytedance/sonic v1.10.1
 	github.com/cilium/workerpool v1.2.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/klauspost/compress v1.16.7
