@@ -63,7 +63,6 @@ func (s *Sender[T]) Complete(ctx *context.Context) (*context.Context, error) {
 	// Get fasthttp object
 	request, response := acquire()
 	defer release(request, response)
-
 	// Initialize Request
 	s.client.setHeaderWithURI(request)
 	if errs := s.setBody(request.BodyWriter()); errs != nil {
