@@ -14,6 +14,8 @@
     </p>
 <p align="center">Golang SDK for AnthRopic Claude AI</p>
 
+<strong>Sorry I didn't finish v2, I will come back when my work on telebote is finished.</strong>
+
 <br>
 
 ## Features
