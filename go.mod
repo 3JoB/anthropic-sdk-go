@@ -4,7 +4,7 @@ go 1.21.3
 
 require (
 	github.com/3JoB/brotli v0.0.1
-	github.com/3JoB/ulib v1.38.0
+	github.com/3JoB/ulib v1.38.1
 	github.com/3JoB/ulid v0.0.2
 	github.com/3JoB/unsafeConvert v1.6.0
 	github.com/bytedance/sonic v1.10.2
