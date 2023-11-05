@@ -30,7 +30,7 @@ Find beauty in each season
 And wonder in the earth`
 
 func main() {
-	p := hashpool.NewPoolWithCache()
+	p := hashpool.NewPool()
 	if err := p.UseCompress("br"); err != nil {
 		panic(err)
 	}
@@ -44,7 +44,7 @@ func main() {
 
 func G_main() {
 	// fuck i accidentally leaked my keys and it's now disabled by me.
-	c, err := anthropic.New(&anthropic.Config[[]data.MessageModule]{Key: "your keys", DefaultModel: data.ModelFullInstant})
+	c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: data.ModelFullInstant})
 	if err != nil {
 		panic(err)
 	}
@@ -52,7 +52,7 @@ func G_main() {
 		Prompt:   "Do you know Golang, please answer me in the shortest possible way.",
 		MaxToken: 1200,
 	})*/
-	d, err := c.Send(&anthropic.Sender[[]data.MessageModule]{
+	d, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
@@ -64,7 +64,7 @@ func G_main() {
 	}
 	fmt.Println(d.Response.String())
 
-	ds, err := c.Send(&anthropic.Sender[[]data.MessageModule]{
+	ds, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "What is its current version number?",
 		},
@@ -77,7 +77,7 @@ func G_main() {
 	fmt.Println(ds.Response.String())
 
 	// Set UserID
-	dsr, err := c.Send(&anthropic.Sender[[]data.MessageModule]{
+	dsr, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "What is its current version number?",
 		},

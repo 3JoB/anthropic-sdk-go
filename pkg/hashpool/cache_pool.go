@@ -9,14 +9,14 @@ import (
 	"github.com/3JoB/anthropic-sdk-go/v2/internel/compress"
 )
 
-type cache_pool struct {
+type Pool struct {
 	pool *hashmap.Map[string, string]
 	c    compress.Interface
 	cmp  bool // Compress status
 }
 
 // Enable Compress
-func (p *cache_pool) UseCompress(compress_model string) error {
+func (p *Pool) UseCompress(compress_model string) error {
 	if p.c != nil {
 		return ErrDisableSwitchCmp
 	}
@@ -42,7 +42,7 @@ func (p *cache_pool) UseCompress(compress_model string) error {
 }
 
 // Get retrieves an element from the map under given hash key.
-func (p *cache_pool) Get(k string) (string, bool) {
+func (p *Pool) Get(k string) (string, bool) {
 	d, ok := p.pool.Get(k)
 	if p.cmp {
 		if !ok {
@@ -64,7 +64,7 @@ func (p *cache_pool) Get(k string) (string, bool) {
 // An existing item for this key will be overwritten.
 // If a resizing operation is happening concurrently while calling Set,
 // the item might show up in the map after the resize operation is finished.
-func (p *cache_pool) Set(k string, v string) bool {
+func (p *Pool) Set(k string, v string) bool {
 	if p.cmp {
 		buf, err := p.c.Encode(unsafeConvert.ByteSlice(v))
 		if err != nil {
@@ -78,7 +78,7 @@ func (p *cache_pool) Set(k string, v string) bool {
 }
 
 // Del deletes the key from the map and returns whether the key was deleted.
-func (p *cache_pool) Del(k string) bool {
+func (p *Pool) Del(k string) bool {
 	return p.pool.Del(k)
 }
 
@@ -86,12 +86,12 @@ func (p *cache_pool) Del(k string) bool {
 // If a resizing operation is happening concurrently while calling Insert,
 // the item might show up in the map after the resize operation is finished.
 // Returns true if the item was inserted or false if it existed.
-func (p *cache_pool) Insert(k, v string) bool {
+func (p *Pool) Insert(k, v string) bool {
 	return p.pool.Insert(k, v)
 }
 
 // Flush will clear all data in the Pool.
-func (p *cache_pool) ResetPool() {
+func (p *Pool) ResetPool() {
 	p.pool.Range(func(k, v string) bool {
 		return p.pool.Del(k)
 	})
@@ -99,15 +99,15 @@ func (p *cache_pool) ResetPool() {
 
 // Append will take out the data,
 // and then append a new piece of data to the end before saving it.
-func (p *cache_pool) Append(k, v string) {}
+func (p *Pool) Append(k, v string) {}
 
 // Len returns the number of elements within the map.
-func (p *cache_pool) Len() int {
+func (p *Pool) Len() int {
 	return p.pool.Len()
 }
 
 // Range calls f sequentially for each key and value present in the map.
 // If f returns false, range stops the iteration.
-func (p *cache_pool) Range(f func(k string, v string) bool) {
+func (p *Pool) Range(f func(k string, v string) bool) {
 	p.pool.Range(f)
 }

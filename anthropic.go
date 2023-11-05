@@ -11,11 +11,11 @@ import (
 )
 
 // Create a new Client object.
-func New[T []data.MessageModule | string](c *Config[T]) (*Client[T], error) {
+func New(c *Config) (*Client, error) {
 	if c == nil {
 		return nil, data.ErrConfigEmpty
 	}
-	client := &Client[T]{
+	client := &Client{
 		cfg:    c,
 		header: hashmap.New[string, string](),
 		client: &fasthttp.Client{
@@ -33,7 +33,7 @@ func New[T []data.MessageModule | string](c *Config[T]) (*Client[T], error) {
 	return client, nil
 }
 
-func NewPool[T []data.MessageModule | string](c *Config[T]) sync.Pool {
+func NewPool[T []data.MessageModule | string](c *Config) sync.Pool {
 	return sync.Pool{
 		New: func() any {
 			if client, err := New(c); err != nil {
