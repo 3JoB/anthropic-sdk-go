@@ -3,9 +3,7 @@ package anthropic
 import (
 	"time"
 
-	"github.com/3JoB/ulib/litefmt"
 	"github.com/3JoB/ulid"
-	"github.com/cornelk/hashmap"
 	"github.com/valyala/fasthttp"
 	"pgregory.net/rand"
 
@@ -16,8 +14,8 @@ import (
 
 type Client struct {
 	client  *fasthttp.Client
-	cfg     *Config                  // Config
-	header  *hashmap.Map[string, string] // http
+	cfg     *Config           // Config
+	header  map[string]string // http
 	timeout time.Duration
 }
 
@@ -74,24 +72,10 @@ func (ah *Client) check(sender *resp.Sender) (err error) {
 	return nil
 }
 
-func (c *Client) headers() error {
-	if c.cfg.Key == "" {
-		return data.ErrApiKeyEmpty
-	}
-	c.header.Set("Accept", "application/json")
-	c.header.Set("Content-Type", "application/json")
-	c.header.Set("Client", litefmt.Sprint("anthropic-sdk-go/", data.SDKVersion))
-	c.header.Set("anthropic-version", "2023-06-01")
-	c.header.Set("x-api-key", c.cfg.Key)
-	c.header.Set("User-Agent", data.UserAgent)
-	return nil
-}
-
 func (c *Client) setHeaderWithURI(req *fasthttp.Request) {
-	c.header.Range(func(k, v string) bool {
+	for k, v := range c.header {
 		req.Header.Set(k, v)
-		return true
-	})
+	}
 	req.SetRequestURI(data.API)
 	req.Header.SetMethod("POST")
 }

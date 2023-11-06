@@ -9,7 +9,6 @@ var (
 	ErrContextIsNil     = errors.New("Context cannot be nil!")
 	ErrContextNotFound  = errors.New("Context not found")
 	ErrConfigIsNil      = errors.New("Configuration cannot be nil!")
-	ErrConfigEmpty      = errors.New("Configuration cannot be empty!")
 	ErrSenderIsNil      = errors.New("Sender cannot be nil!")
 	ErrPromptHumanEmpty = errors.New("The value of human cannot be empty!")
 	ErrPromptCtxEmpty   = errors.New("The value of context cannot be empty!")
