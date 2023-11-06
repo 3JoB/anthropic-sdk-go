@@ -21,10 +21,9 @@ type Client struct {
 
 // Set the response timeout in minutes.
 func (ah *Client) SetTimeOut(times int) {
-	if times == 0 {
-		return
+	if times != 0 {
+		ah.timeout = time.Duration(times) * time.Minute
 	}
-	ah.timeout = time.Duration(times) * time.Minute
 }
 
 // Send data to the API endpoint. Before sending out,
