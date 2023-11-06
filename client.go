@@ -53,8 +53,7 @@ func (ah *Client) Send(sender *Sender) (*context.Context, error) {
 	if err != nil {
 		return ctx, err
 	}
-	sender.With(ah)
-	return sender.Complete(ctx)
+	return sender.Complete(ah, ctx)
 }
 
 // Basic check

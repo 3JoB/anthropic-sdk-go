@@ -17,7 +17,6 @@ type Sender struct {
 	Message   data.MessageModule // Chunked message structure
 	ContextID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
 	Sender    resp.Sender
-	client    *Client
 }
 
 func NewSender() *Sender {
@@ -31,24 +30,20 @@ func (s *Sender) newCtx() *context.Context {
 	}
 }
 
-func (s *Sender) With(client *Client) {
-	s.client = client
-}
-
 func (s *Sender) SetHuman(v string) {}
 
 // Make a processed request to an API endpoint.
-func (s *Sender) Complete(ctx *context.Context) (*context.Context, error) {
+func (s *Sender) Complete(client *Client, ctx *context.Context) (*context.Context, error) {
 	// Get fasthttp object
 	request, response := acquire()
 	defer release(request, response)
 	// Initialize Request
-	s.client.setHeaderWithURI(request)
+	client.setHeaderWithURI(request)
 	if errs := s.setBody(request.BodyWriter()); errs != nil {
 		return nil, errs
 	}
 
-	if errs := s.client.do(request, response); errs != nil {
+	if errs := client.do(request, response); errs != nil {
 		return ctx, errs
 	}
 
