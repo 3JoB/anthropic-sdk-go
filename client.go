@@ -30,9 +30,7 @@ func (ah *Client) SetTimeOut(times int) {
 // the data will be processed into a form that the API can recognize.
 func (ah *Client) Send(sender *Sender) (*context.Context, error) {
 	var err error
-	if err = ah.check(&sender.Sender); err != nil {
-		return nil, err
-	}
+	ah.check(&sender.Sender)
 	if (sender.Message == data.MessageModule{}) {
 		return nil, data.ErrContextIsNil
 	}
@@ -57,7 +55,7 @@ func (ah *Client) Send(sender *Sender) (*context.Context, error) {
 }
 
 // Basic check
-func (ah *Client) check(sender *resp.Sender) (err error) {
+func (ah *Client) check(sender *resp.Sender) {
 	if sender.Model == "" {
 		sender.Model = ah.cfg.DefaultModel
 	}
@@ -67,15 +65,6 @@ func (ah *Client) check(sender *resp.Sender) (err error) {
 	if sender.MaxToken < 400 {
 		sender.MaxToken = 400
 	}
-	return nil
-}
-
-func (c *Client) setHeaderWithURI(req *fasthttp.Request) {
-	for k, v := range c.header {
-		req.Header.Set(k, v)
-	}
-	req.SetRequestURI(data.API)
-	req.Header.SetMethod("POST")
 }
 
 func (c *Client) do(req *fasthttp.Request, res *fasthttp.Response) error {

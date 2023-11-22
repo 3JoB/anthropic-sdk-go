@@ -34,10 +34,8 @@ func (s *Sender) SetHuman(v string) {}
 // Make a processed request to an API endpoint.
 func (s *Sender) Complete(client *Client, ctx *context.Context) (*context.Context, error) {
 	// Get fasthttp object
-	request, response := acquire()
+	request, response := client.Acquire()
 	defer release(request, response)
-	// Initialize Request
-	client.setHeaderWithURI(request)
 	if errs := s.setBody(request.BodyWriter()); errs != nil {
 		return nil, errs
 	}
