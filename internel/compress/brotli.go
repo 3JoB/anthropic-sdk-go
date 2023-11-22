@@ -4,6 +4,7 @@ import (
 	"bytes"
 
 	"github.com/3JoB/brotli"
+	"github.com/3JoB/ulib/pool"
 )
 
 type Brotli struct{}
@@ -16,15 +17,15 @@ func NewBrotli() Interface {
 // Encode compresses the given bytes using brotli compression,
 // returning the compressed data in a new bytes.Buffer.
 func (b *Brotli) Encode(v []byte) (*bytes.Buffer, error) {
-	var i bytes.Buffer
-	w := brotli.NewWriter(&i)
+	i := pool.NewBuffer()
+	w := brotli.NewWriter(i)
 	if _, err := w.Write(v); err != nil {
 		return nil, err
 	}
 	if err := w.Close(); err != nil {
 		return nil, err
 	}
-	return &i, nil
+	return i, nil
 }
 
 // The Decode method will first decode and then

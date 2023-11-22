@@ -3,6 +3,7 @@ package compress
 import (
 	"bytes"
 
+	"github.com/3JoB/ulib/pool"
 	"github.com/ulikunitz/xz"
 )
 
@@ -16,15 +17,15 @@ func NewXZ() Interface {
 // Encode compresses the given bytes using xz compression,
 // returning the compressed data in a new bytes.Buffer.
 func (x *XZ) Encode(v []byte) (*bytes.Buffer, error) {
-	var i bytes.Buffer
-	w, _ := xz.NewWriter(&i)
+	i := pool.NewBuffer()
+	w, _ := xz.NewWriter(i)
 	if _, err := w.Write(v); err != nil {
 		return nil, err
 	}
 	if err := w.Close(); err != nil {
 		return nil, err
 	}
-	return &i, nil
+	return i, nil
 }
 
 // The Decode method will first decode and then

@@ -1,7 +1,7 @@
 // The pool subpackage is the new hashmap cache pool, which is only for testing now.
 //
 // It will replace the Context cache pool in the future.
-package hashpool
+package pool
 
 import (
 	"github.com/3JoB/anthropic-sdk-go/v2/internel/errors"

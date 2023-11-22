@@ -1,7 +1,7 @@
 package anthropic
 
 import (
-	"github.com/3JoB/anthropic-sdk-go/v2/pkg/hashpool"
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/pool"
 )
 
 // Anthropic-SDK-Go configuration
@@ -22,6 +22,6 @@ type WorkerPoolConfig struct {
 }
 
 type DataPoolConfig struct {
-	Pool     *hashpool.Pool
+	Pool     *pool.Pool
 	Compress bool // Only CachePool
 }

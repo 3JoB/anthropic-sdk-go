@@ -1,8 +1,7 @@
-package hashpool
+package pool
 
 import (
-	"bytes"
-
+	"github.com/3JoB/ulib/pool"
 	"github.com/3JoB/unsafeConvert"
 	"github.com/cornelk/hashmap"
 
@@ -35,8 +34,6 @@ func (p *Pool) UseCompress(compress_model string) error {
 		p.c = compress.NewSnappy()
 	case "zlib":
 		p.c = compress.NewZlib()
-	default:
-		return ErrUnavaCmpAlg
 	}
 	return nil
 }
@@ -48,13 +45,13 @@ func (p *Pool) Get(k string) (string, bool) {
 		if !ok {
 			return d, ok
 		}
-		var b *bytes.Buffer
+		b := pool.NewBuffer()
+		defer pool.ReleaseBuffer(b)
 		b.WriteString(d)
 		p.c.Decode(b)
 		if b.Len() == 0 {
 			return "", ok
 		}
-		b.Reset()
 		return unsafeConvert.StringSlice(b.Bytes()), ok
 	}
 	return d, ok

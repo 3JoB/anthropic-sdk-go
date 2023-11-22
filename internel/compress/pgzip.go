@@ -3,6 +3,7 @@ package compress
 import (
 	"bytes"
 
+	"github.com/3JoB/ulib/pool"
 	"github.com/klauspost/pgzip"
 )
 
@@ -20,15 +21,15 @@ func NewPGZip() Interface {
 // it has special advantages when compressing large amounts of data.
 // When the data block exceeds 1MB, pgzip will obtain a very considerable performance improvement.
 func (f *PGZip) Encode(v []byte) (*bytes.Buffer, error) {
-	var i bytes.Buffer
-	w := pgzip.NewWriter(&i)
+	i := pool.NewBuffer()
+	w := pgzip.NewWriter(i)
 	if _, err := w.Write(v); err != nil {
 		return nil, err
 	}
 	if err := w.Close(); err != nil {
 		return nil, err
 	}
-	return &i, nil
+	return i, nil
 }
 
 // The Decode method will first decode and then overwrite the data in the input *bytes.Buffer.
