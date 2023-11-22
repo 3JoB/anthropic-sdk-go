@@ -25,7 +25,7 @@ func (zs *ZST) Encode(v []byte) (*bytes.Buffer, error) {
 	if err := w.Close(); err != nil {
 		return nil, err
 	}
-	return  i, nil
+	return i, nil
 }
 
 // The Decode method will first decode and then overwrite the data in the input *bytes.Buffer.

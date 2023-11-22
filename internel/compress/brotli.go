@@ -3,8 +3,8 @@ package compress
 import (
 	"bytes"
 
-	"github.com/3JoB/brotli"
 	"github.com/3JoB/ulib/pool"
+	"github.com/andybalholm/brotli"
 )
 
 type Brotli struct{}
@@ -33,7 +33,6 @@ func (b *Brotli) Encode(v []byte) (*bytes.Buffer, error) {
 func (b *Brotli) Decode(v *bytes.Buffer) {
 	r := brotli.NewReader(v)
 	d := reader(r)
-	_ = r.Close()
 	v.Reset()
 	_, _ = v.Write(d)
 }

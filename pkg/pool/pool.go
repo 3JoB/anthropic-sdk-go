@@ -4,8 +4,9 @@
 package pool
 
 import (
-	"github.com/3JoB/anthropic-sdk-go/v2/internel/errors"
 	"github.com/cornelk/hashmap"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/internel/errors"
 )
 
 var (
