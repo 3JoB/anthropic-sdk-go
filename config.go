@@ -6,22 +6,12 @@ import (
 
 // Anthropic-SDK-Go configuration
 type Config struct {
-	Key          string        // API Keys
-	DefaultModel string        // Choose the default AI model
-	PoolConfig   PoolConfig // Pool Config
-}
-
-// Pool Config
-type PoolConfig struct {
-	WorkerPool WorkerPoolConfig
-	DataPool   DataPoolConfig
-}
-
-type WorkerPoolConfig struct {
-	Process int
+	Key          string         // API Keys
+	DefaultModel string         // Choose the default AI model
+	DataPool     DataPoolConfig // Pool Config
 }
 
 type DataPoolConfig struct {
 	Pool     *pool.Pool
-	Compress bool // Only CachePool
+	Compress bool
 }
