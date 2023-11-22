@@ -2,7 +2,7 @@ package resp
 
 import (
 	"github.com/3JoB/unsafeConvert"
-	"github.com/bytedance/sonic"
+	"github.com/sugawarayuuta/sonnet"
 )
 
 type Sender struct {
@@ -37,7 +37,7 @@ type Response struct {
 }
 
 func (resp Response) String() string {
-	d, _ := sonic.Marshal(&resp)
+	d, _ := sonnet.Marshal(&resp)
 	return unsafeConvert.StringSlice(d)
 }
 
@@ -55,7 +55,7 @@ func Error(code int, v []byte) (*ErrorResponse, error) {
 	var e = R{
 		Error: &ErrorResponse{},
 	}
-	err := sonic.Unmarshal(v, &e)
+	err := sonnet.Unmarshal(v, &e)
 	e.Error.Code = code
 	return e.Error, err
 }
@@ -91,6 +91,6 @@ func (e *ErrorResponse) IsStatusCode(code int) bool {
 // if you need to call it multiple times, please assign or cache it directly,
 // because the structure will call json to decode itself
 func (e *ErrorResponse) String() string {
-	d, _ := sonic.Marshal(e)
+	d, _ := sonnet.Marshal(e)
 	return unsafeConvert.StringSlice(d)
 }

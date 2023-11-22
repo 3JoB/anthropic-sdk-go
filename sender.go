@@ -5,8 +5,7 @@ import (
 	"io"
 
 	"github.com/3JoB/unsafeConvert"
-	"github.com/bytedance/sonic"
-	"github.com/bytedance/sonic/encoder"
+	"github.com/sugawarayuuta/sonnet"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/context"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
@@ -48,7 +47,7 @@ func (s *Sender) Complete(client *Client, ctx *context.Context) (*context.Contex
 	}
 
 	ctx.ID = s.ContextID
-	if errs := sonic.Unmarshal(response.Body(), &ctx.Response); errs != nil {
+	if errs := sonnet.Unmarshal(response.Body(), &ctx.Response); errs != nil {
 		return ctx, errs
 	}
 
@@ -76,5 +75,5 @@ func (s *Sender) Complete(client *Client, ctx *context.Context) (*context.Contex
 //
 // Need to export io.Writer in BodyWriter() as w.
 func (opt *Sender) setBody(w io.Writer) error {
-	return encoder.NewStreamEncoder(w).Encode(&opt.Sender)
+	return sonnet.NewEncoder(w).Encode(&opt.Sender)
 }
