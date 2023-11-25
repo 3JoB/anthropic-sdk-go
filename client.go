@@ -38,9 +38,8 @@ func (c *Client) Send(sender *Sender) (*pool.Session, error) {
 	s := sender.newSession()
 	if sender.SessionID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
-		sender.SessionID = id.String()
-		s.ID = sender.SessionID
-		sender.Sender.Set(&sender.Message)
+		s.ID = id.String()
+		err = sender.Sender.Set(&sender.Message)
 	} else {
 		s.ID = sender.SessionID
 		p, ok := c.pool.Get(s.ID)
@@ -60,6 +59,7 @@ func (c *Client) Send(sender *Sender) (*pool.Session, error) {
 	return s, nil
 }
 
+// Should only be used when needed.
 func (c *Client) CloseSession(s *pool.Session) bool {
 	return c.pool.Del(s.ID)
 }

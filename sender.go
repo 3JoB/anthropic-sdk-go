@@ -2,7 +2,6 @@ package anthropic
 
 import (
 	"errors"
-	"io"
 
 	"github.com/3JoB/unsafeConvert"
 	"github.com/sugawarayuuta/sonnet"
@@ -33,8 +32,8 @@ func (s *Sender) newSession() *pool.Session {
 func (s *Sender) Complete(client *Client, session *pool.Session) error {
 	// Get fasthttp object
 	request, response := client.Acquire()
-	defer release(request, response)
-	if err := s.setBody(request.BodyWriter()); err != nil {
+	defer client.Release(request, response)
+	if err := sonnet.NewEncoder(request.BodyWriter()).Encode(&s.Sender); err != nil {
 		return err
 	}
 
@@ -46,25 +45,20 @@ func (s *Sender) Complete(client *Client, session *pool.Session) error {
 	if err := sonnet.Unmarshal(response.Body(), &session.Response); err != nil {
 		return err
 	}
-
 	session.RawData = response.Body()
 
 	if response.StatusCode() != 200 {
-		err, _ := resp.Error(response.StatusCode(), response.Body())
+		err, errp := resp.Error(response.StatusCode(), response.Body())
+		if errp != nil {
+			return err
+		}
 		if err != nil {
 			session.ErrorResp = err
 			return err
 		}
-		return errors.New(unsafeConvert.StringSlice(session.RawData))
+		return errors.New(unsafeConvert.StringPointer(session.RawData))
 	}
 	s.Message.Assistant = session.Response.Completion
 
 	return nil
-}
-
-// Set Body for *fasthttp.Request.
-//
-// Need to export io.Writer in BodyWriter() as w.
-func (opt *Sender) setBody(w io.Writer) error {
-	return sonnet.NewEncoder(w).Encode(&opt.Sender)
 }

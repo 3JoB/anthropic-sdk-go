@@ -27,28 +27,11 @@ Claude Docs: [https://console.anthropic.com/docs](https://console.anthropic.com/
 
 <br><br>
 
-## TODO
-
-Here is the to-do list for v2. When most of them are completed and stable tested, the v2 sdk will be released to the stable version.
-
-There seems to be a lot to do (sad) and I have other work, so progress may be slow.
-
-- [ ] New ContextPool (should be hashmap now)
-- [X] Switch to fasthttp
-- [ ] Support SSE (still exploring, but fasthttp seems to have support)
-- [ ] Brand new API (I know, the API design of v1 is too messy)
-- [ ] Support prompt cache function (means fewer builds, but may cause some API conflicts, I'm still exploring)
-- [ ] Context Prompt Pool supports compression.
-
-<br><br>
-
 ## Start
-
-**Since the v2 SDK has not released a stable version, the documentation still only provides v1 support for the time being.**
 
 Usage:
 ```sh
-$ go get github.com/3JoB/anthropic-sdk-go@v1.6.0
+$ go get github.com/3JoB/anthropic-sdk-go/v2@v2.1.0
 ```
 
 <br>
@@ -60,12 +43,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/3JoB/anthropic-sdk-go"
-	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/v2"
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 func main() {
-	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
+	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: data.ModelFullInstant})
 	if err != nil {
 		panic(err)
 	}
@@ -74,7 +58,7 @@ func main() {
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
-		Sender: anthropic.Sender{MaxToken: 1200},
+		Sender: &resp.Sender{MaxToken: 1200},
 	})
 
 	if err != nil {
@@ -87,7 +71,7 @@ func main() {
 
 Return:
 ```json
-{"detail":null,"completion":"Hello world! \nfmt.Println(\"Hello world!\")\n\nDone.","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1","truncated":false}
+{"detail":null,"completion":"Hello world! \nfmt.Println(\"Hello world!\")\n\nDone.","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1.2","truncated":false}
 ```
 
 <br>
@@ -99,12 +83,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/3JoB/anthropic-sdk-go"
-	"github.com/3JoB/anthropic-sdk-go/data"
+	"github.com/3JoB/anthropic-sdk-go/v2"
+	"github.com/3JoB/anthropic-sdk-go/v2/resp"
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
 func main() {
-	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
+	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: data.ModelFullInstant})
 	if err != nil {
 		panic(err)
 	}
@@ -113,7 +98,7 @@ func main() {
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
-		Sender: anthropic.Sender{MaxToken: 1200},
+		Sender: &resp.Sender{MaxToken: 1200},
 	})
 
 	if err != nil {
@@ -126,8 +111,8 @@ func main() {
 		Message: data.MessageModule{
             Human: "What is its current version number?",
         },
-		ContextID: d.ID,
-        Sender: anthropic.Sender{MaxToken: 1200},
+		SessionID: d.ID,
+        Sender: &resp.Sender{MaxToken: 1200},
 	})
 
 	if err != nil {
@@ -141,10 +126,10 @@ func main() {
 Return:
 ```json
 {"detail":null,"completion":"Hello world! \nfmt.Println(\"Hello world!\")\n\nDone.","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1","truncated":false}
-{"detail":null,"completion":"1.14.4 ","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1","truncated":false}
+{"detail":null,"completion":"1.14.4 ","stop_reason":"stop_sequence","stop":"\n\nHuman:","log_id":"nop","exception":"","model":"claude-instant-v1.2","truncated":false}
 ```
 
-### Delete the context in an ID
+### Delete the session in an ID
 ```golang
 c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
 if err != nil {
@@ -155,14 +140,14 @@ d, err := c.Send(&anthropic.Opts{
 	Message: data.MessageModule{
 		Human: "Do you know Golang, please answer me in the shortest possible way.",
 	},
-	Sender: anthropic.Sender{MaxToken: 1200},
+	Sender: &resp.Sender{MaxToken: 1200},
 })
 
 if err != nil {
 	panic(err)
 }
 
-d.Close()
+c.CloseSession(d)
 ```
 
 <br>

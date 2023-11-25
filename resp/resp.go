@@ -17,5 +17,5 @@ type Response struct {
 
 func (resp Response) String() string {
 	d, _ := sonnet.Marshal(&resp)
-	return unsafeConvert.StringSlice(d)
+	return unsafeConvert.StringPointer(d)
 }

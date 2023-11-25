@@ -65,7 +65,7 @@ func (c *Client) Acquire() (*fasthttp.Request, *fasthttp.Response) {
 // Release returns req and resp acquired via Acquire to request pool.
 //
 // It is forbidden accessing req and/or its' members after returning it to request pool.
-func release(req *fasthttp.Request, res *fasthttp.Response) {
+func (c *Client) Release(req *fasthttp.Request, res *fasthttp.Response) {
 	fasthttp.ReleaseRequest(req)
 	fasthttp.ReleaseResponse(res)
 }
