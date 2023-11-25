@@ -1,6 +1,7 @@
 package resp
 
 import (
+	"github.com/3JoB/ulib/litefmt"
 	"github.com/3JoB/unsafeConvert"
 	"github.com/sugawarayuuta/sonnet"
 )
@@ -19,9 +20,11 @@ func Error(code int, v []byte) (*ErrorResponse, error) {
 	var e = R{
 		Error: &ErrorResponse{},
 	}
-	err := sonnet.Unmarshal(v, &e)
+	if err := sonnet.Unmarshal(v, &e); err != nil {
+		return nil, err
+	}
 	e.Error.Code = code
-	return e.Error, err
+	return e.Error, nil
 }
 
 /*
@@ -32,6 +35,7 @@ Example:
 	}
 */
 func (e *ErrorResponse) Error() string {
+	litefmt.Sprint("anthropic: ", e.Message, " (", unsafeConvert.IntToString(e.Code), ")")
 	return e.Message
 }
 
