@@ -1,8 +1,13 @@
-//go:build !windows
 // +build !windows
 
 package data
 
-import "github.com/valyala/fasthttp/fasthttpproxy"
+import (
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttp/fasthttpproxy"
+)
 
-var dialer = fasthttpproxy.FasthttpProxyHTTPDialer()
+func dialer() fasthttp.DialFunc {
+	return fasthttpproxy.FasthttpProxyHTTPDialer()
+}
+
