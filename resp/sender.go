@@ -1,8 +1,9 @@
 package resp
 
 import (
-	"github.com/3JoB/anthropic-sdk-go/v2/data"
 	"github.com/3JoB/ulib/litefmt"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/data"
 )
 
 type Sender struct {
@@ -38,7 +39,7 @@ func (s *Sender) Set(d *data.MessageModule) error {
 	return nil
 }
 
-func (s *Sender) Build(next string,  d *data.MessageModule) error {
+func (s *Sender) Build(next string, d *data.MessageModule) error {
 	if d.Human == "" {
 		return data.ErrPromptHumanEmpty
 	}

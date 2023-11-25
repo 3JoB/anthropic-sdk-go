@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+	// "fmt"
 
 	"github.com/3JoB/anthropic-sdk-go/v2"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//fmt.Println(d.Response.String())
+	// fmt.Println(d.Response.String())
 
 	_, err = c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
@@ -34,7 +34,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//fmt.Println(ds.Response.String())
+	// fmt.Println(ds.Response.String())
 
 	// Set UserID
 	dsr, err := c.Send(&anthropic.Sender{
@@ -52,6 +52,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//fmt.Println(dsr.Response.String())
+	// fmt.Println(dsr.Response.String())
 	c.CloseSession(dsr)
 }
