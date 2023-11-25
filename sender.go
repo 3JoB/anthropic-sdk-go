@@ -7,66 +7,59 @@ import (
 	"github.com/3JoB/unsafeConvert"
 	"github.com/sugawarayuuta/sonnet"
 
-	"github.com/3JoB/anthropic-sdk-go/v2/context"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/pool"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 type Sender struct {
 	Message   data.MessageModule // Chunked message structure
-	ContextID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
-	Sender    resp.Sender
+	SessionID string             // Session ID. If empty, a new session is automatically created. If not empty, an attempt is made to find an existing session.
+	Sender    *resp.Sender
 }
 
 func NewSender() *Sender {
 	return &Sender{}
 }
 
-func (s *Sender) newCtx() *context.Context {
-	return &context.Context{
+func (s *Sender) newSession() *pool.Session {
+	return &pool.Session{
 		Response: resp.Response{},
 		Human:    s.Message.Human,
 	}
 }
 
-func (s *Sender) SetHuman(v string) {}
-
 // Make a processed request to an API endpoint.
-func (s *Sender) Complete(client *Client, ctx *context.Context) (*context.Context, error) {
+func (s *Sender) Complete(client *Client, session *pool.Session) error {
 	// Get fasthttp object
 	request, response := client.Acquire()
 	defer release(request, response)
-	if errs := s.setBody(request.BodyWriter()); errs != nil {
-		return nil, errs
+	if err := s.setBody(request.BodyWriter()); err != nil {
+		return err
 	}
 
-	if errs := client.do(request, response); errs != nil {
-		return ctx, errs
+	if err := client.do(request, response); err != nil {
+		return err
 	}
 
-	ctx.ID = s.ContextID
-	if errs := sonnet.Unmarshal(response.Body(), &ctx.Response); errs != nil {
-		return ctx, errs
+	session.ID = s.SessionID
+	if err := sonnet.Unmarshal(response.Body(), &session.Response); err != nil {
+		return err
 	}
 
-	ctx.RawData = response.Body()
+	session.RawData = response.Body()
 
 	if response.StatusCode() != 200 {
-		errs, _ := resp.Error(response.StatusCode(), response.Body())
-		if errs != nil {
-			ctx.ErrorResp = errs
-			return ctx, errs
+		err, _ := resp.Error(response.StatusCode(), response.Body())
+		if err != nil {
+			session.ErrorResp = err
+			return err
 		}
-		return ctx, errors.New(unsafeConvert.StringSlice(ctx.RawData))
+		return errors.New(unsafeConvert.StringSlice(session.RawData))
 	}
+	s.Message.Assistant = session.Response.Completion
 
-	s.Message.Assistant = ctx.Response.Completion
-
-	if !ctx.Add() {
-		return ctx, errors.New("add failed")
-	}
-
-	return ctx, nil
+	return nil
 }
 
 // Set Body for *fasthttp.Request.

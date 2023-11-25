@@ -23,7 +23,7 @@ func New(c *Config) (*Client, error) {
 			"User-Agent":        data.UserAgent,
 			"x-api-key":         c.Key,
 		},
-		pool:   pool.NewPool(),
+		pool:   pool.New(),
 		client: data.Client,
 	}
 	if c.Compress != nil {

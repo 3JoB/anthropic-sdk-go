@@ -31,7 +31,7 @@ Find beauty in each season
 And wonder in the earth`
 
 func main() {
-	p := pool.NewPool()
+	p := pool.New()
 	if err := p.UseCompress(brotli.New()); err != nil {
 		panic(err)
 	}
@@ -57,7 +57,7 @@ func G_main() {
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
-		Sender: resp.Sender{MaxToken: 1200},
+		Sender: &resp.Sender{MaxToken: 1200},
 	})
 	if err != nil {
 		fmt.Println(d.ErrorResp.Message)
@@ -69,8 +69,8 @@ func G_main() {
 		Message: data.MessageModule{
 			Human: "What is its current version number?",
 		},
-		ContextID: d.ID,
-		Sender:    resp.Sender{MaxToken: 1200},
+		SessionID: d.ID,
+		Sender:    &resp.Sender{MaxToken: 1200},
 	})
 	if err != nil {
 		panic(err)
@@ -82,8 +82,8 @@ func G_main() {
 		Message: data.MessageModule{
 			Human: "What is its current version number?",
 		},
-		ContextID: d.ID,
-		Sender: resp.Sender{
+		SessionID: d.ID,
+		Sender: &resp.Sender{
 			MaxToken: 1200,
 			MetaData: resp.MetaData{
 				UserID: "rand id",

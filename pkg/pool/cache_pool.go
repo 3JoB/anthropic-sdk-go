@@ -1,6 +1,7 @@
 package pool
 
 import (
+	"github.com/3JoB/ulib/litefmt"
 	"github.com/3JoB/ulib/pool"
 	"github.com/3JoB/unsafeConvert"
 	"github.com/cornelk/hashmap"
@@ -45,7 +46,7 @@ func (p *Pool) Get(k string) (string, bool) {
 // An existing item for this key will be overwritten.
 // If a resizing operation is happening concurrently while calling Set,
 // the item might show up in the map after the resize operation is finished.
-func (p *Pool) Set(k string, v string) bool {
+func (p *Pool) Set(k, v string) bool {
 	if p.c != nil {
 		buf, err := p.c.Encode(unsafeConvert.ByteSlice(v))
 		if err != nil {
@@ -80,7 +81,13 @@ func (p *Pool) ResetPool() {
 
 // Append will take out the data,
 // and then append a new piece of data to the end before saving it.
-func (p *Pool) Append(k, v string) {}
+func (p *Pool) Append(k, v string) bool {
+	r, ok := p.Get(k)
+	if !ok {
+		return p.Set(k, v)
+	}
+	return p.Set(k, litefmt.Sprint(r, v))
+}
 
 // Len returns the number of elements within the map.
 func (p *Pool) Len() int {

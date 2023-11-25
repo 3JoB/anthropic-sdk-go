@@ -15,7 +15,7 @@ var (
 )
 
 // Create a new pool in cached mode.
-func NewPool() *Pool {
+func New() *Pool {
 	return &Pool{
 		pool: hashmap.New[string, string](),
 	}

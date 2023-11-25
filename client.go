@@ -7,10 +7,8 @@ import (
 	"github.com/valyala/fasthttp"
 	"pgregory.net/rand"
 
-	"github.com/3JoB/anthropic-sdk-go/v2/context"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
 	"github.com/3JoB/anthropic-sdk-go/v2/pkg/pool"
-	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 type Client struct {
@@ -18,55 +16,59 @@ type Client struct {
 	key     string
 	model   string
 	pool    *pool.Pool
-	header  map[string]string // http
+	header  map[string]string
 	timeout time.Duration
 }
 
 // Set the response timeout in minutes.
-func (ah *Client) SetTimeOut(times int) {
+func (c *Client) SetTimeOut(times int) {
 	if times != 0 {
-		ah.timeout = time.Duration(times) * time.Minute
+		c.timeout = time.Duration(times) * time.Minute
 	}
 }
 
 // Send data to the API endpoint. Before sending out,
 // the data will be processed into a form that the API can recognize.
-func (ah *Client) Send(sender *Sender) (*context.Context, error) {
+func (c *Client) Send(sender *Sender) (*pool.Session, error) {
 	var err error
-	ah.check(&sender.Sender)
 	if (sender.Message == data.MessageModule{}) {
-		return nil, data.ErrContextIsNil
+		return nil, data.ErrSessionIsNil
 	}
-	ctx := sender.newCtx()
-	if sender.ContextID == "" {
+	c.check(sender)
+	ss := sender.newSession()
+	if sender.SessionID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
-		sender.ContextID = id.String()
-		sender.Sender.Prompt, err = context.Set(sender.Message.Human, "")
+		sender.SessionID = id.String()
+		ss.ID = sender.SessionID
+		err = sender.Sender.Set(sender.Message)
 	} else {
-		ctx.ID = sender.ContextID
-		d, ok := ctx.Find()
+		ss.ID = sender.SessionID
+		p, ok := c.pool.Get(ss.ID)
 		if !ok {
-			return nil, data.ErrContextNotFound
+			return nil, data.ErrSessionNotFound
 		}
-		d = append(d, sender.Message)
-		sender.Sender.Prompt, err = ctx.Build(d)
+		err = sender.Sender.Build(p, sender.Message)
 	}
 	if err != nil {
-		return ctx, err
+		return ss, err
 	}
-	return sender.Complete(ah, ctx)
+	if err := sender.Complete(c, ss); err != nil {
+		return nil, err
+	}
+	_ = c.pool.Append(ss.ID, ss.Response.Completion)
+	return ss, nil
 }
 
 // Basic check
-func (c *Client) check(sender *resp.Sender) {
-	if sender.Model == "" {
-		sender.Model = c.model
+func (c *Client) check(s *Sender) {
+	if s.Sender.Model == "" {
+		s.Sender.Model = c.model
 	}
-	if len(sender.StopSequences) == 0 {
-		sender.StopSequences = data.StopSequences
+	if len(s.Sender.StopSequences) == 0 {
+		s.Sender.StopSequences = data.StopSequences
 	}
-	if sender.MaxToken < 400 {
-		sender.MaxToken = 400
+	if s.Sender.MaxToken < 400 {
+		s.Sender.MaxToken = 400
 	}
 }
 
