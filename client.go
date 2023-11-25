@@ -9,14 +9,17 @@ import (
 
 	"github.com/3JoB/anthropic-sdk-go/v2/context"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/pool"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
 
 type Client struct {
-	client  *fasthttp.Client
-	cfg     *Config           // Config
-	header  map[string]string // http
-	timeout time.Duration
+	client        *fasthttp.Client
+	key           string
+	model         string
+	pool          *pool.Pool
+	header        map[string]string // http
+	timeout       time.Duration
 }
 
 // Set the response timeout in minutes.
@@ -55,9 +58,9 @@ func (ah *Client) Send(sender *Sender) (*context.Context, error) {
 }
 
 // Basic check
-func (ah *Client) check(sender *resp.Sender) {
+func (c *Client) check(sender *resp.Sender) {
 	if sender.Model == "" {
-		sender.Model = ah.cfg.DefaultModel
+		sender.Model = c.model
 	}
 	if len(sender.StopSequences) == 0 {
 		sender.StopSequences = data.StopSequences

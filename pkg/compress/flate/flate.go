@@ -1,8 +1,9 @@
-package compress
+package flate
 
 import (
 	"bytes"
 
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 	"github.com/3JoB/ulib/pool"
 	"github.com/klauspost/compress/flate"
 )
@@ -10,7 +11,7 @@ import (
 type Flate struct{}
 
 // Initialize a new Deflate object based on the Interface interface
-func NewFlate() Interface {
+func New() compress.Interface {
 	return &Flate{}
 }
 
@@ -32,7 +33,7 @@ func (f *Flate) Encode(v []byte) (*bytes.Buffer, error) {
 // overwrite the data in the input *bytes.Buffer.
 func (f *Flate) Decode(v *bytes.Buffer) {
 	r := flate.NewReader(v)
-	d := reader(r)
+	d := compress.Reader(r)
 	_ = r.Close()
 	v.Reset()
 	_, _ = v.Write(d)

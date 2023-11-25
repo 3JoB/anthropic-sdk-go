@@ -1,8 +1,9 @@
-package compress
+package snappy
 
 import (
 	"bytes"
 
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 	"github.com/3JoB/ulib/pool"
 	"github.com/klauspost/compress/snappy"
 )
@@ -10,7 +11,7 @@ import (
 type Snappy struct{}
 
 // Initialize a new Snappy object based on the Interface interface
-func NewSnappy() Interface {
+func NewSnappy() compress.Interface {
 	return &Snappy{}
 }
 
@@ -21,7 +22,7 @@ func NewSnappy() Interface {
 // compression ratio is ridiculously low.
 // This compression engine is not recommended under normal circumstances
 // and it causes additional overhead.
-func (s *Snappy) Encode(v []byte) (*bytes.Buffer, error) {
+func (s Snappy) Encode(v []byte) (*bytes.Buffer, error) {
 	i := pool.NewBuffer()
 	w := snappy.NewBufferedWriter(i)
 	if _, err := w.Write(v); err != nil {
@@ -34,8 +35,8 @@ func (s *Snappy) Encode(v []byte) (*bytes.Buffer, error) {
 }
 
 // The Decode method will first decode and then overwrite the data in the input *bytes.Buffer.
-func (s *Snappy) Decode(v *bytes.Buffer) {
-	d := reader(snappy.NewReader(v))
+func (s Snappy) Decode(v *bytes.Buffer) {
+	d := compress.Reader(snappy.NewReader(v))
 	v.Reset()
 	_, _ = v.Write(d)
 }

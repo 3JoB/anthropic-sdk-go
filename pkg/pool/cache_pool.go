@@ -11,37 +11,21 @@ import (
 type Pool struct {
 	pool *hashmap.Map[string, string]
 	c    compress.Interface
-	cmp  bool // Compress status
 }
 
 // Enable Compress
-func (p *Pool) UseCompress(compress_model string) error {
+func (p *Pool) UseCompress(compress compress.Interface) error {
 	if p.c != nil {
 		return ErrDisableSwitchCmp
 	}
-	switch compress_model {
-	case "br":
-		p.c = compress.NewBrotli()
-	case "zs", "zst":
-		p.c = compress.NewZST()
-	case "xz":
-		p.c = compress.NewXZ()
-	case "gzip", "pgzip":
-		p.c = compress.NewPGZip()
-	case "deflate":
-		p.c = compress.NewFlate()
-	case "snappy":
-		p.c = compress.NewSnappy()
-	case "zlib":
-		p.c = compress.NewZlib()
-	}
+	p.c = compress
 	return nil
 }
 
 // Get retrieves an element from the map under given hash key.
 func (p *Pool) Get(k string) (string, bool) {
 	d, ok := p.pool.Get(k)
-	if p.cmp {
+	if p.c != nil {
 		if !ok {
 			return d, ok
 		}
@@ -62,7 +46,7 @@ func (p *Pool) Get(k string) (string, bool) {
 // If a resizing operation is happening concurrently while calling Set,
 // the item might show up in the map after the resize operation is finished.
 func (p *Pool) Set(k string, v string) bool {
-	if p.cmp {
+	if p.c != nil {
 		buf, err := p.c.Encode(unsafeConvert.ByteSlice(v))
 		if err != nil {
 			return false

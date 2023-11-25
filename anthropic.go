@@ -7,12 +7,14 @@ import (
 	"github.com/valyala/fasthttp"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/pool"
 )
 
 // Create a new Client object.
 func New(c *Config) (*Client, error) {
 	client := &Client{
-		cfg: c,
+		key: c.Key,
+		model: c.DefaultModel,
 		header: map[string]string{
 			"Accept":            "application/json",
 			"Content-Type":      "application/json",
@@ -21,10 +23,11 @@ func New(c *Config) (*Client, error) {
 			"User-Agent":        data.UserAgent,
 			"x-api-key":         c.Key,
 		},
+		pool: pool.NewPool(),
 		client: data.Client,
 	}
-	if c.DefaultModel == "" {
-		c.DefaultModel = data.ModelMajorInstant
+	if client.model == "" {
+		client.model = data.ModelMajorInstant
 	}
 	return client, nil
 }

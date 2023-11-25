@@ -5,6 +5,7 @@ import (
 
 	"github.com/3JoB/anthropic-sdk-go/v2"
 	"github.com/3JoB/anthropic-sdk-go/v2/data"
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress/brotli"
 	"github.com/3JoB/anthropic-sdk-go/v2/pkg/pool"
 	"github.com/3JoB/anthropic-sdk-go/v2/resp"
 )
@@ -31,7 +32,7 @@ And wonder in the earth`
 
 func main() {
 	p := pool.NewPool()
-	if err := p.UseCompress("br"); err != nil {
+	if err := p.UseCompress(brotli.New()); err != nil {
 		panic(err)
 	}
 	p.Set("c_data", c_data)
