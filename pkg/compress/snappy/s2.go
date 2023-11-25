@@ -3,9 +3,10 @@ package snappy
 import (
 	"bytes"
 
-	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 	"github.com/3JoB/ulib/pool"
 	"github.com/klauspost/compress/s2"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 )
 
 type S2 struct{}

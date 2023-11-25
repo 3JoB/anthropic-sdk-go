@@ -13,7 +13,7 @@ import (
 // Create a new Client object.
 func New(c *Config) (*Client, error) {
 	client := &Client{
-		key: c.Key,
+		key:   c.Key,
 		model: c.DefaultModel,
 		header: map[string]string{
 			"Accept":            "application/json",
@@ -23,8 +23,11 @@ func New(c *Config) (*Client, error) {
 			"User-Agent":        data.UserAgent,
 			"x-api-key":         c.Key,
 		},
-		pool: pool.NewPool(),
+		pool:   pool.NewPool(),
 		client: data.Client,
+	}
+	if c.Compress != nil {
+		_ = client.pool.UseCompress(c.Compress)
 	}
 	if client.model == "" {
 		client.model = data.ModelMajorInstant

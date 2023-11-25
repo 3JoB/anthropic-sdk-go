@@ -3,9 +3,10 @@ package xz
 import (
 	"bytes"
 
-	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 	"github.com/3JoB/ulib/pool"
 	"github.com/ulikunitz/xz"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 )
 
 type XZ struct{}

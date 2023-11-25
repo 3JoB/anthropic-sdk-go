@@ -3,9 +3,10 @@ package gzip
 import (
 	"bytes"
 
-	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 	"github.com/3JoB/ulib/pool"
 	"github.com/klauspost/pgzip"
+
+	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
 )
 
 type PGZip struct{}

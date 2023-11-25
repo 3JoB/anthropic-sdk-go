@@ -14,12 +14,12 @@ import (
 )
 
 type Client struct {
-	client        *fasthttp.Client
-	key           string
-	model         string
-	pool          *pool.Pool
-	header        map[string]string // http
-	timeout       time.Duration
+	client  *fasthttp.Client
+	key     string
+	model   string
+	pool    *pool.Pool
+	header  map[string]string // http
+	timeout time.Duration
 }
 
 // Set the response timeout in minutes.
