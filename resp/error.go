@@ -53,12 +53,3 @@ func (e *ErrorResponse) StatusCode() int {
 func (e *ErrorResponse) IsStatusCode(code int) bool {
 	return code == e.Code
 }
-
-// Return a String object
-//
-// if you need to call it multiple times, please assign or cache it directly,
-// because the structure will call json to decode itself
-func (e *ErrorResponse) String() string {
-	d, _ := sonnet.Marshal(e)
-	return unsafeConvert.StringSlice(d)
-}
