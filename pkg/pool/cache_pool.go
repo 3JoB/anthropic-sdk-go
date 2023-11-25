@@ -2,8 +2,6 @@ package pool
 
 import (
 	"github.com/3JoB/ulib/litefmt"
-	"github.com/3JoB/ulib/pool"
-	"github.com/3JoB/unsafeConvert"
 	"github.com/cornelk/hashmap"
 
 	"github.com/3JoB/anthropic-sdk-go/v2/pkg/compress"
@@ -11,35 +9,16 @@ import (
 
 type Pool struct {
 	pool *hashmap.Map[string, string]
-	c    compress.Interface
 }
 
-// Enable Compress
+// Enable Compress (no use)
 func (p *Pool) UseCompress(compress compress.Interface) error {
-	if p.c != nil {
-		return ErrDisableSwitchCmp
-	}
-	p.c = compress
 	return nil
 }
 
 // Get retrieves an element from the map under given hash key.
 func (p *Pool) Get(k string) (string, bool) {
-	d, ok := p.pool.Get(k)
-	if p.c != nil {
-		if !ok {
-			return d, ok
-		}
-		b := pool.NewBuffer()
-		defer pool.ReleaseBuffer(b)
-		b.WriteString(d)
-		p.c.Decode(b)
-		if b.Len() == 0 {
-			return "", ok
-		}
-		return unsafeConvert.StringSlice(b.Bytes()), ok
-	}
-	return d, ok
+	return p.pool.Get(k)
 }
 
 // Set sets the value under the specified key to the map.
@@ -47,14 +26,6 @@ func (p *Pool) Get(k string) (string, bool) {
 // If a resizing operation is happening concurrently while calling Set,
 // the item might show up in the map after the resize operation is finished.
 func (p *Pool) Set(k, v string) bool {
-	if p.c != nil {
-		buf, err := p.c.Encode(unsafeConvert.ByteSlice(v))
-		if err != nil {
-			return false
-		}
-		v = unsafeConvert.StringSlice(buf.Bytes())
-		defer buf.Reset()
-	}
 	p.pool.Set(k, v)
 	return true
 }

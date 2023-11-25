@@ -35,28 +35,33 @@ func (c *Client) Send(sender *Sender) (*pool.Session, error) {
 		return nil, data.ErrSessionIsNil
 	}
 	c.check(sender)
-	ss := sender.newSession()
+	s := sender.newSession()
 	if sender.SessionID == "" {
 		id, _ := ulid.New(ulid.Timestamp(time.Now()), rand.New())
 		sender.SessionID = id.String()
-		ss.ID = sender.SessionID
-		err = sender.Sender.Set(sender.Message)
+		s.ID = sender.SessionID
+		sender.Sender.Set(&sender.Message)
 	} else {
-		ss.ID = sender.SessionID
-		p, ok := c.pool.Get(ss.ID)
+		s.ID = sender.SessionID
+		p, ok := c.pool.Get(s.ID)
 		if !ok {
 			return nil, data.ErrSessionNotFound
 		}
-		err = sender.Sender.Build(p, sender.Message)
+		err = sender.Sender.Build(p, &sender.Message)
 	}
 	if err != nil {
-		return ss, err
-	}
-	if err := sender.Complete(c, ss); err != nil {
 		return nil, err
 	}
-	_ = c.pool.Append(ss.ID, ss.Response.Completion)
-	return ss, nil
+	c.pool.Set(s.ID, sender.Sender.Prompt)
+	if err := sender.Complete(c, s); err != nil {
+		return nil, err
+	}
+	c.pool.Append(s.ID, s.Response.Completion)
+	return s, nil
+}
+
+func (c *Client) CloseSession(s *pool.Session) bool {
+	return c.pool.Del(s.ID)
 }
 
 // Basic check

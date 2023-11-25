@@ -26,7 +26,7 @@ func (s *Sender) SetUserID(userID string) {
 	s.MetaData = MetaData{UserID: userID}
 }
 
-func (s *Sender) Set(d data.MessageModule) error {
+func (s *Sender) Set(d *data.MessageModule) error {
 	if d.Human == "" {
 		return data.ErrPromptHumanEmpty
 	}
@@ -38,7 +38,7 @@ func (s *Sender) Set(d data.MessageModule) error {
 	return nil
 }
 
-func (s *Sender) Build(next string,  d data.MessageModule) error {
+func (s *Sender) Build(next string,  d *data.MessageModule) error {
 	if d.Human == "" {
 		return data.ErrPromptHumanEmpty
 	}

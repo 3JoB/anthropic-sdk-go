@@ -35,8 +35,7 @@ Example:
 	}
 */
 func (e *ErrorResponse) Error() string {
-	litefmt.Sprint("anthropic: ", e.Message, " (", unsafeConvert.IntToString(e.Code), ")")
-	return e.Message
+	return litefmt.Sprint("anthropic: ", e.Message, " (", unsafeConvert.IntToString(e.Code), ")")
 }
 
 // Return an error object

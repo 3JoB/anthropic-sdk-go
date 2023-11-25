@@ -27,10 +27,10 @@ func (s Snappy) Encode(v []byte) (*bytes.Buffer, error) {
 	i := pool.NewBuffer()
 	w := snappy.NewBufferedWriter(i)
 	if _, err := w.Write(v); err != nil {
-		return nil, err
+		return i, err
 	}
 	if err := w.Close(); err != nil {
-		return nil, err
+		return i, err
 	}
 	return i, nil
 }
