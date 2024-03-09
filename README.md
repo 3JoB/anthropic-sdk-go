@@ -49,12 +49,12 @@ import (
 )
 
 func main() {
-	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: data.ModelFullInstant})
+	c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: data.ModelFullInstant})
 	if err != nil {
 		panic(err)
 	}
 
-	d, err := c.Send(&anthropic.Opts{
+	d, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
@@ -89,12 +89,12 @@ import (
 )
 
 func main() {
-	c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: data.ModelFullInstant})
+	c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: data.ModelFullInstant})
 	if err != nil {
 		panic(err)
 	}
 
-	d, err := c.Send(&anthropic.Opts{
+	d, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
 			Human: "Do you know Golang, please answer me in the shortest possible way.",
 		},
@@ -107,12 +107,12 @@ func main() {
 
 	fmt.Println(d.Response.String())
 
-	ds, err := c.Send(&anthropic.Opts{
+	ds, err := c.Send(&anthropic.Sender{
 		Message: data.MessageModule{
-            Human: "What is its current version number?",
-        },
+			Human: "What is its current version number?",
+		},
 		SessionID: d.ID,
-        Sender: &resp.Sender{MaxToken: 1200},
+		Sender: &resp.Sender{MaxToken: 1200},
 	})
 
 	if err != nil {
@@ -131,12 +131,12 @@ Return:
 
 ### Delete the session in an ID
 ```golang
-c, err := anthropic.New(&anthropic.Client{Key: "your keys", DefaultModel: anthropic.Model.Full.Instant1})
+c, err := anthropic.New(&anthropic.Config{Key: "your keys", DefaultModel: data.Model_FullInstant_1_0})
 if err != nil {
 	panic(err)
 }
 
-d, err := c.Send(&anthropic.Opts{
+d, err := c.Send(&anthropic.Sender{
 	Message: data.MessageModule{
 		Human: "Do you know Golang, please answer me in the shortest possible way.",
 	},
