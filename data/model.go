@@ -2,10 +2,12 @@ package data
 
 // latest model
 const (
-	ModelMajorInstant string = "claude-instant-1"
-	ModelMajorClaude  string = "claude-2"
-	ModelFullInstant  string = "claude-instant-1.2"
-	ModelFullClaude   string = "claude-2.1"
+	ModelMajorInstant      string = "claude-instant-1"
+	ModelMajorClaude       string = "claude-2"
+	ModelFullInstant       string = "claude-instant-1.2"
+	ModelFullClaude        string = "claude-2.1"
+	ModelFullClaude3Sonnet string = "claude-3-sonnet-20240229"
+	ModelFullClaude3Opus   string = "claude-3-opus-20240229"
 )
 
 // old model (Availability not guaranteed)
