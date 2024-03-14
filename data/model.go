@@ -8,6 +8,7 @@ const (
 	ModelFullClaude        string = "claude-2.1"
 	ModelFullClaude3Sonnet string = "claude-3-sonnet-20240229"
 	ModelFullClaude3Opus   string = "claude-3-opus-20240229"
+	ModelFullClaude3Haiku  string = "claude-3-haiku-20240307"
 )
 
 // old model (Availability not guaranteed)
